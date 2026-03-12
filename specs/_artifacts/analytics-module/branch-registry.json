@@ -1,0 +1,29 @@
+{
+  "canonicalRevision": "rev-4",
+  "branches": [
+    {
+      "branchId": "b-intake",
+      "parentRevision": "rev-0",
+      "touchedSections": ["Overview", "Intake Summary", "Evidence Model"],
+      "proposedChanges": ["seed subject spec", "seed evidence ledger"],
+      "confidenceNotes": "high confidence from direct notes",
+      "status": "merged"
+    },
+    {
+      "branchId": "b-reporting",
+      "parentRevision": "rev-2",
+      "touchedSections": ["Architecture or Structure", "Behavior and Flows", "Acceptance Criteria"],
+      "proposedChanges": ["add reporting views", "add dedupe behavior"],
+      "confidenceNotes": "mixed evidence from notes and mockup",
+      "status": "merged"
+    },
+    {
+      "branchId": "b-retention-review",
+      "parentRevision": "rev-4",
+      "touchedSections": ["Scope and Boundaries", "Planning Readiness"],
+      "proposedChanges": ["resolve retention-policy blocker"],
+      "confidenceNotes": "waiting on owner decision",
+      "status": "open"
+    }
+  ]
+}

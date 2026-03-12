@@ -1,0 +1,19 @@
+{
+  "subject": "feature-flags-system",
+  "currentPhase": "PUBLISH",
+  "canonicalRevision": "rev-5",
+  "status": "ready",
+  "entryCriteriaMet": true,
+  "exitCriteriaMet": true,
+  "phaseHistory": [
+    {"phase": "INTAKE", "status": "complete", "checkpoint": "input-log.md"},
+    {"phase": "EVIDENCE_FANOUT", "status": "complete", "checkpoint": "branch-registry.json"},
+    {"phase": "REDUCE_AND_MERGE", "status": "complete", "checkpoint": "spec-ledger.md"},
+    {"phase": "GAP_ANALYSIS", "status": "complete", "checkpoint": "completeness-matrix.md"},
+    {"phase": "USER_INPUT", "status": "complete", "checkpoint": "question-backlog.md"},
+    {"phase": "DRAFT", "status": "complete", "checkpoint": "../../feature-flags-system.md"},
+    {"phase": "VERIFY", "status": "complete", "checkpoint": "review-report.md"},
+    {"phase": "READINESS_GATE", "status": "complete", "checkpoint": "manifest.json"},
+    {"phase": "PUBLISH", "status": "complete", "checkpoint": "implementation-plan.md"}
+  ]
+}

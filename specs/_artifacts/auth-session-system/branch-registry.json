@@ -1,0 +1,29 @@
+{
+  "canonicalRevision": "rev-6",
+  "branches": [
+    {
+      "branchId": "b-code-study",
+      "parentRevision": "rev-0",
+      "touchedSections": ["Overview", "Core Model", "Behavior and Flows"],
+      "proposedChanges": ["seed session-family model", "seed refresh rotation behavior"],
+      "confidenceNotes": "high confidence from direct auth notes",
+      "status": "merged"
+    },
+    {
+      "branchId": "b-cookie-rules",
+      "parentRevision": "rev-2",
+      "touchedSections": ["Scope and Boundaries", "Failure Modes and Edge Cases"],
+      "proposedChanges": ["add secure cookie transport rules"],
+      "confidenceNotes": "high confidence from policy note",
+      "status": "merged"
+    },
+    {
+      "branchId": "b-refresh-contradiction",
+      "parentRevision": "rev-4",
+      "touchedSections": ["Canonical Decisions", "Planning Readiness"],
+      "proposedChanges": ["resolve refresh reuse to family revocation"],
+      "confidenceNotes": "high confidence after user clarification",
+      "status": "merged"
+    }
+  ]
+}

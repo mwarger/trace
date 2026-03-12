@@ -1,0 +1,29 @@
+{
+  "canonicalRevision": "rev-5",
+  "branches": [
+    {
+      "branchId": "b-intake",
+      "parentRevision": "rev-0",
+      "touchedSections": ["Overview", "Intake Summary", "Goals"],
+      "proposedChanges": ["seed sparse request", "derive subject slug"],
+      "confidenceNotes": "high confidence from direct user request",
+      "status": "merged"
+    },
+    {
+      "branchId": "b-questions",
+      "parentRevision": "rev-1",
+      "touchedSections": ["Canonical Decisions", "Core Model", "Acceptance Criteria"],
+      "proposedChanges": ["add kill-switch precedence", "add audit requirement"],
+      "confidenceNotes": "high confidence from structured answers",
+      "status": "merged"
+    },
+    {
+      "branchId": "b-sdk-review",
+      "parentRevision": "rev-3",
+      "touchedSections": ["Architecture or Structure", "Failure Modes and Edge Cases"],
+      "proposedChanges": ["add local eval cache", "add stale-config fallback"],
+      "confidenceNotes": "medium confidence from implementation-style review",
+      "status": "merged"
+    }
+  ]
+}

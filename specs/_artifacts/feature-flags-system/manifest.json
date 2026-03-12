@@ -1,0 +1,21 @@
+{
+  "subject": "feature-flags-system",
+  "canonicalVersion": "v0.5",
+  "readiness": "ready",
+  "completenessScore": 91,
+  "evidenceConfidenceScore": 90,
+  "decisionRiskScore": 18,
+  "activeBlockers": [],
+  "whyNotReady": [],
+  "blockerDimensions": [
+    "boundaries",
+    "core-flows",
+    "entities",
+    "state-transitions",
+    "interfaces",
+    "constraints",
+    "acceptance-criteria"
+  ],
+  "minimumNextActions": [],
+  "artifactPath": "specs/_artifacts/feature-flags-system"
+}

@@ -1,0 +1,18 @@
+{
+  "subject": "analytics-module",
+  "currentPhase": "READINESS_GATE",
+  "canonicalRevision": "rev-4",
+  "status": "waiting-on-blocker-resolution",
+  "entryCriteriaMet": true,
+  "exitCriteriaMet": false,
+  "phaseHistory": [
+    {"phase": "INTAKE", "status": "complete", "checkpoint": "input-log.md"},
+    {"phase": "EVIDENCE_FANOUT", "status": "complete", "checkpoint": "branch-registry.json"},
+    {"phase": "REDUCE_AND_MERGE", "status": "complete", "checkpoint": "spec-ledger.md"},
+    {"phase": "GAP_ANALYSIS", "status": "complete", "checkpoint": "completeness-matrix.md"},
+    {"phase": "USER_INPUT", "status": "complete", "checkpoint": "question-backlog.md"},
+    {"phase": "DRAFT", "status": "complete", "checkpoint": "../../analytics-module.md"},
+    {"phase": "VERIFY", "status": "complete", "checkpoint": "review-report.md"},
+    {"phase": "READINESS_GATE", "status": "blocked", "checkpoint": "manifest.json"}
+  ]
+}

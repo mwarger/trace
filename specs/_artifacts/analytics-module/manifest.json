@@ -1,0 +1,16 @@
+{
+  "subject": "analytics-module",
+  "canonicalVersion": "v0.4",
+  "readiness": "not-ready",
+  "completenessScore": 83,
+  "evidenceConfidenceScore": 82,
+  "decisionRiskScore": 31,
+  "activeBlockers": ["retention-policy"],
+  "whyNotReady": ["Raw and aggregate retention windows are not finalized."],
+  "blockerDimensions": ["constraints"],
+  "minimumNextActions": [
+    "Get workspace-tier retention policy.",
+    "Rescore constraints and long-window report behavior."
+  ],
+  "artifactPath": "specs/_artifacts/analytics-module"
+}

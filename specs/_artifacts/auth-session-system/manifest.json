@@ -1,0 +1,22 @@
+{
+  "subject": "auth-session-system",
+  "canonicalVersion": "v0.6",
+  "readiness": "ready",
+  "completenessScore": 93,
+  "evidenceConfidenceScore": 91,
+  "decisionRiskScore": 16,
+  "activeBlockers": [],
+  "whyNotReady": [],
+  "blockerDimensions": [
+    "boundaries",
+    "core-flows",
+    "entities",
+    "state-transitions",
+    "interfaces",
+    "constraints",
+    "failure-modes",
+    "acceptance-criteria"
+  ],
+  "minimumNextActions": [],
+  "artifactPath": "specs/_artifacts/auth-session-system"
+}
