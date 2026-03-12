@@ -3,6 +3,10 @@
 Trace is a standalone skill pack for building subject-named specs from
 evidence.
 
+The primary output is a subject spec you can point another agent or an external
+implementation loop at. The root `specs/README.md` is the navigational index
+for those subject specs, not a replacement for them.
+
 ## Inspiration
 
 Trace takes inspiration from marginalia as a reading and synthesis method, then
@@ -180,8 +184,21 @@ trace-pack smoke-test
 The smoke test checks:
 - expected skill folders exist
 - expected spec files exist
+- the root specs index uses the managed Trace block
 - managed JSON files parse
 - managed JSONL ledgers parse
+
+## Root specs index contract
+
+Every successful Trace run should leave behind:
+- a subject spec at `specs/<subject>.md`
+- a matching row in `specs/README.md`
+
+Trace manages the subject rows inside:
+- `<!-- trace:spec-index:start -->`
+- `<!-- trace:spec-index:end -->`
+
+Human notes outside that block should be preserved.
 
 ## Uninstall
 

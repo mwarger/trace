@@ -33,6 +33,16 @@ do
   require_file "$ROOT_DIR/skills/$skill/SKILL.md"
 done
 
+log "checking root specs index markers"
+grep -q '<!-- trace:spec-index:start -->' "$ROOT_DIR/specs/README.md" || {
+  printf '[trace-smoke] ERROR: missing start marker in specs/README.md\n' >&2
+  exit 1
+}
+grep -q '<!-- trace:spec-index:end -->' "$ROOT_DIR/specs/README.md" || {
+  printf '[trace-smoke] ERROR: missing end marker in specs/README.md\n' >&2
+  exit 1
+}
+
 log "validating json/jsonl artifacts"
 ROOT="$ROOT_DIR" python3 - <<'PY'
 import json

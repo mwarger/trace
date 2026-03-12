@@ -27,6 +27,9 @@ export CODEX_HOME="$(pwd)/.local-test/codex-home"
 
 Then start Codex from that same shell.
 
+Trace should produce subject specs that can be handed to implementation work
+directly, plus a root `specs/README.md` index for lookup.
+
 ## Remote install
 
 Tell your agent to install Trace from:

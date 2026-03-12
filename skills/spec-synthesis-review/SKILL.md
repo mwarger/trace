@@ -41,10 +41,39 @@ If any check fails, return to:
 - contradiction review
 - or redrafting
 
+## Root specs index update
+
+After the subject spec reaches a stable draft, create or update the row for the
+current subject inside the managed block in `specs/README.md`.
+
+Managed block markers:
+- `<!-- trace:spec-index:start -->`
+- `<!-- trace:spec-index:end -->`
+
+Preserve prose outside the managed block.
+
+The row should include:
+- `Spec`
+- `Target`
+- `Purpose`
+- `Status`
+- `Readiness`
+- `Keywords`
+- `Artifacts`
+
+Rules:
+- `Target` should point at the implementation directory or code path when it
+  can be inferred, otherwise use `—`
+- `Purpose` should be one short implementation-oriented sentence
+- update an existing row for the subject instead of appending duplicates
+- the root index is navigational; the subject spec remains the canonical
+  implementation artifact
+
 ## Output
 
 Update:
 - `specs/<subject>.md`
+- `specs/README.md`
 - `review-report.md`
 - `claim-ledger.jsonl`
 - `contradiction-log.md`

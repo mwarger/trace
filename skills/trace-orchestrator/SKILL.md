@@ -121,6 +121,9 @@ Batch the smallest independent unblocker set, default max `3`.
 
 ## Artifacts
 
+Root index:
+- `specs/README.md`
+
 Canonical spec:
 - `specs/<subject>.md`
 
@@ -138,3 +141,21 @@ Sidecars:
 - `decision-log.md`
 - `review-report.md`
 - `implementation-plan.md`
+
+## Root specs index
+
+Every successful Trace run must leave behind a root `specs/README.md`.
+
+Rules:
+- if `specs/README.md` is missing, create it before or alongside the subject spec
+- if it exists, preserve human-written prose outside the managed block
+- update only the managed block for subject rows
+- do not duplicate rows for the same subject; update the existing row
+
+Managed block markers:
+- `<!-- trace:spec-index:start -->`
+- `<!-- trace:spec-index:end -->`
+
+The root index is for discovery and navigation.
+The subject spec is the backing artifact to hand to an external implementation
+loop or another agent.
