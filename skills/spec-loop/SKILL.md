@@ -19,7 +19,8 @@ For each evidence unit:
 ## Hard rules
 
 - Never append to the rolling summary mechanically. Rewrite it.
-- Every canonical claim must point back to claim ids and evidence unit ids.
+- Every canonical claim must be traceable through sidecar claim ids and
+  evidence unit ids.
 - If the evidence source is large, spawn sub-agents per independent area.
 - Sub-agents return typed patch proposals only.
 

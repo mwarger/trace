@@ -7,9 +7,10 @@ The pack is built around 5 ideas:
 - the lead agent is the only reducer of canon
 - sub-agents do most bounded exploration and review work
 - provenance is required before text becomes canonical
-- no spec is planning-ready below the 80/80 gate
+- no spec is planning-ready below the 80/80 gate or with unresolved blocker gaps
+  or contradictions
 
-## Layout
+## Repo layout
 
 ```text
 skills/
@@ -25,48 +26,177 @@ specs/
   feature-flags-system.md
   auth-session-system.md
   _artifacts/
+scripts/
+  cli.sh
+  smoke-test.sh
+  test-local.sh
+install.sh
+uninstall.sh
 ```
 
-## Skills
+## What gets installed
 
+This repo installs 6 skills:
 - `marginalia-spec-orchestrator`
-  Top-level reducer workflow. Routes work to sub-skills, enforces merge rules,
-  user-question rules, and readiness gates.
 - `spec-intake`
-  Normalizes evidence, creates subject slug, seeds canon and ledgers.
 - `spec-loop`
-  Runs the paragraph-style evidence loop: unit summary, rolling summary, next
-  action.
 - `spec-completeness`
-  Scores ontology coverage, contradictions, and readiness.
 - `spec-synthesis-review`
-  Merges typed patches into canon, runs provenance and verification passes.
 - `spec-plan-handoff`
-  Emits implementation plan only from a ready spec.
 
-## Example corpus
+The default install target is:
+- `${CODEX_HOME:-$HOME/.codex}/skills`
 
-The `specs/` tree shows 3 worked examples:
-- `analytics-module.md`
-- `feature-flags-system.md`
-- `auth-session-system.md`
+By default the installer uses symlinks so local edits in this repo are visible
+immediately in the installed skills.
 
-Each subject spec has a sidecar folder under `specs/_artifacts/<subject>/`
-containing run state, evidence ledgers, contradiction logs, decision logs,
-claim ledgers, reviews, and plan handoff artifacts.
+## Prereqs
 
-## Usage
+- `bash`
+- `git`
+- `python3`
 
-Use the orchestrator skill when the user wants to:
-- reverse engineer an existing system into a clean spec
-- turn sparse evidence into a planning-ready spec
-- produce a reducer-safe, provenance-backed subject spec
+`curl` is only needed if you install via a remote raw script URL.
 
-The workflow is:
-1. intake evidence
-2. fan out bounded sub-agent exploration
-3. reduce typed patches into canon
-4. rescore ontology and readiness
-5. ask targeted user questions only when passive evidence is weaker
-6. verify grounding before promoting readiness
-7. emit planning artifacts only after the 80/80 gate passes
+## Install
+
+### Local checkout
+
+From this repo:
+
+```bash
+./install.sh
+```
+
+This will:
+- install the skills into your Codex skills dir
+- install a helper command named `marginalia-spec-pack`
+
+Useful env vars:
+
+```bash
+MARGINALIA_INSTALL_MODE=copy ./install.sh
+MARGINALIA_SKILLS_DIR="$HOME/.codex/skills" ./install.sh
+CODEX_HOME="$HOME/.codex" ./install.sh
+```
+
+### Superpowers-style remote install
+
+Once this repo is hosted, the intended install shape is:
+
+```bash
+curl -fsSL "https://raw.githubusercontent.com/<owner>/<repo>/main/install.sh?$(date +%s)" | bash
+```
+
+For Codex, the install doc is:
+- [`.codex/INSTALL.md`](.codex/INSTALL.md)
+
+## Helper command
+
+After install, this command should be available:
+
+```bash
+marginalia-spec-pack help
+```
+
+Supported commands:
+- `help`
+- `where`
+- `list-skills`
+- `install-skills`
+- `uninstall-skills`
+- `doctor`
+- `smoke-test`
+- `test-local`
+
+## How to kick it off
+
+Start a new Codex session after install and ask for one of these:
+
+```text
+Create a subject-named spec for this feature request using the marginalia pack.
+Reverse engineer this repo into a marginalia spec with sidecar artifacts.
+Take this transcript and build a planning-ready subject spec.
+Use the marginalia-spec-orchestrator skill on this codebase.
+```
+
+If the install worked, the orchestrator skill should trigger and then route into
+the focused sub-skills.
+
+## Local isolated testing
+
+If you want to test this without touching your normal Codex setup:
+
+```bash
+./scripts/test-local.sh
+```
+
+That creates:
+- `.local-test/codex-home/skills`
+
+and installs the skills there instead of your normal `~/.codex/skills`.
+
+Then launch Codex from the same shell with:
+
+```bash
+export CODEX_HOME="$(pwd)/.local-test/codex-home"
+codex
+```
+
+This isolates the test from your normal skills and other installed scripts.
+
+You can also do it through the helper:
+
+```bash
+marginalia-spec-pack test-local
+```
+
+## Smoke test
+
+To verify the repo structure and example artifacts:
+
+```bash
+./scripts/smoke-test.sh
+```
+
+or:
+
+```bash
+marginalia-spec-pack smoke-test
+```
+
+The smoke test checks:
+- expected skill folders exist
+- expected spec files exist
+- managed JSON files parse
+- managed JSONL ledgers parse
+
+## Uninstall
+
+To remove the installed wrapper and managed skills:
+
+```bash
+./uninstall.sh
+```
+
+or:
+
+```bash
+marginalia-spec-pack uninstall-skills
+```
+
+## Notes on interference
+
+The safest way to test locally is with a separate `CODEX_HOME`.
+That keeps this pack from mixing with other installed skills, custom prompts, or
+other local automation.
+
+Recommended workflow for isolated testing:
+
+```bash
+./scripts/test-local.sh
+export CODEX_HOME="$(pwd)/.local-test/codex-home"
+codex
+```
+
+Then try a prompt that should trigger the orchestrator.

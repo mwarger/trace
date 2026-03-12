@@ -6,13 +6,13 @@
   "entryCriteriaMet": true,
   "exitCriteriaMet": false,
   "phaseHistory": [
-    {"phase": "INTAKE", "status": "complete", "checkpoint": "input-log.md"},
-    {"phase": "EVIDENCE_FANOUT", "status": "complete", "checkpoint": "branch-registry.json"},
-    {"phase": "REDUCE_AND_MERGE", "status": "complete", "checkpoint": "spec-ledger.md"},
-    {"phase": "GAP_ANALYSIS", "status": "complete", "checkpoint": "completeness-matrix.md"},
-    {"phase": "USER_INPUT", "status": "complete", "checkpoint": "question-backlog.md"},
-    {"phase": "DRAFT", "status": "complete", "checkpoint": "../../analytics-module.md"},
-    {"phase": "VERIFY", "status": "complete", "checkpoint": "review-report.md"},
-    {"phase": "READINESS_GATE", "status": "blocked", "checkpoint": "manifest.json"}
+    {"phase": "INTAKE", "status": "complete", "entryCriteria": "evidence provided", "exitCriteria": "subject slug and intake artifacts created", "checkpoint": "input-log.md"},
+    {"phase": "EVIDENCE_FANOUT", "status": "complete", "entryCriteria": "initial evidence classified", "exitCriteria": "bounded branches completed or queued", "checkpoint": "branch-registry.json"},
+    {"phase": "REDUCE_AND_MERGE", "status": "complete", "entryCriteria": "branch outputs returned", "exitCriteria": "canon and ledgers updated", "checkpoint": "spec-ledger.md"},
+    {"phase": "GAP_ANALYSIS", "status": "complete", "entryCriteria": "canon changed materially", "exitCriteria": "scores and blockers recomputed", "checkpoint": "completeness-matrix.md"},
+    {"phase": "USER_INPUT", "status": "complete", "entryCriteria": "passive evidence weaker than targeted clarification", "exitCriteria": "question answers captured as evidence", "checkpoint": "question-backlog.md"},
+    {"phase": "DRAFT", "status": "complete", "entryCriteria": "enough canon exists to rewrite subject doc", "exitCriteria": "subject spec updated", "checkpoint": "../../analytics-module.md"},
+    {"phase": "VERIFY", "status": "complete", "entryCriteria": "draft canon exists", "exitCriteria": "verification checks recorded", "checkpoint": "review-report.md"},
+    {"phase": "READINESS_GATE", "status": "blocked", "entryCriteria": "verification complete", "exitCriteria": "blocked until retention policy resolved", "checkpoint": "manifest.json"}
   ]
 }

@@ -6,14 +6,14 @@
   "entryCriteriaMet": true,
   "exitCriteriaMet": true,
   "phaseHistory": [
-    {"phase": "INTAKE", "status": "complete", "checkpoint": "input-log.md"},
-    {"phase": "EVIDENCE_FANOUT", "status": "complete", "checkpoint": "branch-registry.json"},
-    {"phase": "REDUCE_AND_MERGE", "status": "complete", "checkpoint": "spec-ledger.md"},
-    {"phase": "GAP_ANALYSIS", "status": "complete", "checkpoint": "completeness-matrix.md"},
-    {"phase": "USER_INPUT", "status": "complete", "checkpoint": "question-backlog.md"},
-    {"phase": "DRAFT", "status": "complete", "checkpoint": "../../auth-session-system.md"},
-    {"phase": "VERIFY", "status": "complete", "checkpoint": "review-report.md"},
-    {"phase": "READINESS_GATE", "status": "complete", "checkpoint": "manifest.json"},
-    {"phase": "PUBLISH", "status": "complete", "checkpoint": "implementation-plan.md"}
+    {"phase": "INTAKE", "status": "complete", "entryCriteria": "dense mixed evidence provided", "exitCriteria": "subject slug and intake artifacts created", "checkpoint": "input-log.md"},
+    {"phase": "EVIDENCE_FANOUT", "status": "complete", "entryCriteria": "independent auth subproblems identified", "exitCriteria": "study and contradiction branches returned", "checkpoint": "branch-registry.json"},
+    {"phase": "REDUCE_AND_MERGE", "status": "complete", "entryCriteria": "branch outputs returned", "exitCriteria": "canon and ledgers updated", "checkpoint": "spec-ledger.md"},
+    {"phase": "GAP_ANALYSIS", "status": "complete", "entryCriteria": "canon changed materially", "exitCriteria": "scores and blockers recomputed", "checkpoint": "completeness-matrix.md"},
+    {"phase": "USER_INPUT", "status": "complete", "entryCriteria": "refresh reuse ambiguity remained", "exitCriteria": "clarifications captured as evidence", "checkpoint": "question-backlog.md"},
+    {"phase": "DRAFT", "status": "complete", "entryCriteria": "canon sufficient for spec draft", "exitCriteria": "subject spec updated", "checkpoint": "../../auth-session-system.md"},
+    {"phase": "VERIFY", "status": "complete", "entryCriteria": "draft canon exists", "exitCriteria": "verification checks recorded", "checkpoint": "review-report.md"},
+    {"phase": "READINESS_GATE", "status": "complete", "entryCriteria": "verification complete", "exitCriteria": "ready thresholds cleared", "checkpoint": "manifest.json"},
+    {"phase": "PUBLISH", "status": "complete", "entryCriteria": "subject marked ready", "exitCriteria": "implementation handoff emitted", "checkpoint": "implementation-plan.md"}
   ]
 }

@@ -8,7 +8,8 @@
 
 ## Notes
 
-- `Readiness` follows the 80/80 gate from the completeness model.
+- `Readiness` follows the 80/80 gate plus blocker and contradiction gates from
+  the completeness model.
 - `Artifacts` contains reducer state, evidence ledgers, contradiction logs,
   decision logs, reviews, and plan handoff material.
 - `Keywords` are explicit to improve lookup later by synonym or subsystem.
