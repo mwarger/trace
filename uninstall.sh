@@ -1,18 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CLI_NAME="marginalia-spec-pack"
+CLI_NAME="trace-pack"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 log() {
-  printf '[marginalia uninstall] %s\n' "$1"
+  printf '[trace uninstall] %s\n' "$1"
 }
 
 remove_wrapper() {
   local candidates=()
 
-  if [[ -n "${MARGINALIA_BIN_DIR:-}" ]]; then
-    candidates+=("$MARGINALIA_BIN_DIR")
+  if [[ -n "${TRACE_BIN_DIR:-}" ]]; then
+    candidates+=("$TRACE_BIN_DIR")
   fi
 
   candidates+=("/usr/local/bin" "/opt/homebrew/bin" "$HOME/.local/bin" "$HOME/bin")

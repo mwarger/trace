@@ -4,12 +4,12 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 log() {
-  printf '[marginalia-smoke] %s\n' "$1"
+  printf '[trace-smoke] %s\n' "$1"
 }
 
 require_file() {
   [[ -f "$1" ]] || {
-    printf '[marginalia-smoke] ERROR: missing file %s\n' "$1" >&2
+    printf '[trace-smoke] ERROR: missing file %s\n' "$1" >&2
     exit 1
   }
 }
@@ -23,7 +23,7 @@ require_file "$ROOT_DIR/specs/feature-flags-system.md"
 require_file "$ROOT_DIR/specs/auth-session-system.md"
 
 for skill in \
-  marginalia-spec-orchestrator \
+  trace-orchestrator \
   spec-intake \
   spec-loop \
   spec-completeness \

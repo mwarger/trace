@@ -1,6 +1,6 @@
 ---
 name: spec-loop
-description: "Run the evidence-first marginalia loop for a subject spec. Use this when you need to process evidence one unit at a time, produce unit summaries, rewrite the rolling summary, branch out to sub-agents for bounded exploration, and decide whether to read more, ask, or mark an assumption."
+description: "Run the evidence-first Trace loop for a subject spec. Use this when you need to process evidence one unit at a time, produce unit summaries, rewrite the rolling summary, branch out to sub-agents for bounded exploration, and decide whether to read more, ask, or mark an assumption."
 ---
 
 Use this after intake and whenever more evidence work is needed.

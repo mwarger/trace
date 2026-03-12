@@ -13,7 +13,7 @@ That installs the skills into:
 - `${CODEX_HOME:-$HOME/.codex}/skills`
 
 and installs a helper command:
-- `marginalia-spec-pack`
+- `trace-pack`
 
 ## Isolated local test install
 
@@ -27,9 +27,12 @@ export CODEX_HOME="$(pwd)/.local-test/codex-home"
 
 Then start Codex from that same shell.
 
-## Once the repo is hosted
+## Remote install
 
-The intended Codex install flow is:
+Tell your agent to install Trace from:
+- <https://github.com/mwarger/trace>
+
+The Codex install doc is:
 
 ```text
 Fetch and follow instructions from https://raw.githubusercontent.com/mwarger/trace/main/.codex/INSTALL.md
@@ -46,8 +49,8 @@ curl -fsSL "https://raw.githubusercontent.com/mwarger/trace/main/install.sh?$(da
 Run:
 
 ```bash
-marginalia-spec-pack doctor
-marginalia-spec-pack list-skills
+trace-pack doctor
+trace-pack list-skills
 ```
 
-Then start a new Codex session and ask for a marginalia-style spec.
+Then start a new Codex session and ask for a Trace-style spec.

@@ -2,12 +2,12 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CLI_NAME="marginalia-spec-pack"
+CLI_NAME="trace-pack"
 DEFAULT_CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
-DEFAULT_SKILLS_DIR="${MARGINALIA_SKILLS_DIR:-$DEFAULT_CODEX_HOME/skills}"
-MANIFEST_NAME=".marginalia-spec-pack-install.json"
+DEFAULT_SKILLS_DIR="${TRACE_SKILLS_DIR:-$DEFAULT_CODEX_HOME/skills}"
+MANIFEST_NAME=".trace-pack-install.json"
 SKILL_NAMES=(
-  marginalia-spec-orchestrator
+  trace-orchestrator
   spec-intake
   spec-loop
   spec-completeness
@@ -29,11 +29,11 @@ has_cmd() {
 }
 
 skills_dir() {
-  printf '%s\n' "${MARGINALIA_SKILLS_DIR:-$DEFAULT_SKILLS_DIR}"
+  printf '%s\n' "${TRACE_SKILLS_DIR:-$DEFAULT_SKILLS_DIR}"
 }
 
 install_mode() {
-  printf '%s\n' "${MARGINALIA_INSTALL_MODE:-link}"
+  printf '%s\n' "${TRACE_INSTALL_MODE:-link}"
 }
 
 manifest_path() {
@@ -50,14 +50,14 @@ write_manifest() {
   TARGET_DIR="$target_dir" ROOT="$ROOT_DIR" MODE="$mode" python3 - <<'PY'
 import json, os
 skills = [
-  "marginalia-spec-orchestrator",
+  "trace-orchestrator",
   "spec-intake",
   "spec-loop",
   "spec-completeness",
   "spec-synthesis-review",
   "spec-plan-handoff",
 ]
-path = os.path.join(os.environ["TARGET_DIR"], ".marginalia-spec-pack-install.json")
+path = os.path.join(os.environ["TARGET_DIR"], ".trace-pack-install.json")
 data = {
   "root_dir": os.environ["ROOT"],
   "install_mode": os.environ["MODE"],
@@ -177,8 +177,8 @@ Commands:
 
 Env vars:
   CODEX_HOME
-  MARGINALIA_SKILLS_DIR
-  MARGINALIA_INSTALL_MODE=link|copy
+  TRACE_SKILLS_DIR
+  TRACE_INSTALL_MODE=link|copy
 EOF
 }
 

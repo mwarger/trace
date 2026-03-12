@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CLI_NAME="marginalia-spec-pack"
+CLI_NAME="trace-pack"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-INSTALL_DIR="${MARGINALIA_SPEC_HOME:-$HOME/.marginalia-spec-pack}"
-REPO_URL="${MARGINALIA_SPEC_REPO_URL:-}"
+INSTALL_DIR="${TRACE_PACK_HOME:-$HOME/.trace-pack}"
+REPO_URL="${TRACE_REPO_URL:-}"
 
 log() {
-  printf '[marginalia install] %s\n' "$1"
+  printf '[trace install] %s\n' "$1"
 }
 
 fail() {
-  printf '[marginalia install] ERROR: %s\n' "$1" >&2
+  printf '[trace install] ERROR: %s\n' "$1" >&2
   exit 1
 }
 
@@ -22,8 +22,8 @@ has_cmd() {
 pick_bin_dir() {
   local candidates=()
 
-  if [[ -n "${MARGINALIA_BIN_DIR:-}" ]]; then
-    candidates+=("$MARGINALIA_BIN_DIR")
+  if [[ -n "${TRACE_BIN_DIR:-}" ]]; then
+    candidates+=("$TRACE_BIN_DIR")
   fi
 
   candidates+=("/usr/local/bin" "/opt/homebrew/bin" "$HOME/.local/bin" "$HOME/bin")

@@ -1,7 +1,13 @@
 # Trace
 
 Trace is a standalone skill pack for building subject-named specs from
- evidence.
+evidence.
+
+## Inspiration
+
+Trace takes inspiration from marginalia as a reading and synthesis method, then
+pushes that idea into evidence-led specification, reducer-based merges, and
+sub-agent-assisted planning.
 
 The pack is built around 5 ideas:
 - everything starts as evidence
@@ -15,7 +21,7 @@ The pack is built around 5 ideas:
 
 ```text
 skills/
-  marginalia-spec-orchestrator/
+  trace-orchestrator/
   spec-intake/
   spec-loop/
   spec-completeness/
@@ -38,7 +44,7 @@ uninstall.sh
 ## What gets installed
 
 This repo installs 6 skills:
-- `marginalia-spec-orchestrator`
+- `trace-orchestrator`
 - `spec-intake`
 - `spec-loop`
 - `spec-completeness`
@@ -71,17 +77,20 @@ From this repo:
 
 This will:
 - install the skills into your Codex skills dir
-- install a helper command named `marginalia-spec-pack`
+- install a helper command named `trace-pack`
 
 Useful env vars:
 
 ```bash
-MARGINALIA_INSTALL_MODE=copy ./install.sh
-MARGINALIA_SKILLS_DIR="$HOME/.codex/skills" ./install.sh
+TRACE_INSTALL_MODE=copy ./install.sh
+TRACE_SKILLS_DIR="$HOME/.codex/skills" ./install.sh
 CODEX_HOME="$HOME/.codex" ./install.sh
 ```
 
-### Superpowers-style remote install
+### Remote install
+
+Tell your agent to install Trace from:
+- <https://github.com/mwarger/trace>
 
 ```bash
 curl -fsSL "https://raw.githubusercontent.com/mwarger/trace/main/install.sh?$(date +%s)" | bash
@@ -99,7 +108,7 @@ For Codex, the install doc is:
 After install, this command should be available:
 
 ```bash
-marginalia-spec-pack help
+trace-pack help
 ```
 
 Supported commands:
@@ -117,10 +126,10 @@ Supported commands:
 Start a new Codex session after install and ask for one of these:
 
 ```text
-Create a subject-named spec for this feature request using the marginalia pack.
-Reverse engineer this repo into a marginalia spec with sidecar artifacts.
+Create a subject-named spec for this feature request using Trace.
+Reverse engineer this repo into a Trace spec with sidecar artifacts.
 Take this transcript and build a planning-ready subject spec.
-Use the marginalia-spec-orchestrator skill on this codebase.
+Use the trace-orchestrator skill on this codebase.
 ```
 
 If the install worked, the orchestrator skill should trigger and then route into
@@ -151,7 +160,7 @@ This isolates the test from your normal skills and other installed scripts.
 You can also do it through the helper:
 
 ```bash
-marginalia-spec-pack test-local
+trace-pack test-local
 ```
 
 ## Smoke test
@@ -165,7 +174,7 @@ To verify the repo structure and example artifacts:
 or:
 
 ```bash
-marginalia-spec-pack smoke-test
+trace-pack smoke-test
 ```
 
 The smoke test checks:
@@ -185,7 +194,7 @@ To remove the installed wrapper and managed skills:
 or:
 
 ```bash
-marginalia-spec-pack uninstall-skills
+trace-pack uninstall-skills
 ```
 
 ## Notes on interference

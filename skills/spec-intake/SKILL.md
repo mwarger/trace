@@ -1,6 +1,6 @@
 ---
 name: spec-intake
-description: "Normalize all starting evidence into a subject spec run. Use this when beginning a marginalia spec from code, docs, transcripts, screenshots, URLs, or a sparse user request. Creates the subject slug, frontmatter, evidence ledger, and intake summary."
+description: "Normalize all starting evidence into a subject spec run. Use this when beginning a Trace spec from code, docs, transcripts, screenshots, URLs, or a sparse user request. Creates the subject slug, frontmatter, evidence ledger, and intake summary."
 ---
 
 Use this skill first.
