@@ -1,6 +1,7 @@
-# Marginalia Spec Pack
+# Trace
 
-Standalone skill pack for building subject-named specs from evidence.
+Trace is a standalone skill pack for building subject-named specs from
+ evidence.
 
 The pack is built around 5 ideas:
 - everything starts as evidence
@@ -82,11 +83,13 @@ CODEX_HOME="$HOME/.codex" ./install.sh
 
 ### Superpowers-style remote install
 
-Once this repo is hosted, the intended install shape is:
-
 ```bash
-curl -fsSL "https://raw.githubusercontent.com/<owner>/<repo>/main/install.sh?$(date +%s)" | bash
+curl -fsSL "https://raw.githubusercontent.com/mwarger/trace/main/install.sh?$(date +%s)" | bash
 ```
+
+GitHub repo:
+- `git@github.com:mwarger/trace.git`
+- <https://github.com/mwarger/trace>
 
 For Codex, the install doc is:
 - [`.codex/INSTALL.md`](.codex/INSTALL.md)

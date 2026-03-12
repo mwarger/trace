@@ -1,11 +1,11 @@
-# Marginalia Spec Pack for Codex
+# Trace for Codex
 
 ## Quick local install
 
 If you already have a checkout of this repo:
 
 ```bash
-cd /path/to/ralph-marginalia
+cd /path/to/trace
 ./install.sh
 ```
 
@@ -20,7 +20,7 @@ and installs a helper command:
 If you want to test without touching your normal Codex setup:
 
 ```bash
-cd /path/to/ralph-marginalia
+cd /path/to/trace
 ./scripts/test-local.sh
 export CODEX_HOME="$(pwd)/.local-test/codex-home"
 ```
@@ -32,13 +32,13 @@ Then start Codex from that same shell.
 The intended Codex install flow is:
 
 ```text
-Fetch and follow instructions from https://raw.githubusercontent.com/<owner>/<repo>/main/.codex/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/mwarger/trace/main/.codex/INSTALL.md
 ```
 
 If you prefer a shell install:
 
 ```bash
-curl -fsSL "https://raw.githubusercontent.com/<owner>/<repo>/main/install.sh?$(date +%s)" | bash
+curl -fsSL "https://raw.githubusercontent.com/mwarger/trace/main/install.sh?$(date +%s)" | bash
 ```
 
 ## Verify
