@@ -14,8 +14,8 @@ log() {
 mkdir -p "$TEST_SKILLS_DIR"
 
 log "installing isolated skill set into $TEST_SKILLS_DIR"
-MARGINALIA_SKILLS_DIR="$TEST_SKILLS_DIR" \
-MARGINALIA_INSTALL_MODE="${MARGINALIA_INSTALL_MODE:-link}" \
+TRACE_SKILLS_DIR="$TEST_SKILLS_DIR" \
+TRACE_INSTALL_MODE="${TRACE_INSTALL_MODE:-link}" \
 "$ROOT_DIR/scripts/cli.sh" install-skills
 
 cat > "$MANIFEST_PATH" <<EOF

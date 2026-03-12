@@ -52,7 +52,7 @@ ensure_source() {
   fi
 
   has_cmd git || fail "git is required for remote install"
-  [[ -n "$REPO_URL" ]] || fail "set MARGINALIA_SPEC_REPO_URL for remote install"
+  [[ -n "$REPO_URL" ]] || fail "set TRACE_REPO_URL for remote install"
 
   if [[ -d "$INSTALL_DIR/.git" ]]; then
     log "updating existing install at $INSTALL_DIR"
