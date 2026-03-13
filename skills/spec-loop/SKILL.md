@@ -1,6 +1,6 @@
 ---
 name: spec-loop
-description: "Run the evidence-first Trace loop for a subject spec. Use this when you need to process evidence one unit at a time, produce unit summaries, rewrite the rolling summary, branch out to sub-agents for bounded exploration, and decide whether to read more, ask, or mark an assumption."
+description: "Run the evidence-first Trace loop for a subject spec. Use this when you need to process evidence one unit at a time, produce unit summaries, rewrite the rolling summary, branch out to sub-agents for bounded exploration, choose adaptive clarification profiles, and emit speculative variants when blockers remain."
 ---
 
 Use this after intake and whenever more evidence work is needed.
@@ -11,7 +11,8 @@ For each evidence unit:
 1. write a one-sentence `unit summary`
 2. rewrite the one-sentence `rolling summary`
 3. update claims and provenance links
-4. choose the next action:
+4. update critical decision coverage and blocker state
+5. choose the next action:
    - `Read More`
    - `Ask`
    - `Mark Assumption`
@@ -23,15 +24,57 @@ For each evidence unit:
   evidence unit ids.
 - If the evidence source is large, spawn sub-agents per independent area.
 - Sub-agents return typed patch proposals only.
+- No major canon claim may exist without `evidence_refs` or an explicit
+  assumption id.
+- Analogy prompts are ambiguity-heavy by default.
 
-## When to ask
+## Clarification policy
+
+First classify or reuse `request_archetype`.
+
+Use these clarification profiles:
+
+- `feature`, `analogy_feature`, `parity_clone`
+  - `core_outcome`
+  - `scope_boundary`
+  - `implementation_constraints`
+  - `acceptance_signal`
+- `bugfix`
+  - reproduction
+  - expected behavior
+  - environment/version boundary
+- `integration`
+  - external system boundary
+  - auth/data ownership
+  - failure/retry expectations
+- `migration`
+  - source/target boundary
+  - compatibility window
+  - rollback expectation
 
 Ask only if:
 - passive evidence is exhausted, ambiguous, or lower value
-- the ambiguity blocks planning or blocker coverage
+- the ambiguity blocks critical decision coverage or blocker closure
 
 Use the runtime's native question tool whenever available.
+Ask one batch at a time, max `3`, with recommended options first.
+Allow a recommended default pack when the user can approve defaults in one
+reply.
 Record answers as new `evidence_unit` records.
+
+## Speculative mode
+
+If required clarifications remain unresolved:
+- do not collapse uncertainty into one canonized solution shape
+- emit `2-3` bounded variants instead of one settled handoff path
+- each variant must list:
+  - included scope
+  - excluded scope
+  - unresolved decisions
+  - tradeoffs
+  - risk notes
+- set `planning_status=SPECULATIVE_DRAFT`
+- keep `handoff_status=WITHHELD`
 
 ## Required outputs
 
@@ -41,6 +84,11 @@ Update:
 - `evidence-ledger.jsonl`
 - `claim-ledger.jsonl`
 - the `Core Model`, `Behavior and Flows`, and `Open Questions` sections
+
+`question-backlog.md` must always split:
+- `Required Clarifications`
+- `Deferred Questions`
+- `Non-blocking Assumptions`
 
 ## Branching guidance
 

@@ -51,7 +51,27 @@ from pathlib import Path
 
 root = Path(os.environ["ROOT"])
 for path in root.joinpath("specs", "_artifacts").rglob("*.json"):
-    json.loads(path.read_text())
+    data = json.loads(path.read_text())
+    if path.name == "manifest.json":
+        for key in (
+            "policy_version",
+            "request_archetype",
+            "planning_status",
+            "handoff_status",
+            "blocker_reasons",
+            "critical_decision_coverage",
+        ):
+            if key not in data:
+                raise SystemExit(f"missing {key} in {path}")
+    if path.name == "run-state.json":
+        for key in (
+            "policy_version",
+            "planning_status",
+            "handoff_status",
+            "blocker_reasons",
+        ):
+            if key not in data:
+                raise SystemExit(f"missing {key} in {path}")
 
 for path in root.joinpath("specs", "_artifacts").rglob("*.jsonl"):
     for line in path.read_text().splitlines():

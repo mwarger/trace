@@ -1,5 +1,8 @@
 # Implementation Plan
 
+Planning status: `PLANNING_READY`
+Handoff status: `ELIGIBLE`
+
 ## Workstreams
 
 1. control-plane schema and publish API

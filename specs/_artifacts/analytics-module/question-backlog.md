@@ -1,12 +1,23 @@
 # Question Backlog
 
-## Resolved
+## Required Clarifications
 
-- What is the reporting surface?
-  Resolved: funnels, trends, retention.
+- `q-analytics-001`
+  What is the retention window for raw vs aggregated events?
+  Blocks: `constraints`, `acceptance_signal`
+  Status: `open`
 
-## Open
+## Deferred Questions
 
-- What is the retention window for raw vs aggregated events?
-  Dimension: constraints
-  Why it matters: storage policy and recompute shape.
+- `q-analytics-002`
+  Is cross-device identity stitching part of v1 reporting?
+  Blocks: none
+  Status: `deferred`
+
+## Non-blocking Assumptions
+
+- `asm-analytics-001`
+  Retention policy will likely vary by workspace tier.
+  Criticality: `medium`
+  Reversibility: `moderate`
+  Status: `unconfirmed`

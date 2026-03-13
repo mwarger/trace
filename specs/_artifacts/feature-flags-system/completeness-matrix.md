@@ -16,6 +16,21 @@
 | acceptance criteria | 4 | high | 3 | 3 | 4.6 | 0 | yes |
 
 Scores:
-- completeness: 91
-- evidence confidence: 90
-- decision risk: 18
+- `completeness_score`: 91
+- `evidence_confidence_score`: 90
+- `decision_risk_score`: 18
+- `corroboration_score`: 88
+- `assumption_risk_score`: 8
+
+Critical decision coverage:
+
+| Bucket | Status | Basis |
+|---|---|---|
+| core_outcome | closed-by-user-answer | rollout and kill switch goals were confirmed in question rounds |
+| scope_boundary | closed-by-user-answer | experiments and pricing logic were explicitly excluded |
+| implementation_constraints | closed-by-user-answer | local evaluation, caching, and audit expectations were confirmed |
+| dependencies_and_integrations | closed-by-evidence | SDK and admin/control plane boundary is explicit in canon |
+| acceptance_signal | closed-by-user-answer | deterministic targeting and audit expectations were confirmed |
+
+Unconfirmed product decisions:
+- none

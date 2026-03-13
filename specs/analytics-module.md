@@ -12,6 +12,9 @@ keywords:
   - reporting
   - ingestion
 artifact_path: specs/_artifacts/analytics-module
+policy_version: trace-readiness-v2
+planning_status: DISCOVERY
+handoff_status: WITHHELD
 ---
 
 # Analytics Module
@@ -131,12 +134,16 @@ Claims promoted into canon must map to claim ids in the sidecar claim ledger.
 - `completeness_score`: 83
 - `evidence_confidence_score`: 82
 - `decision_risk_score`: 31
-- blocker dimensions at `3+`
+- `corroboration_score`: 74
+- `assumption_risk_score`: 27
+- critical decision bucket `implementation_constraints` remains open
 - one blocker remains operationally open: retention policy
 
 ## Planning Readiness
 
-Not Ready.
+Status: `DISCOVERY`
+Handoff: `WITHHELD`
+
 Core behavior and interfaces are stable enough to keep studying, but
 long-window storage and recompute work would still be speculative until
 retention is set.

@@ -1,21 +1,37 @@
 {
   "subject": "feature-flags-system",
-  "canonicalVersion": "v0.5",
-  "readiness": "ready",
-  "completenessScore": 91,
-  "evidenceConfidenceScore": 90,
-  "decisionRiskScore": 18,
-  "activeBlockers": [],
-  "whyNotReady": [],
-  "blockerDimensions": [
-    "boundaries",
-    "core-flows",
-    "entities",
-    "state-transitions",
-    "interfaces",
-    "constraints",
-    "acceptance-criteria"
+  "canonical_spec": "specs/feature-flags-system.md",
+  "canonical_version": "v0.5",
+  "artifact_path": "specs/_artifacts/feature-flags-system",
+  "policy_version": "trace-readiness-v2",
+  "request_archetype": "feature",
+  "starting_evidence_density": "sparse",
+  "source_origin_keys": [
+    "user-request",
+    "question-round-1",
+    "question-round-2"
   ],
-  "minimumNextActions": [],
-  "artifactPath": "specs/_artifacts/feature-flags-system"
+  "planning_status": "PLANNING_READY",
+  "handoff_status": "ELIGIBLE",
+  "blocker_reasons": [],
+  "critical_decision_coverage": {
+    "core_outcome": "closed-by-user-answer",
+    "scope_boundary": "closed-by-user-answer",
+    "implementation_constraints": "closed-by-user-answer",
+    "dependencies_and_integrations": "closed-by-evidence",
+    "acceptance_signal": "closed-by-user-answer"
+  },
+  "question_rounds_completed": 2,
+  "required_clarifications_remaining": [],
+  "assumption_load": 2,
+  "assumption_risk_score": 8,
+  "unconfirmed_product_decisions": [],
+  "acceptance_scenarios_present": true,
+  "corroboration_score": 88,
+  "completeness_score": 91,
+  "evidence_confidence_score": 90,
+  "decision_risk_score": 18,
+  "why_not_ready": [],
+  "blocker_dimensions": [],
+  "minimum_next_actions": []
 }

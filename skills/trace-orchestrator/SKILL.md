@@ -1,6 +1,6 @@
 ---
 name: trace-orchestrator
-description: "Create a subject-named specification from any evidence source using a reducer-based Trace workflow. Use this when the user wants a planning-ready spec, a clean-room reverse spec, or an evidence-first feature spec with sub-agent fanout, provenance tracking, contradiction handling, and 80/80 readiness gates."
+description: "Create a subject-named specification from any evidence source using a reducer-based Trace workflow. Use this when the user wants a planning-ready spec, a clean-room reverse spec, or an evidence-first feature spec with sub-agent fanout, provenance tracking, adaptive clarification, speculative variants, and a canonical readiness contract."
 ---
 
 Use this as the top-level skill for the pack.
@@ -24,11 +24,56 @@ Trigger when the user wants to:
 3. The lead agent is the only reducer.
 4. Use sub-agents by default for bounded read-heavy work.
 5. Use the runtime's native question tool whenever user input is needed.
-6. No spec is planning-ready unless:
-   - `completeness_score >= 80`
-   - `evidence_confidence_score >= 80`
-   - blocker dimensions are at least `3`
-   - contradictions are resolved
+6. `trace-orchestrator` owns the canonical readiness verdict.
+7. No run is planning-ready if blocker reasons remain open.
+8. Scores matter only after blocker reasons are cleared.
+
+## Canonical readiness contract
+
+Every run must carry these canonical fields in `manifest.json` and
+`run-state.json`:
+- `policy_version`
+- `request_archetype`
+- `starting_evidence_density`
+- `source_origin_keys`
+- `planning_status`
+- `handoff_status`
+- `blocker_reasons`
+- `critical_decision_coverage`
+- `question_rounds_completed`
+- `required_clarifications_remaining`
+- `assumption_load`
+- `assumption_risk_score`
+- `unconfirmed_product_decisions`
+- `acceptance_scenarios_present`
+- `corroboration_score`
+
+`trace-orchestrator` is the only skill allowed to finalize:
+- `planning_status`
+- `handoff_status`
+- `blocker_reasons`
+
+Other skills emit structured inputs to that verdict.
+
+## Planning state machine
+
+Use these states:
+- `planning_status`
+  - `DISCOVERY`
+  - `AWAITING_CLARIFICATION`
+  - `SPECULATIVE_DRAFT`
+  - `PLANNING_READY`
+- `handoff_status`
+  - `WITHHELD`
+  - `ELIGIBLE`
+
+Transitions:
+- unresolved blocker reasons prevent `PLANNING_READY`
+- unanswered required clarifications force `AWAITING_CLARIFICATION`
+- bounded speculative variants while blockers remain force
+  `SPECULATIVE_DRAFT`
+- `handoff_status=ELIGIBLE` only when `planning_status=PLANNING_READY`
+- do not emit a real implementation handoff while `handoff_status=WITHHELD`
 
 ## Canonical merge protocol
 
@@ -108,16 +153,45 @@ Keep work local when it changes canon, readiness, or user interaction policy.
 
 ## Question policy
 
-Ask the user only when the gap is planning-relevant and passive evidence is
-exhausted or lower value.
+Ask the user when critical decision coverage is incomplete and passive evidence
+is exhausted or lower value.
 
 Every question must map to:
-- one ontology dimension
+- one critical decision bucket or blocker dimension
 - one ambiguity
 - one reason it matters
 
 Use the runtime's native question tool whenever available.
 Batch the smallest independent unblocker set, default max `3`.
+Offer a recommended default pack when a full answer can be approved quickly.
+
+## Request archetypes
+
+Classify every run into one of:
+- `feature`
+- `analogy_feature`
+- `parity_clone`
+- `integration`
+- `bugfix`
+- `migration`
+- `refactor`
+- `reverse_spec`
+
+Analogy-driven prompts such as "like X" or "replicate X" default to
+`analogy_feature` unless strong contrary evidence exists.
+
+## Critical decision buckets
+
+These buckets drive readiness:
+- `core_outcome`
+- `scope_boundary`
+- `implementation_constraints`
+- `dependencies_and_integrations`
+- `acceptance_signal`
+
+Evidence density is a routing hint, not the sole readiness gate.
+A single explicit prompt may be enough if it closes these buckets without
+relying on unconfirmed assumptions.
 
 ## Artifacts
 

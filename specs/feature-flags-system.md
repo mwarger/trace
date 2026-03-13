@@ -12,6 +12,9 @@ keywords:
   - cohorts
   - config
 artifact_path: specs/_artifacts/feature-flags-system
+policy_version: trace-readiness-v2
+planning_status: PLANNING_READY
+handoff_status: ELIGIBLE
 ---
 
 # Feature Flags System
@@ -125,11 +128,15 @@ assumptions were promoted only when explicitly accepted.
 - `completeness_score`: 91
 - `evidence_confidence_score`: 90
 - `decision_risk_score`: 18
-- no unresolved blocker dimensions
+- `corroboration_score`: 88
+- `assumption_risk_score`: 8
+- required critical decision buckets are closed
+- no unresolved blocker reasons
 
 ## Planning Readiness
 
-Ready.
+Status: `PLANNING_READY`
+Handoff: `ELIGIBLE`
 
 ## References
 

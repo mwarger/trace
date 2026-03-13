@@ -16,6 +16,21 @@
 | acceptance criteria | 4 | high | 2 | 2 | 4.4 | 0 | yes |
 
 Scores:
-- completeness: 93
-- evidence confidence: 91
-- decision risk: 16
+- `completeness_score`: 93
+- `evidence_confidence_score`: 91
+- `decision_risk_score`: 16
+- `corroboration_score`: 92
+- `assumption_risk_score`: 6
+
+Critical decision coverage:
+
+| Bucket | Status | Basis |
+|---|---|---|
+| core_outcome | closed-by-evidence | secure session creation, rotation, revocation, and device trust are explicit |
+| scope_boundary | closed-by-evidence | MFA and federation are explicitly out of scope |
+| implementation_constraints | closed-by-user-answer | refresh family revocation and cookie behavior were clarified |
+| dependencies_and_integrations | closed-by-evidence | browser/mobile transport split is explicit |
+| acceptance_signal | closed-by-evidence | revocation, reuse detection, and cookie safety scenarios are explicit |
+
+Unconfirmed product decisions:
+- none

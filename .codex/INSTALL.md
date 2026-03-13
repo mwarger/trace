@@ -28,7 +28,11 @@ export CODEX_HOME="$(pwd)/.local-test/codex-home"
 Then start Codex from that same shell.
 
 Trace should produce subject specs that can be handed to implementation work
-directly, plus a root `specs/README.md` index for lookup.
+directly when `planning_status=PLANNING_READY` and
+`handoff_status=ELIGIBLE`, plus a root `specs/README.md` index for lookup.
+
+Sparse prompts may still yield a bounded speculative draft, but that should
+keep handoff withheld until clarifications close the critical decision buckets.
 
 ## Remote install
 

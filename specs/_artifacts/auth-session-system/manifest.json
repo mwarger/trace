@@ -1,22 +1,38 @@
 {
   "subject": "auth-session-system",
-  "canonicalVersion": "v0.6",
-  "readiness": "ready",
-  "completenessScore": 93,
-  "evidenceConfidenceScore": 91,
-  "decisionRiskScore": 16,
-  "activeBlockers": [],
-  "whyNotReady": [],
-  "blockerDimensions": [
-    "boundaries",
-    "core-flows",
-    "entities",
-    "state-transitions",
-    "interfaces",
-    "constraints",
-    "failure-modes",
-    "acceptance-criteria"
+  "canonical_spec": "specs/auth-session-system.md",
+  "canonical_version": "v0.6",
+  "artifact_path": "specs/_artifacts/auth-session-system",
+  "policy_version": "trace-readiness-v2",
+  "request_archetype": "reverse_spec",
+  "starting_evidence_density": "dense",
+  "source_origin_keys": [
+    "auth-docs",
+    "code-notes",
+    "policy-notes",
+    "question-round-1"
   ],
-  "minimumNextActions": [],
-  "artifactPath": "specs/_artifacts/auth-session-system"
+  "planning_status": "PLANNING_READY",
+  "handoff_status": "ELIGIBLE",
+  "blocker_reasons": [],
+  "critical_decision_coverage": {
+    "core_outcome": "closed-by-evidence",
+    "scope_boundary": "closed-by-evidence",
+    "implementation_constraints": "closed-by-user-answer",
+    "dependencies_and_integrations": "closed-by-evidence",
+    "acceptance_signal": "closed-by-evidence"
+  },
+  "question_rounds_completed": 1,
+  "required_clarifications_remaining": [],
+  "assumption_load": 2,
+  "assumption_risk_score": 6,
+  "unconfirmed_product_decisions": [],
+  "acceptance_scenarios_present": true,
+  "corroboration_score": 92,
+  "completeness_score": 93,
+  "evidence_confidence_score": 91,
+  "decision_risk_score": 16,
+  "why_not_ready": [],
+  "blocker_dimensions": [],
+  "minimum_next_actions": []
 }

@@ -1,6 +1,6 @@
 ---
 name: spec-intake
-description: "Normalize all starting evidence into a subject spec run. Use this when beginning a Trace spec from code, docs, transcripts, screenshots, URLs, or a sparse user request. Creates the subject slug, frontmatter, evidence ledger, and intake summary."
+description: "Normalize all starting evidence into a subject spec run. Use this when beginning a Trace spec from code, docs, transcripts, screenshots, URLs, or a sparse user request. Creates the subject slug, frontmatter, evidence ledgers, request archetype, evidence-density classification, and canonical readiness skeleton."
 ---
 
 Use this skill first.
@@ -11,6 +11,9 @@ Turn raw inputs into a normalized evidence run with:
 - a subject slug
 - a canonical spec path
 - a root specs index path
+- a request archetype
+- an evidence-density classification
+- a critical-decision coverage skeleton
 - seeded frontmatter
 - initial evidence records
 - intake summary
@@ -47,11 +50,31 @@ Turn raw inputs into a normalized evidence run with:
    - `freshness`
    - `independence_group`
    - `extraction_method`
-9. Seed the spec with:
+9. Record `source_origin_keys` from evidence provenance, not raw file count.
+10. Classify `request_archetype`:
+   - `feature`
+   - `analogy_feature`
+   - `parity_clone`
+   - `integration`
+   - `bugfix`
+   - `migration`
+   - `refactor`
+   - `reverse_spec`
+11. Classify `starting_evidence_density`:
+   - `sparse`
+   - `mixed`
+   - `dense`
+12. Seed `critical_decision_coverage` with these buckets:
+   - `core_outcome`
+   - `scope_boundary`
+   - `implementation_constraints`
+   - `dependencies_and_integrations`
+   - `acceptance_signal`
+13. Seed the spec with:
    - `Overview`
    - `Intake Summary`
    - `Evidence Model`
-10. Seed sidecars:
+14. Seed sidecars:
    - `manifest.json`
    - `run-state.json`
    - `branch-registry.json`
@@ -68,3 +91,5 @@ Turn raw inputs into a normalized evidence run with:
   main loop starts.
 - The root `specs/README.md` is navigational.
 - The subject spec is the implementation handoff artifact.
+- `sparse` analogy or feature runs should default to clarification if the
+  critical decision buckets are not explicit in evidence.

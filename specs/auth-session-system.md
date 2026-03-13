@@ -12,6 +12,9 @@ keywords:
   - revocation
   - device trust
 artifact_path: specs/_artifacts/auth-session-system
+policy_version: trace-readiness-v2
+planning_status: PLANNING_READY
+handoff_status: ELIGIBLE
 ---
 
 # Auth Session System
@@ -127,11 +130,15 @@ desired revocation behavior and client constraints.
 - `completeness_score`: 93
 - `evidence_confidence_score`: 91
 - `decision_risk_score`: 16
+- `corroboration_score`: 92
+- `assumption_risk_score`: 6
 - prior blocker on refresh reuse is resolved
+- no unresolved blocker reasons
 
 ## Planning Readiness
 
-Ready.
+Status: `PLANNING_READY`
+Handoff: `ELIGIBLE`
 
 ## References
 

@@ -1,19 +1,78 @@
 {
   "subject": "feature-flags-system",
-  "currentPhase": "PUBLISH",
-  "canonicalRevision": "rev-5",
+  "policy_version": "trace-readiness-v2",
+  "request_archetype": "feature",
+  "planning_status": "PLANNING_READY",
+  "handoff_status": "ELIGIBLE",
+  "blocker_reasons": [],
+  "current_phase": "PUBLISH",
+  "canonical_revision": "rev-5",
   "status": "ready",
-  "entryCriteriaMet": true,
-  "exitCriteriaMet": true,
-  "phaseHistory": [
-    {"phase": "INTAKE", "status": "complete", "entryCriteria": "request captured", "exitCriteria": "subject slug and intake artifacts created", "checkpoint": "input-log.md"},
-    {"phase": "EVIDENCE_FANOUT", "status": "complete", "entryCriteria": "gaps suitable for branching identified", "exitCriteria": "question and sdk branches returned", "checkpoint": "branch-registry.json"},
-    {"phase": "REDUCE_AND_MERGE", "status": "complete", "entryCriteria": "branch outputs returned", "exitCriteria": "canon and ledgers updated", "checkpoint": "spec-ledger.md"},
-    {"phase": "GAP_ANALYSIS", "status": "complete", "entryCriteria": "canon changed materially", "exitCriteria": "scores and blockers recomputed", "checkpoint": "completeness-matrix.md"},
-    {"phase": "USER_INPUT", "status": "complete", "entryCriteria": "targeted clarifications required", "exitCriteria": "answers captured as evidence", "checkpoint": "question-backlog.md"},
-    {"phase": "DRAFT", "status": "complete", "entryCriteria": "canon sufficient for spec draft", "exitCriteria": "subject spec updated", "checkpoint": "../../feature-flags-system.md"},
-    {"phase": "VERIFY", "status": "complete", "entryCriteria": "draft canon exists", "exitCriteria": "verification checks recorded", "checkpoint": "review-report.md"},
-    {"phase": "READINESS_GATE", "status": "complete", "entryCriteria": "verification complete", "exitCriteria": "ready thresholds cleared", "checkpoint": "manifest.json"},
-    {"phase": "PUBLISH", "status": "complete", "entryCriteria": "subject marked ready", "exitCriteria": "implementation handoff emitted", "checkpoint": "implementation-plan.md"}
+  "entry_criteria_met": true,
+  "exit_criteria_met": true,
+  "phase_history": [
+    {
+      "phase": "INTAKE",
+      "status": "complete",
+      "entry_criteria": "request captured",
+      "exit_criteria": "subject slug, evidence density, and readiness skeleton created",
+      "checkpoint": "input-log.md"
+    },
+    {
+      "phase": "EVIDENCE_FANOUT",
+      "status": "complete",
+      "entry_criteria": "gaps suitable for branching identified",
+      "exit_criteria": "question and sdk branches returned",
+      "checkpoint": "branch-registry.json"
+    },
+    {
+      "phase": "REDUCE_AND_MERGE",
+      "status": "complete",
+      "entry_criteria": "branch outputs returned",
+      "exit_criteria": "canon and ledgers updated",
+      "checkpoint": "spec-ledger.md"
+    },
+    {
+      "phase": "GAP_ANALYSIS",
+      "status": "complete",
+      "entry_criteria": "canon changed materially",
+      "exit_criteria": "critical decision coverage and blockers recomputed",
+      "checkpoint": "completeness-matrix.md"
+    },
+    {
+      "phase": "USER_INPUT",
+      "status": "complete",
+      "entry_criteria": "targeted clarifications required",
+      "exit_criteria": "answers captured as evidence",
+      "checkpoint": "question-backlog.md"
+    },
+    {
+      "phase": "DRAFT",
+      "status": "complete",
+      "entry_criteria": "canon sufficient for spec draft",
+      "exit_criteria": "subject spec updated",
+      "checkpoint": "../../feature-flags-system.md"
+    },
+    {
+      "phase": "VERIFY",
+      "status": "complete",
+      "entry_criteria": "draft canon exists",
+      "exit_criteria": "verification checks recorded",
+      "checkpoint": "review-report.md"
+    },
+    {
+      "phase": "READINESS_GATE",
+      "status": "complete",
+      "entry_criteria": "verification complete",
+      "exit_criteria": "all blocker reasons cleared and score gates satisfied",
+      "checkpoint": "manifest.json"
+    },
+    {
+      "phase": "PUBLISH",
+      "status": "complete",
+      "entry_criteria": "subject marked planning-ready",
+      "exit_criteria": "implementation handoff emitted",
+      "checkpoint": "implementation-plan.md"
+    }
   ]
 }

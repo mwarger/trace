@@ -1,9 +1,12 @@
 ---
 name: spec-completeness
-description: "Score a subject spec against the ontology and readiness gates. Use this when you need blocker-aware completeness scoring, evidence-confidence scoring, decision-risk scoring, contradiction penalties, next-action selection, or the Ouroboros-style 80/80 planning gate."
+description: "Score a subject spec against the ontology and canonical readiness contract. Use this when you need claim-level coverage scoring, corroboration checks, critical-decision coverage, risk-weighted assumptions, contradiction penalties, and blocker-aware 80/80 gates."
 ---
 
 Use this whenever canon changes materially.
+
+Do not finalize readiness here.
+Emit structured inputs for the `trace-orchestrator` verdict.
 
 ## Ontology
 
@@ -30,6 +33,14 @@ For each dimension track:
 - `contradiction_count`
 - `planning_blocker`
 
+Also track:
+- `critical_decision_coverage`
+- `corroboration_score`
+- `acceptance_scenarios_present`
+- `assumption_load`
+- `assumption_risk_score`
+- `unconfirmed_product_decisions`
+
 ## Scores
 
 Compute:
@@ -40,33 +51,43 @@ Compute:
 Rules:
 - blocker dimensions weigh more
 - duplicate evidence should not inflate support
+- multiple files from one origin do not count as strong corroboration by
+  themselves
 - unresolved assumptions cap the affected dimension
 - contradictions reduce confidence and readiness
+- a single direct prompt may strongly support `purpose`, but may not alone push
+  `boundaries`, `interfaces`, `constraints`, `failure modes`, or
+  `acceptance criteria` past partial unless the evidence is explicit
+- no run may be planning-ready if a critical decision bucket is covered only by
+  assumptions
+- assumption risk matters more than raw assumption count
+
+Every assumption must be labeled:
+- `criticality: low | medium | high`
+- `reversibility: easy | moderate | expensive`
+
+High-criticality or expensive-to-reverse assumptions increase
+`assumption_risk_score` directly.
 
 ## Gates
-
-`Not Ready` if:
-- `completeness_score < 80`
-- or `evidence_confidence_score < 80`
-- or any blocker dimension below `3`
-- or contradictions remain unresolved
-
-`Conditionally Ready` if:
-- completeness and evidence confidence are `>= 80`
-- blocker dimensions are `>= 3`
-- assumptions are explicit
-
-`Ready` if:
-- completeness and evidence confidence are `>= 90`
-- blocker dimensions are `>= 4`
-- contradictions are closed
-- acceptance criteria are implementation-usable
-- decision risk is below cap
 
 Every scoring pass must emit:
 - `why_not_ready[]`
 - `blocker_dimensions[]`
 - `minimum_next_actions[]`
+- `critical_decision_coverage`
+- `corroboration_score`
+- `assumption_risk_score`
+- `unconfirmed_product_decisions`
+
+The orchestrator may only mark a run `PLANNING_READY` when:
+- `completeness_score >= 80`
+- `evidence_confidence_score >= 80`
+- contradictions are resolved
+- blocker reasons are empty
+- critical decision buckets are closed
+- acceptance scenarios are present or intentionally deferred
+- assumption risk is below threshold
 
 ## Output
 

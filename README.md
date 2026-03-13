@@ -18,8 +18,28 @@ The pack is built around 5 ideas:
 - the lead agent is the only reducer of canon
 - sub-agents do most bounded exploration and review work
 - provenance is required before text becomes canonical
-- no spec is planning-ready below the 80/80 gate or with unresolved blocker gaps
-  or contradictions
+- readiness is a canonical state machine, not just a score threshold
+
+## Canonical readiness model
+
+Trace separates planning state from handoff state.
+
+Planning states:
+- `DISCOVERY`
+- `AWAITING_CLARIFICATION`
+- `SPECULATIVE_DRAFT`
+- `PLANNING_READY`
+
+Handoff states:
+- `WITHHELD`
+- `ELIGIBLE`
+
+Important rules:
+- scores do not override blocker reasons
+- sparse prompts may still draft, but blocked runs must keep handoff withheld
+- analogy prompts should trigger clarifying questions unless the critical
+  product decisions are already explicit
+- speculative uncertainty should become bounded variants, not fake certainty
 
 ## Repo layout
 
@@ -199,6 +219,11 @@ Trace manages the subject rows inside:
 - `<!-- trace:spec-index:end -->`
 
 Human notes outside that block should be preserved.
+
+Rows should surface:
+- planning status
+- handoff status
+- subject purpose
 
 ## Uninstall
 

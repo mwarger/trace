@@ -1,16 +1,50 @@
 {
   "subject": "analytics-module",
-  "canonicalVersion": "v0.4",
-  "readiness": "not-ready",
-  "completenessScore": 83,
-  "evidenceConfidenceScore": 82,
-  "decisionRiskScore": 31,
-  "activeBlockers": ["retention-policy"],
-  "whyNotReady": ["Raw and aggregate retention windows are not finalized."],
-  "blockerDimensions": ["constraints"],
-  "minimumNextActions": [
+  "canonical_spec": "specs/analytics-module.md",
+  "canonical_version": "v0.4",
+  "artifact_path": "specs/_artifacts/analytics-module",
+  "policy_version": "trace-readiness-v2",
+  "request_archetype": "reverse_spec",
+  "starting_evidence_density": "mixed",
+  "source_origin_keys": [
+    "owner-notes",
+    "report-mockups",
+    "api-sketches"
+  ],
+  "planning_status": "DISCOVERY",
+  "handoff_status": "WITHHELD",
+  "blocker_reasons": [
+    "critical implementation constraint unresolved: retention policy"
+  ],
+  "critical_decision_coverage": {
+    "core_outcome": "closed-by-evidence",
+    "scope_boundary": "closed-by-evidence",
+    "implementation_constraints": "open",
+    "dependencies_and_integrations": "partial",
+    "acceptance_signal": "partial"
+  },
+  "question_rounds_completed": 1,
+  "required_clarifications_remaining": [
+    "q-analytics-001"
+  ],
+  "assumption_load": 2,
+  "assumption_risk_score": 27,
+  "unconfirmed_product_decisions": [
+    "retention policy"
+  ],
+  "acceptance_scenarios_present": true,
+  "corroboration_score": 74,
+  "completeness_score": 83,
+  "evidence_confidence_score": 82,
+  "decision_risk_score": 31,
+  "why_not_ready": [
+    "Raw and aggregate retention windows are not finalized."
+  ],
+  "blocker_dimensions": [
+    "constraints"
+  ],
+  "minimum_next_actions": [
     "Get workspace-tier retention policy.",
     "Rescore constraints and long-window report behavior."
-  ],
-  "artifactPath": "specs/_artifacts/analytics-module"
+  ]
 }

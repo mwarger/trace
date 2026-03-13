@@ -34,6 +34,9 @@ Before readiness promotion, run:
 - section/schema format check
 - missing-context gate
 - action-safety gate for mutation or publication steps
+- stable-id check for questions, assumptions, decisions, and major claims
+- evidence-ref check for every major canon claim
+- blocker-state check against the orchestrator readiness contract
 
 If any check fails, return to:
 - evidence gathering
@@ -56,8 +59,8 @@ The row should include:
 - `Spec`
 - `Target`
 - `Purpose`
-- `Status`
-- `Readiness`
+- `Planning Status`
+- `Handoff`
 - `Keywords`
 - `Artifacts`
 

@@ -16,6 +16,21 @@
 | acceptance criteria | 3 | medium | 2 | 2 | 3.4 | 0 | yes |
 
 Scores:
-- completeness: 83
-- evidence confidence: 82
-- decision risk: 31
+- `completeness_score`: 83
+- `evidence_confidence_score`: 82
+- `decision_risk_score`: 31
+- `corroboration_score`: 74
+- `assumption_risk_score`: 27
+
+Critical decision coverage:
+
+| Bucket | Status | Basis |
+|---|---|---|
+| core_outcome | closed-by-evidence | ingestion, normalization, and reporting goals are explicit |
+| scope_boundary | closed-by-evidence | warehouse export and billing policy are out of scope |
+| implementation_constraints | open | retention policy is unresolved |
+| dependencies_and_integrations | partial | upstream event producers are known but policy dependencies remain |
+| acceptance_signal | partial | core scenarios exist but long-window retention expectations remain blocked |
+
+Unconfirmed product decisions:
+- retention policy

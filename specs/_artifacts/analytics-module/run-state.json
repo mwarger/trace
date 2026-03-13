@@ -1,18 +1,73 @@
 {
   "subject": "analytics-module",
-  "currentPhase": "READINESS_GATE",
-  "canonicalRevision": "rev-4",
+  "policy_version": "trace-readiness-v2",
+  "request_archetype": "reverse_spec",
+  "planning_status": "DISCOVERY",
+  "handoff_status": "WITHHELD",
+  "blocker_reasons": [
+    "critical implementation constraint unresolved: retention policy"
+  ],
+  "current_phase": "READINESS_GATE",
+  "canonical_revision": "rev-4",
   "status": "waiting-on-blocker-resolution",
-  "entryCriteriaMet": true,
-  "exitCriteriaMet": false,
-  "phaseHistory": [
-    {"phase": "INTAKE", "status": "complete", "entryCriteria": "evidence provided", "exitCriteria": "subject slug and intake artifacts created", "checkpoint": "input-log.md"},
-    {"phase": "EVIDENCE_FANOUT", "status": "complete", "entryCriteria": "initial evidence classified", "exitCriteria": "bounded branches completed or queued", "checkpoint": "branch-registry.json"},
-    {"phase": "REDUCE_AND_MERGE", "status": "complete", "entryCriteria": "branch outputs returned", "exitCriteria": "canon and ledgers updated", "checkpoint": "spec-ledger.md"},
-    {"phase": "GAP_ANALYSIS", "status": "complete", "entryCriteria": "canon changed materially", "exitCriteria": "scores and blockers recomputed", "checkpoint": "completeness-matrix.md"},
-    {"phase": "USER_INPUT", "status": "complete", "entryCriteria": "passive evidence weaker than targeted clarification", "exitCriteria": "question answers captured as evidence", "checkpoint": "question-backlog.md"},
-    {"phase": "DRAFT", "status": "complete", "entryCriteria": "enough canon exists to rewrite subject doc", "exitCriteria": "subject spec updated", "checkpoint": "../../analytics-module.md"},
-    {"phase": "VERIFY", "status": "complete", "entryCriteria": "draft canon exists", "exitCriteria": "verification checks recorded", "checkpoint": "review-report.md"},
-    {"phase": "READINESS_GATE", "status": "blocked", "entryCriteria": "verification complete", "exitCriteria": "blocked until retention policy resolved", "checkpoint": "manifest.json"}
+  "entry_criteria_met": true,
+  "exit_criteria_met": false,
+  "phase_history": [
+    {
+      "phase": "INTAKE",
+      "status": "complete",
+      "entry_criteria": "evidence provided",
+      "exit_criteria": "subject slug, evidence density, and readiness skeleton created",
+      "checkpoint": "input-log.md"
+    },
+    {
+      "phase": "EVIDENCE_FANOUT",
+      "status": "complete",
+      "entry_criteria": "initial evidence classified",
+      "exit_criteria": "bounded branches completed or queued",
+      "checkpoint": "branch-registry.json"
+    },
+    {
+      "phase": "REDUCE_AND_MERGE",
+      "status": "complete",
+      "entry_criteria": "branch outputs returned",
+      "exit_criteria": "canon and ledgers updated",
+      "checkpoint": "spec-ledger.md"
+    },
+    {
+      "phase": "GAP_ANALYSIS",
+      "status": "complete",
+      "entry_criteria": "canon changed materially",
+      "exit_criteria": "critical decision coverage and blockers recomputed",
+      "checkpoint": "completeness-matrix.md"
+    },
+    {
+      "phase": "USER_INPUT",
+      "status": "complete",
+      "entry_criteria": "passive evidence weaker than targeted clarification",
+      "exit_criteria": "question answers captured as evidence",
+      "checkpoint": "question-backlog.md"
+    },
+    {
+      "phase": "DRAFT",
+      "status": "complete",
+      "entry_criteria": "enough canon exists to rewrite subject doc",
+      "exit_criteria": "subject spec updated",
+      "checkpoint": "../../analytics-module.md"
+    },
+    {
+      "phase": "VERIFY",
+      "status": "complete",
+      "entry_criteria": "draft canon exists",
+      "exit_criteria": "verification checks recorded",
+      "checkpoint": "review-report.md"
+    },
+    {
+      "phase": "READINESS_GATE",
+      "status": "blocked",
+      "entry_criteria": "verification complete",
+      "exit_criteria": "blocked until retention policy resolves implementation constraints",
+      "checkpoint": "manifest.json"
+    }
   ]
 }
