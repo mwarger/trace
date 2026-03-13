@@ -61,6 +61,10 @@ Rules:
 - no run may be planning-ready if a critical decision bucket is covered only by
   assumptions
 - assumption risk matters more than raw assumption count
+- on `sparse` `analogy_feature` or `parity_clone` runs with zero question
+  rounds, `core_outcome`, `scope_boundary`, `implementation_constraints`, and
+  `acceptance_signal` must remain `partial`, `open`, or `assumed`, not
+  `covered`
 
 Every assumption must be labeled:
 - `criticality: low | medium | high`
@@ -88,6 +92,11 @@ The orchestrator may only mark a run `PLANNING_READY` when:
 - critical decision buckets are closed
 - acceptance scenarios are present or intentionally deferred
 - assumption risk is below threshold
+
+The orchestrator must not mark a run `PLANNING_READY` when:
+- `request_archetype` is `analogy_feature` or `parity_clone`
+- `starting_evidence_density` is `sparse`
+- `question_rounds_completed = 0`
 
 ## Output
 

@@ -40,6 +40,8 @@ Important rules:
 - analogy prompts should trigger clarifying questions unless the critical
   product decisions are already explicit
 - speculative uncertainty should become bounded variants, not fake certainty
+- sparse analogy prompts with zero question rounds must not become
+  `PLANNING_READY`
 
 ## Repo layout
 
@@ -158,6 +160,9 @@ Use the trace-orchestrator skill on this codebase.
 
 If the install worked, the orchestrator skill should trigger and then route into
 the focused sub-skills.
+
+After changing the skill pack, restart the agent session before testing again.
+Do not trust a run that still writes old policy markers such as `trace-v1`.
 
 ## Local isolated testing
 

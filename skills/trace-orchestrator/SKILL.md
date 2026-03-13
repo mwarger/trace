@@ -27,6 +27,10 @@ Trigger when the user wants to:
 6. `trace-orchestrator` owns the canonical readiness verdict.
 7. No run is planning-ready if blocker reasons remain open.
 8. Scores matter only after blocker reasons are cleared.
+9. A `sparse` `analogy_feature` or `parity_clone` run with
+   `question_rounds_completed = 0` may never end in `PLANNING_READY`.
+10. In that case, `handoff_status` must remain `WITHHELD` even if the draft is
+    coherent.
 
 ## Canonical readiness contract
 
@@ -74,6 +78,9 @@ Transitions:
   `SPECULATIVE_DRAFT`
 - `handoff_status=ELIGIBLE` only when `planning_status=PLANNING_READY`
 - do not emit a real implementation handoff while `handoff_status=WITHHELD`
+- `sparse` `analogy_feature` or `parity_clone` plus zero question rounds must
+  resolve to `AWAITING_CLARIFICATION` or `SPECULATIVE_DRAFT`, never
+  `PLANNING_READY`
 
 ## Canonical merge protocol
 
@@ -192,6 +199,7 @@ These buckets drive readiness:
 Evidence density is a routing hint, not the sole readiness gate.
 A single explicit prompt may be enough if it closes these buckets without
 relying on unconfirmed assumptions.
+Analogy-driven sparse prompts do not get that exception by default.
 
 ## Artifacts
 

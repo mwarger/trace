@@ -11,6 +11,8 @@ Use this only after `trace-orchestrator` has finalized `planning_status` and
 Do not emit a real implementation plan if:
 - `planning_status != PLANNING_READY`
 - or `handoff_status != ELIGIBLE`
+- or the run is a `sparse` `analogy_feature` or `parity_clone` with
+  `question_rounds_completed = 0`
 
 ## Inputs
 

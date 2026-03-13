@@ -27,6 +27,9 @@ For each evidence unit:
 - No major canon claim may exist without `evidence_refs` or an explicit
   assumption id.
 - Analogy prompts are ambiguity-heavy by default.
+- `question_rounds_completed = 0` on a `sparse` `analogy_feature` or
+  `parity_clone` run means required clarification buckets are still open unless
+  the user explicitly approved a recommended default pack.
 
 ## Clarification policy
 
@@ -62,6 +65,16 @@ Allow a recommended default pack when the user can approve defaults in one
 reply.
 Record answers as new `evidence_unit` records.
 
+For `sparse` `analogy_feature` or `parity_clone` runs:
+- seed required clarification ids before drafting:
+  - `rq-core-outcome`
+  - `rq-scope-boundary`
+  - `rq-implementation-constraints`
+  - `rq-acceptance-signal`
+- do not mark those buckets `covered` from analogy alone
+- if the user does not answer, keep the run in
+  `AWAITING_CLARIFICATION` or `SPECULATIVE_DRAFT`
+
 ## Speculative mode
 
 If required clarifications remain unresolved:
@@ -75,6 +88,7 @@ If required clarifications remain unresolved:
   - risk notes
 - set `planning_status=SPECULATIVE_DRAFT`
 - keep `handoff_status=WITHHELD`
+- do not emit one canonized “best guess” subject spec as if it were final
 
 ## Required outputs
 
@@ -89,6 +103,12 @@ Update:
 - `Required Clarifications`
 - `Deferred Questions`
 - `Non-blocking Assumptions`
+
+`No open planning-critical questions` is illegal for a `sparse`
+`analogy_feature` or `parity_clone` run unless:
+- each required clarification id is closed by evidence
+- or answered by the user
+- or explicitly approved through a recommended default pack
 
 ## Branching guidance
 

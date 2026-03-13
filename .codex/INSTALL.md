@@ -61,3 +61,6 @@ trace-pack list-skills
 ```
 
 Then start a new Codex session and ask for a Trace-style spec.
+
+If you update the skill pack, restart the agent session before rerunning a
+Trace prompt so the new policy is actually loaded.
