@@ -238,7 +238,21 @@ Added to the canonical readiness fields. **The orchestrator owns these fields** 
 
 #### spec-completeness
 
-Score the expanded question categories (failure modes, security, edge cases, scalability, operational, ordering/concurrency) alongside the existing 11 dimensions. These new categories feed into the completeness and confidence scores.
+The 11-dimension ontology is unchanged. The new question categories are **sub-signals** that feed into existing dimensions as required coverage inputs. A dimension cannot reach "covered" unless its mapped sub-signals are addressed (per the archetype applicability matrix in spec-loop).
+
+Sub-signal → dimension mapping:
+
+| Sub-signal | Feeds into dimensions |
+|------------|----------------------|
+| Security boundaries | `constraints`, `interfaces` |
+| Edge cases | `failure modes`, `state transitions` |
+| Scalability assumptions | `constraints`, `assumptions` |
+| Operational concerns | `interfaces`, `constraints` |
+| Ordering and concurrency | `state transitions`, `core flows` |
+
+This raises the bar for existing dimensions without adding new top-level dimensions. A dimension's coverage score now requires its sub-signals to be addressed before it can score above `partial`. The aggregate scoring math (coverage-weighted roll-up) is unchanged — the dimensions are the same, they're just harder to fully cover.
+
+For archetypes where a sub-signal is marked `optional`, that sub-signal does not block the parent dimension's coverage. It only contributes if evidence is present.
 
 #### spec-plan-handoff
 
