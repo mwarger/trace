@@ -30,6 +30,7 @@ for skill in \
   spec-loop \
   spec-completeness \
   spec-synthesis-review \
+  spec-adversarial-review \
   spec-plan-handoff
 do
   require_file "$ROOT_DIR/skills/$skill/SKILL.md"
