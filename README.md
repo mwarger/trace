@@ -57,6 +57,136 @@ evidence → intake → loop → completeness → synthesis-review → adversari
                      └──────────── beads escalation ──────────────────────────────────┘
 ```
 
+### Anatomy of a run
+
+A single Trace run moves through 12 phases. Most are sequential, but the loop-back paths and optional beads fork create the real flow:
+
+```mermaid
+flowchart TD
+    A[INTAKE] --> B[EVIDENCE_FANOUT]
+    B --> C[REDUCE_AND_MERGE]
+    C --> D[GAP_ANALYSIS]
+    D --> E[USER_INPUT]
+    E --> F[DRAFT]
+    F --> G[VERIFY]
+    G --> H[READINESS_GATE]
+    H -->|gates pass| I[ADVERSARIAL_REVIEW]
+    H -->|gates fail| D
+    I -->|converged| J[PLAN_HANDOFF]
+    I -->|findings persist| D
+    I -->|cap hit| K[Decomposition]
+    J -->|user accepts| L[BEADS_GENERATION]
+    J -->|run ends| END[Done]
+    L --> M[BEADS_REVIEW]
+    M -->|converged| END
+    M -->|spec gaps| D
+    M -->|cap hit| K
+```
+
+| Phase | Purpose | Exit criterion |
+|-------|---------|----------------|
+| `INTAKE` | Normalize inputs, classify archetype, seed evidence ledger | Subject slug + readiness skeleton created |
+| `EVIDENCE_FANOUT` | Sub-agent exploration of evidence sources | All evidence units collected |
+| `REDUCE_AND_MERGE` | Canonical merge of sub-agent outputs | Single rolling summary with provenance |
+| `GAP_ANALYSIS` | Identify missing coverage across dimensions | Gap list emitted or empty |
+| `USER_INPUT` | Ask clarifying questions matched to archetype profile | User responds or skips |
+| `DRAFT` | Write or rewrite spec sections from evidence | All sections drafted with provenance |
+| `VERIFY` | Check draft against acceptance criteria | Verification pass/fail recorded |
+| `READINESS_GATE` | Score against 11-dimension ontology, enforce 80/80 gates | Both scores ≥ 80 and blocker_reasons empty |
+| `ADVERSARIAL_REVIEW` | Stress-test via dynamic agent teams | Zero material findings or cap hit |
+| `PLAN_HANDOFF` | Render implementation plan (or withheld handoff if blocked) | Plan delivered to user |
+| `BEADS_GENERATION` | Decompose plan into `br` beads with dependency wiring | beads-manifest.json emitted |
+| `BEADS_REVIEW` | Stress-test beads for coverage, granularity, dependencies | Zero findings or cap hit |
+
+### Decision model
+
+#### Request archetypes
+
+The archetype determines clarification intensity and evidence expectations:
+
+| Archetype | Description |
+|-----------|-------------|
+| `feature` | New feature development |
+| `analogy_feature` | Feature based on analogy to existing patterns |
+| `parity_clone` | Replicating an existing system |
+| `integration` | Integration with external systems |
+| `bugfix` | Bug fix work |
+| `migration` | Migration work |
+| `refactor` | Refactoring work |
+| `reverse_spec` | Specifying from existing code |
+
+#### Evidence density
+
+Classified at intake. Routes clarification intensity:
+
+- **`sparse`** — minimal evidence; expect multiple question rounds
+- **`mixed`** — moderate evidence; targeted questions only
+- **`dense`** — comprehensive evidence; may skip clarification entirely
+
+#### Critical decision buckets
+
+All 5 must be closed before a run can enter ADVERSARIAL_REVIEW:
+
+1. **`core_outcome`** — the fundamental outcome being delivered
+2. **`scope_boundary`** — what is in and out of scope
+3. **`implementation_constraints`** — technical or business constraints
+4. **`dependencies_and_integrations`** — external system dependencies
+5. **`acceptance_signal`** — how success is measured
+
+A sparse analogy/parity request with zero question rounds can never reach PLANNING_READY — there is not enough signal to close all 5 buckets without user input.
+
+### State transitions
+
+```mermaid
+stateDiagram-v2
+    [*] --> DISCOVERY
+    DISCOVERY --> AWAITING_CLARIFICATION
+    DISCOVERY --> SPECULATIVE_DRAFT
+    AWAITING_CLARIFICATION --> DISCOVERY
+    AWAITING_CLARIFICATION --> SPECULATIVE_DRAFT
+    AWAITING_CLARIFICATION --> ADVERSARIAL_REVIEW
+    SPECULATIVE_DRAFT --> AWAITING_CLARIFICATION
+    SPECULATIVE_DRAFT --> ADVERSARIAL_REVIEW
+    ADVERSARIAL_REVIEW --> PLANNING_READY
+    ADVERSARIAL_REVIEW --> AWAITING_CLARIFICATION
+    ADVERSARIAL_REVIEW --> SPECULATIVE_DRAFT
+    PLANNING_READY --> [*]
+```
+
+Scores do not override blocker reasons. Entry to ADVERSARIAL_REVIEW requires both blocker_reasons empty and completeness/confidence scores ≥ 80. PLANNING_READY is only reachable when all agents report zero material findings.
+
+### Adversarial review
+
+The adversarial review stage is the key gate before a spec becomes planning-ready. Dynamic agent teams are assembled per-run: section agents probe individual spec areas for depth, while cross-cutting agents check coherence across the whole document. Review proceeds in convergence-based rounds — agents continue until findings reach zero or the round cap is hit. If material findings persist at the cap, the spec is sent back for revision or flagged for decomposition into smaller subjects.
+
+**Agent team composition:**
+
+| Agent type | Role | Count |
+|------------|------|-------|
+| Section agents | Probe individual spec areas (core flows, entity/state, interfaces, constraints, security, acceptance criteria, data model, migration) | 3–10 per run |
+| Literal implementer | "If I built exactly what this says with zero context, what would go wrong?" | 1 (cross-cutting) |
+| QA adversary | "What claims are untestable? What edge cases have no defined behavior?" | 1 (cross-cutting) |
+| Consistency checker | "Where does section X contradict or assume something incompatible with section Y?" | 1 (cross-cutting) |
+
+**Convergence model:** min 2 rounds (1 if round 1 is clean), max 5. Exit when all agents independently report zero material findings. Hitting the 5-round cap triggers `decomposition_required` — it is not an acceptable exit.
+
+### Beads pipeline
+
+Beads are an optional post-handoff step — the user is prompted after plan delivery.
+
+**Generation** decomposes the implementation plan into `br` beads: one epic per spec subject, one bead per discrete work unit. Each bead carries dependency wiring, provenance labels (`trace:<subject-slug>`), and an explicit mapping back to spec claims. Every spec claim must map to at least one bead. Output: `beads-manifest.json`.
+
+**Review** stress-tests the beads with a 4-agent team:
+
+| Agent | Focus |
+|-------|-------|
+| Coverage | Every spec claim and acceptance criterion has a bead |
+| Granularity | Each bead is properly sized (not too coarse, not too fine) |
+| Dependency | Cycle detection and dependency graph structure |
+| Actionability | TDD-readiness, test boundaries, literal implementability |
+
+Same convergence model as adversarial review: min 2 rounds, max 5, exit on zero findings, cap = decomposition signal. Beads review can surface spec gaps that adversarial review missed — these escalate back to the spec-loop via `beads-escalation.json`.
+
 ### Skills
 
 | Skill | Role |
@@ -69,35 +199,6 @@ evidence → intake → loop → completeness → synthesis-review → adversari
 | `spec-plan-handoff` | Render the implementation plan if eligible, or emit a withheld handoff with next steps if blocked |
 | `spec-beads-generate` | Decompose implementation plan into `br` beads with dependency wiring, epic grouping, and provenance labels |
 | `spec-beads-review` | Stress-test beads for coverage, granularity, dependencies, and actionability using adversarial agent teams |
-
-### State transitions
-
-```
-DISCOVERY
-  → AWAITING_CLARIFICATION  (evidence exhausted, user can answer)
-  → SPECULATIVE_DRAFT       (evidence partial, blocker reasons exist, question round done)
-
-AWAITING_CLARIFICATION
-  → DISCOVERY               (user answers but evidence gaps remain)
-  → SPECULATIVE_DRAFT       (user provides some answers, unresolved decisions remain)
-  → ADVERSARIAL_REVIEW      (all gates pass after user answers)
-
-SPECULATIVE_DRAFT
-  → AWAITING_CLARIFICATION  (review discovers ambiguities needing user input)
-  → ADVERSARIAL_REVIEW      (blocker reasons resolved, scores pass 80/80)
-
-ADVERSARIAL_REVIEW
-  → PLANNING_READY          (zero material findings by agent consensus)
-  → AWAITING_CLARIFICATION  (ambiguity only user can resolve, or decomposition required)
-  → SPECULATIVE_DRAFT       (missed blocker reopened)
-
-PLANNING_READY
-  → handoff_status = ELIGIBLE (always)
-```
-
-### Adversarial review
-
-The adversarial review stage is the key gate before a spec becomes planning-ready. Dynamic agent teams are assembled per-run: section agents probe individual spec areas for depth, while cross-cutting agents check coherence across the whole document. Review proceeds in convergence-based rounds — agents continue until findings reach zero or the round cap is hit. If material findings persist at the cap, the spec is sent back for revision or flagged for decomposition into smaller subjects.
 
 ## Repo layout
 
