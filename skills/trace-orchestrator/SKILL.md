@@ -57,6 +57,13 @@ Every run must carry these canonical fields in `manifest.json` and
 - `adversarial_findings_total`
 - `adversarial_findings_resolved_by_research`
 - `adversarial_findings_resolved_by_user`
+- `beads_generated`
+- `beads_epic_id`
+- `beads_review_rounds_completed`
+- `beads_review_status`
+- `beads_total`
+- `beads_coverage_score`
+- `beads_workspace_path`
 
 `trace-orchestrator` is the only skill allowed to finalize:
 - `planning_status`
