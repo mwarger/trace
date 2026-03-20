@@ -46,6 +46,9 @@ Important rules:
 ## Repo layout
 
 ```text
+.claude-plugin/
+  plugin.json
+  marketplace.json
 skills/
   trace-orchestrator/
   spec-intake/
@@ -65,6 +68,7 @@ scripts/
   test-local.sh
 install.sh
 uninstall.sh
+LICENSE
 ```
 
 ## What gets installed
@@ -77,57 +81,58 @@ This repo installs 6 skills:
 - `spec-synthesis-review`
 - `spec-plan-handoff`
 
-The default install target is:
-- `${CODEX_HOME:-$HOME/.codex}/skills`
+The installer auto-detects the target platform:
+- If `~/.claude/` exists → installs to `~/.claude/skills/`
+- If `~/.codex/` exists → installs to `~/.codex/skills/`
+- Override with `TRACE_SKILLS_DIR`
 
 By default the installer uses symlinks so local edits in this repo are visible
 immediately in the installed skills.
 
-## Prereqs
-
-- `bash`
-- `git`
-- `python3`
-
-`curl` is only needed if you install via a remote raw script URL.
-
 ## Install
 
-### Local checkout
+### Claude Code (recommended)
 
-From this repo:
+```
+/plugin marketplace add mwarger/trace
+/plugin install trace@trace-dev
+```
+
+That's it. All 6 skills are available immediately. Update with `/plugin update trace`.
+
+### Codex
+
+```
+Fetch and follow instructions from https://raw.githubusercontent.com/mwarger/trace/main/.codex/INSTALL.md
+```
+
+### Manual / shell
+
+Prereqs: `bash`, `git`, `python3`
 
 ```bash
 ./install.sh
 ```
 
-This will:
-- install the skills into your Codex skills dir
-- install a helper command named `trace-pack`
+This installs the skills into your detected skills dir and a helper command `trace-pack`.
 
 Useful env vars:
 
 ```bash
 TRACE_INSTALL_MODE=copy ./install.sh
+TRACE_SKILLS_DIR="$HOME/.claude/skills" ./install.sh
 TRACE_SKILLS_DIR="$HOME/.codex/skills" ./install.sh
-CODEX_HOME="$HOME/.codex" ./install.sh
 ```
 
-### Remote install
-
-Tell your agent to install Trace from:
-- <https://github.com/mwarger/trace>
+Remote install:
 
 ```bash
 curl -fsSL "https://raw.githubusercontent.com/mwarger/trace/main/install.sh?$(date +%s)" | bash
 ```
 
-GitHub repo:
-- `git@github.com:mwarger/trace.git`
-- <https://github.com/mwarger/trace>
-
-For Codex, the install doc is:
-- [`.codex/INSTALL.md`](.codex/INSTALL.md)
+Platform-specific install docs:
+- Claude Code: [`.claude/INSTALL.md`](.claude/INSTALL.md)
+- Codex: [`.codex/INSTALL.md`](.codex/INSTALL.md)
 
 ## Helper command
 
@@ -149,7 +154,7 @@ Supported commands:
 
 ## How to kick it off
 
-Start a new Codex session after install and ask for one of these:
+Start a new session after install and ask for one of these:
 
 ```text
 Create a subject-named spec for this feature request using Trace.
@@ -158,30 +163,32 @@ Take this transcript and build a planning-ready subject spec.
 Use the trace-orchestrator skill on this codebase.
 ```
 
-If the install worked, the orchestrator skill should trigger and then route into
-the focused sub-skills.
+Works in both Claude Code (`claude`) and Codex (`codex`). If the install
+worked, the orchestrator skill should trigger and then route into the focused
+sub-skills.
 
 After changing the skill pack, restart the agent session before testing again.
 Do not trust a run that still writes old policy markers such as `trace-v1`.
 
 ## Local isolated testing
 
-If you want to test this without touching your normal Codex setup:
+If you want to test without touching your normal setup:
 
 ```bash
 ./scripts/test-local.sh
 ```
 
 That creates:
-- `.local-test/codex-home/skills`
+- `.local-test/skills`
 
-and installs the skills there instead of your normal `~/.codex/skills`.
+and installs the skills there instead of your normal skills directory.
 
-Then launch Codex from the same shell with:
+Then launch your agent from the same shell with:
 
 ```bash
-export CODEX_HOME="$(pwd)/.local-test/codex-home"
-codex
+TRACE_SKILLS_DIR="$(pwd)/.local-test/skills" claude
+# or
+TRACE_SKILLS_DIR="$(pwd)/.local-test/skills" codex
 ```
 
 This isolates the test from your normal skills and other installed scripts.
@@ -246,16 +253,15 @@ trace-pack uninstall-skills
 
 ## Notes on interference
 
-The safest way to test locally is with a separate `CODEX_HOME`.
-That keeps this pack from mixing with other installed skills, custom prompts, or
-other local automation.
+The safest way to test locally is with `TRACE_SKILLS_DIR` pointed at an
+isolated directory. That keeps this pack from mixing with other installed
+skills, custom prompts, or other local automation.
 
 Recommended workflow for isolated testing:
 
 ```bash
 ./scripts/test-local.sh
-export CODEX_HOME="$(pwd)/.local-test/codex-home"
-codex
+TRACE_SKILLS_DIR="$(pwd)/.local-test/skills" claude  # or codex
 ```
 
 Then try a prompt that should trigger the orchestrator.

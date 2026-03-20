@@ -16,7 +16,9 @@ require_file() {
 
 log "checking required files"
 require_file "$ROOT_DIR/README.md"
+require_file "$ROOT_DIR/.claude/INSTALL.md"
 require_file "$ROOT_DIR/.codex/INSTALL.md"
+require_file "$ROOT_DIR/.claude-plugin/plugin.json"
 require_file "$ROOT_DIR/specs/README.md"
 require_file "$ROOT_DIR/specs/analytics-module.md"
 require_file "$ROOT_DIR/specs/feature-flags-system.md"

@@ -1,0 +1,18 @@
+{
+  "name": "trace-dev",
+  "description": "Trace spec-from-evidence skill pack",
+  "owner": {
+    "name": "Mat Warger"
+  },
+  "plugins": [
+    {
+      "name": "trace",
+      "description": "Spec-from-evidence pipeline: build subject-named specs with sub-agent fanout, provenance tracking, adaptive clarification, and a canonical readiness contract",
+      "version": "1.0.0",
+      "source": "./",
+      "author": {
+        "name": "Mat Warger"
+      }
+    }
+  ]
+}
