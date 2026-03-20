@@ -130,7 +130,7 @@ Treat the workflow as a persisted state machine:
 7. `VERIFY`
 8. `READINESS_GATE`
 9. `ADVERSARIAL_REVIEW`
-10. `PUBLISH`
+10. `PLAN_HANDOFF`
 
 Each phase needs entry criteria, exit criteria, and a checkpoint artifact in
 `specs/_artifacts/<subject>/run-state.json`.
