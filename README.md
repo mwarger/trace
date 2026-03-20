@@ -50,8 +50,11 @@ Important rules:
 
 ```
 evidence → intake → loop → completeness → synthesis-review → adversarial-review → handoff
-                     ↑                                              │
-                     └──────────── blockers or gaps ────────────────┘
+                     ↑                                              │                  │
+                     └──────────── blockers or gaps ────────────────┘                  │
+                     │                                                                 ↓
+                     │                                              beads-generate → beads-review
+                     └──────────── beads escalation ──────────────────────────────────┘
 ```
 
 ### Skills
@@ -64,6 +67,8 @@ evidence → intake → loop → completeness → synthesis-review → adversari
 | `spec-synthesis-review` | Merge sub-agent outputs into canon, run 4 review passes (completeness, contradiction, provenance, implementability) |
 | `spec-adversarial-review` | Stress-test the spec with dynamic agent teams — section agents for depth, cross-cutting agents for coherence — until zero findings or decomposition |
 | `spec-plan-handoff` | Render the implementation plan if eligible, or emit a withheld handoff with next steps if blocked |
+| `spec-beads-generate` | Decompose implementation plan into `br` beads with dependency wiring, epic grouping, and provenance labels |
+| `spec-beads-review` | Stress-test beads for coverage, granularity, dependencies, and actionability using adversarial agent teams |
 
 ### State transitions
 
@@ -108,6 +113,8 @@ skills/
   spec-synthesis-review/
   spec-adversarial-review/
   spec-plan-handoff/
+  spec-beads-generate/
+  spec-beads-review/
 specs/
   README.md
   analytics-module.md
@@ -125,7 +132,7 @@ LICENSE
 
 ## What gets installed
 
-This repo installs 7 skills:
+This repo installs 9 skills:
 - `trace-orchestrator`
 - `spec-intake`
 - `spec-loop`
@@ -133,6 +140,8 @@ This repo installs 7 skills:
 - `spec-synthesis-review`
 - `spec-adversarial-review`
 - `spec-plan-handoff`
+- `spec-beads-generate`
+- `spec-beads-review`
 
 The installer auto-detects the target platform:
 - If `~/.claude/` exists → installs to `~/.claude/skills/`
@@ -151,7 +160,7 @@ immediately in the installed skills.
 /plugin install trace@trace-dev
 ```
 
-That's it. All 7 skills are available immediately. Update with `/plugin update trace`.
+That's it. All 9 skills are available immediately. Update with `/plugin update trace`.
 
 ### Codex
 
