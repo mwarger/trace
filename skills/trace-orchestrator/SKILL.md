@@ -52,6 +52,11 @@ Every run must carry these canonical fields in `manifest.json` and
 - `unconfirmed_product_decisions`
 - `acceptance_scenarios_present`
 - `corroboration_score`
+- `adversarial_rounds_completed`
+- `adversarial_status`
+- `adversarial_findings_total`
+- `adversarial_findings_resolved_by_research`
+- `adversarial_findings_resolved_by_user`
 
 `trace-orchestrator` is the only skill allowed to finalize:
 - `planning_status`
