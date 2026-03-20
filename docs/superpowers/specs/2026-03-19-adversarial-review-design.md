@@ -221,7 +221,7 @@ Phase 9:  ADVERSARIAL_REVIEW
   entry: synthesis-review passed, scoring gates met
   exit: convergence (zero findings by consensus) or decomposition required
   checkpoint: adversarial-review-log.md
-Phase 10: PUBLISH (was 9)
+Phase 10: PLAN_HANDOFF (was PUBLISH, was 9)
 ```
 
 #### New Manifest Fields
