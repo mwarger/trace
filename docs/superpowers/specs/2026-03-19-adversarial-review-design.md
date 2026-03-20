@@ -102,9 +102,8 @@ Hitting the cap (5 rounds without convergence) is NOT an acceptable exit. It tri
 
 - `adversarial_status = decomposition_required`
 - `planning_status` reverts to `AWAITING_CLARIFICATION`
-- The review emits a decomposition proposal: natural seams in the spec, what's tangling, and 2-3 suggested sub-specs that would each be tractable
-- User decides how to split
-- Each sub-spec enters the pipeline at `spec-intake` independently
+- The review emits a decomposition proposal (see below)
+- User decides how to split and when to run each sub-spec
 
 `adversarial_status` has exactly two values:
 
@@ -112,6 +111,28 @@ Hitting the cap (5 rounds without convergence) is NOT an acceptable exit. It tri
 - `decomposition_required` — too complex, must split
 
 No middle ground. No "close enough."
+
+#### Decomposition Handoff
+
+When decomposition is required, the adversarial review emits:
+
+1. **`decomposition-proposal.md`** — identifies natural seams in the spec, what's tangling, and 2-3 suggested sub-specs with boundaries
+2. **`sub-spec-brief-<name>.md`** (one per suggested sub-spec) — standalone brief containing:
+   - Extracted evidence relevant to that sub-spec
+   - Scope and boundaries (what's in, what's out)
+   - Constraints inherited from the parent spec
+   - Dependencies on other sub-specs (if any)
+   - Enough context that a fresh session can run `spec-intake` on it without losing information
+
+The user reviews the decomposition and decides per sub-spec:
+
+- **Run now in this session** — sequential, one at a time through the full pipeline
+- **Run in parallel via agent teams** — for sub-specs that are independent (no dependency edges between them), the orchestrator can spawn teams to run them concurrently
+- **Save for later** — the brief is self-contained; pick it up in a new session whenever
+
+The decomposition proposal must identify dependency edges between sub-specs so the user can make an informed choice. Sub-specs with dependencies should be sequenced (either within a session or across sessions); independent sub-specs are candidates for parallel teams.
+
+All decomposition artifacts are added to the orchestrator's artifact catalog.
 
 #### Outputs
 
@@ -187,7 +208,7 @@ If adversarial review escalates back, the spec re-enters the pipeline:
 
 - `AWAITING_CLARIFICATION` → route to `spec-loop` (targeted round) → `spec-completeness` → `spec-synthesis-review` → `spec-adversarial-review`
 - `SPECULATIVE_DRAFT` → same re-entry path
-- `decomposition_required` → user splits → each sub-spec enters at `spec-intake`
+- `decomposition_required` → decomposition briefs emitted → user chooses per sub-spec: run now (sequential), run in parallel (agent teams for independent sub-specs), or save for later (self-contained brief for a new session)
 
 **Handoff to spec-loop on re-entry**: when adversarial review triggers a back-transition, it emits an `adversarial-escalation.json` artifact listing the specific findings that caused the regression (finding IDs, affected sections, blocker reason if reopened). The orchestrator passes this as input to the targeted `spec-loop` round so the loop knows exactly what to address rather than running a generic pass. `spec-loop` must accept `adversarial-escalation.json` as an optional input that, when present, scopes the round to the escalated findings.
 
