@@ -131,6 +131,8 @@ Treat the workflow as a persisted state machine:
 8. `READINESS_GATE`
 9. `ADVERSARIAL_REVIEW`
 10. `PLAN_HANDOFF`
+11. `BEADS_GENERATION` (optional — user prompted after PLAN_HANDOFF)
+12. `BEADS_REVIEW` (optional — runs if BEADS_GENERATION completed)
 
 Each phase needs entry criteria, exit criteria, and a checkpoint artifact in
 `specs/_artifacts/<subject>/run-state.json`.
@@ -141,6 +143,19 @@ Each phase needs entry criteria, exit criteria, and a checkpoint artifact in
 - exit: convergence (zero material findings by agent consensus) or
   decomposition required (cap hit)
 - checkpoint: `adversarial-review-log.md`
+
+`BEADS_GENERATION` phase contract:
+- entry: `PLAN_HANDOFF` complete, user accepts prompt ("Would you like to
+  generate a beads workspace from this plan?")
+- exit: `beads-manifest.json` emitted, all beads created via `br`
+- checkpoint: `beads-manifest.json`
+- if user declines, run ends at `PLAN_HANDOFF`
+
+`BEADS_REVIEW` phase contract:
+- entry: `BEADS_GENERATION` complete
+- exit: convergence (zero material findings from all agents) or
+  decomposition required (cap hit)
+- checkpoint: `beads-review-log.md`
 
 ## Required sub-skill order
 
