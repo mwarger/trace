@@ -1,6 +1,7 @@
 ---
 name: trace-orchestrator
 description: "Create a subject-named specification from any evidence source using a reducer-based Trace workflow. Use this when the user wants a planning-ready spec, a clean-room reverse spec, or an evidence-first feature spec with sub-agent fanout, provenance tracking, adaptive clarification, speculative variants, and a canonical readiness contract."
+allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent
 ---
 
 Use this as the top-level skill for the pack.
@@ -23,7 +24,7 @@ Trigger when the user wants to:
 2. Nothing becomes canon without provenance.
 3. The lead agent is the only reducer.
 4. Use sub-agents by default for bounded read-heavy work.
-5. Use the runtime's native question tool whenever user input is needed.
+5. Ask the user directly when user input is needed.
 6. `trace-orchestrator` owns the canonical readiness verdict.
 7. No run is planning-ready if blocker reasons remain open.
 8. Scores matter only after blocker reasons are cleared.
@@ -66,6 +67,7 @@ Use these states:
   - `DISCOVERY`
   - `AWAITING_CLARIFICATION`
   - `SPECULATIVE_DRAFT`
+  - `ADVERSARIAL_REVIEW`
   - `PLANNING_READY`
 - `handoff_status`
   - `WITHHELD`
@@ -81,6 +83,16 @@ Transitions:
 - `sparse` `analogy_feature` or `parity_clone` plus zero question rounds must
   resolve to `AWAITING_CLARIFICATION` or `SPECULATIVE_DRAFT`, never
   `PLANNING_READY`
+- `ADVERSARIAL_REVIEW` entry requires: `blocker_reasons` empty, all critical
+  decision buckets closed, `completeness_score >= 80`,
+  `evidence_confidence_score >= 80`, and synthesis-review verification passed
+- `ADVERSARIAL_REVIEW` → `PLANNING_READY` only when adversarial rounds
+  converge (zero material findings by agent consensus)
+- `ADVERSARIAL_REVIEW` → `AWAITING_CLARIFICATION` if adversarial review
+  surfaces ambiguity only the user can resolve, or if the round cap is hit
+  (decomposition required)
+- `ADVERSARIAL_REVIEW` → `SPECULATIVE_DRAFT` if adversarial review re-opens
+  blocker reasons
 
 ## Canonical merge protocol
 
@@ -140,6 +152,9 @@ Default sub-agent roles:
 - `implementability-reviewer`
 - `artifact-curator`
 
+Use the runtime's agent or subprocess mechanism for delegation (Agent tool in
+Claude Code, sub-agents in Codex).
+
 Delegate when work is:
 - parallelizable
 - read-heavy
@@ -168,7 +183,7 @@ Every question must map to:
 - one ambiguity
 - one reason it matters
 
-Use the runtime's native question tool whenever available.
+Ask the user directly when available.
 Batch the smallest independent unblocker set, default max `3`.
 Offer a recommended default pack when a full answer can be approved quickly.
 
