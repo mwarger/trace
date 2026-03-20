@@ -31,7 +31,9 @@ for skill in \
   spec-completeness \
   spec-synthesis-review \
   spec-adversarial-review \
-  spec-plan-handoff
+  spec-plan-handoff \
+  spec-beads-generate \
+  spec-beads-review
 do
   require_file "$ROOT_DIR/skills/$skill/SKILL.md"
 done
