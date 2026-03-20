@@ -1,6 +1,7 @@
 ---
 name: spec-intake
 description: "Normalize all starting evidence into a subject spec run. Use this when beginning a Trace spec from code, docs, transcripts, screenshots, URLs, or a sparse user request. Creates the subject slug, frontmatter, evidence ledgers, request archetype, evidence-density classification, and canonical readiness skeleton."
+allowed-tools: Read, Write, Glob, Grep, Bash, Agent
 ---
 
 Use this skill first.

@@ -3,8 +3,18 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 CLI_NAME="trace-pack"
-DEFAULT_CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
-DEFAULT_SKILLS_DIR="${TRACE_SKILLS_DIR:-$DEFAULT_CODEX_HOME/skills}"
+
+detect_skills_dir() {
+  if [[ -n "${TRACE_SKILLS_DIR:-}" ]]; then
+    printf '%s\n' "$TRACE_SKILLS_DIR"
+  elif [[ -d "$HOME/.claude" ]]; then
+    printf '%s\n' "$HOME/.claude/skills"
+  elif [[ -d "$HOME/.codex" ]]; then
+    printf '%s\n' "$HOME/.codex/skills"
+  else
+    printf '%s\n' "$HOME/.claude/skills"
+  fi
+}
 MANIFEST_NAME=".trace-pack-install.json"
 SKILL_NAMES=(
   trace-orchestrator
@@ -29,7 +39,7 @@ has_cmd() {
 }
 
 skills_dir() {
-  printf '%s\n' "${TRACE_SKILLS_DIR:-$DEFAULT_SKILLS_DIR}"
+  detect_skills_dir
 }
 
 install_mode() {
@@ -176,9 +186,13 @@ Commands:
   test-local
 
 Env vars:
-  CODEX_HOME
-  TRACE_SKILLS_DIR
-  TRACE_INSTALL_MODE=link|copy
+  TRACE_SKILLS_DIR     override auto-detected skills directory
+  TRACE_INSTALL_MODE   link (default) or copy
+
+Platform detection (when TRACE_SKILLS_DIR is not set):
+  1. ~/.claude/ exists → ~/.claude/skills/
+  2. ~/.codex/ exists  → ~/.codex/skills/
+  3. fallback          → ~/.claude/skills/
 EOF
 }
 

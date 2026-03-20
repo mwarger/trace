@@ -3,8 +3,7 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 TEST_ROOT="${TRACE_TEST_ROOT:-$ROOT_DIR/.local-test}"
-TEST_CODEX_HOME="$TEST_ROOT/codex-home"
-TEST_SKILLS_DIR="$TEST_CODEX_HOME/skills"
+TEST_SKILLS_DIR="$TEST_ROOT/skills"
 MANIFEST_PATH="$TEST_ROOT/README.md"
 
 log() {
@@ -23,12 +22,18 @@ cat > "$MANIFEST_PATH" <<EOF
 
 This directory is an isolated test install for Trace.
 
-Use it like this:
+## Claude Code
 
 \`\`\`bash
 cd "$ROOT_DIR"
-export CODEX_HOME="$TEST_CODEX_HOME"
-codex
+TRACE_SKILLS_DIR="$TEST_SKILLS_DIR" claude
+\`\`\`
+
+## Codex
+
+\`\`\`bash
+cd "$ROOT_DIR"
+TRACE_SKILLS_DIR="$TEST_SKILLS_DIR" codex
 \`\`\`
 
 Suggested prompts:
@@ -40,5 +45,4 @@ EOF
 
 log "wrote $MANIFEST_PATH"
 log "next:"
-printf '  export CODEX_HOME="%s"\n' "$TEST_CODEX_HOME"
-printf '  codex\n'
+printf '  TRACE_SKILLS_DIR="%s" claude   # or codex\n' "$TEST_SKILLS_DIR"

@@ -1,6 +1,7 @@
 ---
 name: spec-synthesis-review
 description: "Reduce typed sub-agent outputs into canon and verify the subject spec before readiness promotion. Use this when you need deterministic merges, provenance review, contradiction handling, verification loops, section drafting, or final review passes across the spec."
+allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
 Use this after a scoring pass or when draft sections need promotion into canon.

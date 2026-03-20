@@ -1,3 +1,4 @@
 .local-test/
 .tmp-bin/
+.tmp-claude-home/
 .tmp-codex-home/
