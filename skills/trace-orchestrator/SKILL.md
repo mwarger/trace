@@ -301,6 +301,11 @@ Sidecars:
 - `adversarial-escalation.json`
 - `decomposition-proposal.md`
 - `sub-spec-brief-<name>.md`
+- `beads-manifest.json`
+- `beads-review-log.md`
+- `beads-review-round-N.json`
+- `beads-decomposition-proposal.md`
+- `beads-escalation.json`
 
 ## Root specs index
 
