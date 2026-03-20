@@ -172,11 +172,18 @@ Each phase needs entry criteria, exit criteria, and a checkpoint artifact in
 4. `spec-synthesis-review`
 5. `spec-adversarial-review`
 6. `spec-plan-handoff`
+7. `spec-beads-generate` (optional — only if user accepts beads prompt)
+8. `spec-beads-review` (optional — only if beads were generated)
 
 Loop back to `spec-loop` or `spec-completeness` whenever verification fails or
 blockers remain. If `spec-adversarial-review` escalates back, pass the
 `adversarial-escalation.json` artifact as input to the targeted `spec-loop`
 round so it addresses the specific findings rather than running a generic pass.
+
+If `spec-beads-review` triggers a back-transition, pass the
+`beads-escalation.json` artifact as input to the targeted `spec-loop` round.
+`spec-loop` treats `beads-escalation.json` identically to
+`adversarial-escalation.json` — scope the round to the listed findings.
 
 ## Delegation policy
 
@@ -207,6 +214,13 @@ For adversarial review, create agent teams via `TeamCreate`:
   completeness matrix
 - cross-cutting agents: literal implementer, QA adversary, consistency checker
 - team persists for all adversarial rounds
+
+For beads review, create agent teams via `TeamCreate`:
+- coverage agent: spec claim traceability
+- granularity agent: bead sizing
+- dependency agent: graph correctness (uses `bv --robot-*` commands)
+- actionability agent: implementability + TDD test sketches
+- team persists for all beads review rounds
 
 ## Tool policy
 
