@@ -17,8 +17,8 @@ dependencies, scalability gaps, security blind spots, untestable claims.
 
 ## Agent team allocation
 
-Use agent teams (`TeamCreate`) as the primary organizing mechanism. The team
-persists across all rounds for context continuity.
+The orchestrator creates agent teams via `TeamCreate` before delegating to this
+skill. The team persists across all rounds for context continuity.
 
 ### Section agents (depth)
 

@@ -101,7 +101,7 @@ immediately in the installed skills.
 /plugin install trace@trace-dev
 ```
 
-That's it. All 6 skills are available immediately. Update with `/plugin update trace`.
+That's it. All 7 skills are available immediately. Update with `/plugin update trace`.
 
 ### Codex
 
