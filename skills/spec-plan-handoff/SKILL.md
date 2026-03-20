@@ -1,6 +1,7 @@
 ---
 name: spec-plan-handoff
 description: "Render the implementation handoff for a subject spec. Use this when the canonical readiness verdict already exists and you need either a real implementation plan for eligible runs or a withheld handoff plus bounded options for blocked runs."
+allowed-tools: Read, Write, Glob, Grep
 ---
 
 Use this only after `trace-orchestrator` has finalized `planning_status` and
@@ -11,6 +12,7 @@ Use this only after `trace-orchestrator` has finalized `planning_status` and
 Do not emit a real implementation plan if:
 - `planning_status != PLANNING_READY`
 - or `handoff_status != ELIGIBLE`
+- or `adversarial_status != converged`
 - or the run is a `sparse` `analogy_feature` or `parity_clone` with
   `question_rounds_completed = 0`
 
@@ -21,6 +23,7 @@ Read from canon and sidecars:
 - `decision-log.md`
 - `completeness-matrix.md`
 - `review-report.md`
+- `adversarial-review-log.md`
 
 Do not plan directly from raw intake chatter.
 
