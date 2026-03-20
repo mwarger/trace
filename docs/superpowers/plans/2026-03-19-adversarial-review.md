@@ -101,290 +101,7 @@ git commit -m "feat: add adversarial manifest fields to canonical readiness cont
 
 ---
 
-### Task 3: Update Orchestrator Run Phases and Sub-Skill Order
-
-**Files:**
-- Modify: `skills/trace-orchestrator/SKILL.md:105-131` (run phases and sub-skill order)
-
-- [ ] **Step 1: Insert ADVERSARIAL_REVIEW phase**
-
-Change the run phases (lines 108-116) from:
-
-```markdown
-1. `INTAKE`
-2. `EVIDENCE_FANOUT`
-3. `REDUCE_AND_MERGE`
-4. `GAP_ANALYSIS`
-5. `USER_INPUT`
-6. `DRAFT`
-7. `VERIFY`
-8. `READINESS_GATE`
-9. `PUBLISH`
-```
-
-to:
-
-```markdown
-1. `INTAKE`
-2. `EVIDENCE_FANOUT`
-3. `REDUCE_AND_MERGE`
-4. `GAP_ANALYSIS`
-5. `USER_INPUT`
-6. `DRAFT`
-7. `VERIFY`
-8. `READINESS_GATE`
-9. `ADVERSARIAL_REVIEW`
-10. `PUBLISH`
-```
-
-- [ ] **Step 2: Insert spec-adversarial-review in sub-skill order**
-
-Change the required sub-skill order (lines 123-127) from:
-
-```markdown
-1. `spec-intake`
-2. `spec-loop`
-3. `spec-completeness`
-4. `spec-synthesis-review`
-5. `spec-plan-handoff`
-```
-
-to:
-
-```markdown
-1. `spec-intake`
-2. `spec-loop`
-3. `spec-completeness`
-4. `spec-synthesis-review`
-5. `spec-adversarial-review`
-6. `spec-plan-handoff`
-```
-
-- [ ] **Step 3: Update the loop-back instruction**
-
-Change lines 129-130 from:
-
-```markdown
-Loop back to `spec-loop` or `spec-completeness` whenever verification fails or
-blockers remain.
-```
-
-to:
-
-```markdown
-Loop back to `spec-loop` or `spec-completeness` whenever verification fails or
-blockers remain. If `spec-adversarial-review` escalates back, pass the
-`adversarial-escalation.json` artifact as input to the targeted `spec-loop`
-round so it addresses the specific findings rather than running a generic pass.
-```
-
-- [ ] **Step 4: Commit**
-
-```bash
-git add skills/trace-orchestrator/SKILL.md
-git commit -m "feat: add adversarial review to orchestrator phases and sub-skill order"
-```
-
----
-
-### Task 4: Update Orchestrator Artifacts and Delegation
-
-**Files:**
-- Modify: `skills/trace-orchestrator/SKILL.md:208-230` (artifacts section)
-- Modify: `skills/trace-orchestrator/SKILL.md:132-155` (delegation policy)
-
-- [ ] **Step 1: Add adversarial artifacts to the catalog**
-
-After line 229 (`- implementation-plan.md`), add:
-
-```markdown
-- `adversarial-review-log.md`
-- `adversarial-round-N.json`
-- `adversarial-escalation.json`
-- `decomposition-proposal.md`
-- `sub-spec-brief-<name>.md`
-```
-
-- [ ] **Step 2: Add team creation guidance to delegation policy**
-
-After the existing delegation policy section (after line 154), add:
-
-```markdown
-For adversarial review, create agent teams via `TeamCreate`:
-- section agents: one per substantive spec area, allocated by reading the
-  completeness matrix
-- cross-cutting agents: literal implementer, QA adversary, consistency checker
-- team persists for all adversarial rounds
-```
-
-- [ ] **Step 3: Commit**
-
-```bash
-git add skills/trace-orchestrator/SKILL.md
-git commit -m "feat: add adversarial artifacts and team creation to orchestrator"
-```
-
----
-
-### Task 5: Expand Spec-Loop Clarification Profiles
-
-**Files:**
-- Modify: `skills/spec-loop/SKILL.md:35-68` (clarification policy)
-
-- [ ] **Step 1: Add the expanded question categories with archetype matrix**
-
-After the existing clarification profiles (after line 57, the migration profile), add:
-
-```markdown
-Additional required categories by archetype:
-
-| Category | feature | analogy_feature | parity_clone | integration | bugfix | migration | refactor | reverse_spec |
-|----------|---------|----------------|-------------|-------------|--------|-----------|----------|-------------|
-| Failure modes | required | required | required | required | required | required | optional | required |
-| Security boundaries | required | required | required | required | optional | optional | optional | required |
-| Edge cases | required | required | required | required | required | required | optional | required |
-| Scalability assumptions | required | optional | optional | required | optional | required | optional | optional |
-| Operational concerns | required | optional | optional | required | optional | required | optional | required |
-| Ordering and concurrency | required | optional | optional | required | required | required | optional | optional |
-
-Categories marked `required` must be addressed before the drafting gate opens.
-Categories marked `optional` are skipped unless evidence suggests relevance.
-```
-
-- [ ] **Step 2: Add the research-first directive**
-
-After the new archetype matrix, add:
-
-```markdown
-## Research-first directive
-
-Before escalating any question to the user:
-1. search the codebase for existing patterns, implementations, or conventions
-   that answer it
-2. check existing evidence and prior clarification answers for implicit answers
-3. only escalate if genuinely unanswerable from available sources
-```
-
-- [ ] **Step 3: Add the raised drafting gate**
-
-After the research-first directive, add:
-
-```markdown
-## Raised drafting gate
-
-All required categories (per archetype matrix) must be addressed before
-transitioning to drafting. "Addressed" means the loop has a concrete answer
-from evidence, codebase research, or user answer — or has explicitly marked the
-category as out-of-scope with user agreement. "We didn't think to ask" is not
-addressed.
-```
-
-- [ ] **Step 4: Add adversarial-escalation.json re-entry support**
-
-After the raised drafting gate section, add:
-
-```markdown
-## Adversarial re-entry
-
-When `adversarial-escalation.json` is present as input, scope the round to the
-escalated findings only. Do not run a full generic pass. Address the specific
-findings, affected sections, and reopened blockers listed in the escalation
-artifact.
-```
-
-- [ ] **Step 5: Commit**
-
-```bash
-git add skills/spec-loop/SKILL.md
-git commit -m "feat: expand spec-loop clarification profiles and add research-first directive"
-```
-
----
-
-### Task 6: Add Sub-Signal Mapping to Spec-Completeness
-
-**Files:**
-- Modify: `skills/spec-completeness/SKILL.md:12-26` (ontology section)
-
-- [ ] **Step 1: Add sub-signal mapping after the ontology dimensions**
-
-After line 26 (`- acceptance criteria`), add:
-
-```markdown
-## Sub-signal requirements
-
-The following sub-signals feed into existing dimensions as required coverage
-inputs. A dimension cannot score above `partial` unless its mapped sub-signals
-are addressed (per the archetype applicability matrix in `spec-loop`).
-
-| Sub-signal | Feeds into dimensions |
-|------------|----------------------|
-| Security boundaries | `constraints`, `interfaces` |
-| Edge cases | `failure modes`, `state transitions` |
-| Scalability assumptions | `constraints`, `assumptions` |
-| Operational concerns | `interfaces`, `constraints` |
-| Ordering and concurrency | `state transitions`, `core flows` |
-
-For archetypes where a sub-signal is marked `optional` in the spec-loop
-matrix, that sub-signal does not block the parent dimension's coverage. It
-only contributes if evidence is present.
-```
-
-- [ ] **Step 2: Commit**
-
-```bash
-git add skills/spec-completeness/SKILL.md
-git commit -m "feat: add sub-signal dimension mapping to spec-completeness"
-```
-
----
-
-### Task 7: Add Adversarial Gate to Spec-Plan-Handoff
-
-**Files:**
-- Modify: `skills/spec-plan-handoff/SKILL.md:10-17` (preconditions)
-
-- [ ] **Step 1: Add adversarial_status gate**
-
-Change lines 12-16 from:
-
-```markdown
-Do not emit a real implementation plan if:
-- `planning_status != PLANNING_READY`
-- or `handoff_status != ELIGIBLE`
-- or the run is a `sparse` `analogy_feature` or `parity_clone` with
-  `question_rounds_completed = 0`
-```
-
-to:
-
-```markdown
-Do not emit a real implementation plan if:
-- `planning_status != PLANNING_READY`
-- or `handoff_status != ELIGIBLE`
-- or `adversarial_status != converged`
-- or the run is a `sparse` `analogy_feature` or `parity_clone` with
-  `question_rounds_completed = 0`
-```
-
-- [ ] **Step 2: Add adversarial-review-log.md to inputs**
-
-After line 24 (`- review-report.md`), add:
-
-```markdown
-- `adversarial-review-log.md`
-```
-
-- [ ] **Step 3: Commit**
-
-```bash
-git add skills/spec-plan-handoff/SKILL.md
-git commit -m "feat: require adversarial_status=converged in plan-handoff gate"
-```
-
----
-
-### Task 8: Create the `spec-adversarial-review` Skill
+### Task 3: Create the `spec-adversarial-review` Skill
 
 **Files:**
 - Create: `skills/spec-adversarial-review/SKILL.md`
@@ -563,6 +280,302 @@ Expected: the YAML frontmatter with `name: spec-adversarial-review`
 ```bash
 git add skills/spec-adversarial-review/SKILL.md
 git commit -m "feat: create spec-adversarial-review skill"
+```
+
+---
+
+### Task 4: Update Orchestrator Run Phases and Sub-Skill Order
+
+**Files:**
+- Modify: `skills/trace-orchestrator/SKILL.md:105-131` (run phases and sub-skill order)
+
+- [ ] **Step 1: Insert ADVERSARIAL_REVIEW phase**
+
+Change the run phases (lines 108-116) from:
+
+```markdown
+1. `INTAKE`
+2. `EVIDENCE_FANOUT`
+3. `REDUCE_AND_MERGE`
+4. `GAP_ANALYSIS`
+5. `USER_INPUT`
+6. `DRAFT`
+7. `VERIFY`
+8. `READINESS_GATE`
+9. `PUBLISH`
+```
+
+to:
+
+```markdown
+1. `INTAKE`
+2. `EVIDENCE_FANOUT`
+3. `REDUCE_AND_MERGE`
+4. `GAP_ANALYSIS`
+5. `USER_INPUT`
+6. `DRAFT`
+7. `VERIFY`
+8. `READINESS_GATE`
+9. `ADVERSARIAL_REVIEW`
+10. `PUBLISH`
+```
+
+- [ ] **Step 2: Add entry/exit/checkpoint comment for the ADVERSARIAL_REVIEW phase**
+
+After the run phases list, add:
+
+```markdown
+`ADVERSARIAL_REVIEW` phase contract:
+- entry: synthesis-review passed, scoring gates met (`completeness_score >= 80`,
+  `evidence_confidence_score >= 80`, `blocker_reasons` empty)
+- exit: convergence (zero material findings by agent consensus) or
+  decomposition required (cap hit)
+- checkpoint: `adversarial-review-log.md`
+```
+
+- [ ] **Step 3: Insert spec-adversarial-review in sub-skill order**
+
+Change the required sub-skill order (lines 123-127, note: line numbers may have shifted from Task 4 Step 1) from:
+
+```markdown
+1. `spec-intake`
+2. `spec-loop`
+3. `spec-completeness`
+4. `spec-synthesis-review`
+5. `spec-plan-handoff`
+```
+
+to:
+
+```markdown
+1. `spec-intake`
+2. `spec-loop`
+3. `spec-completeness`
+4. `spec-synthesis-review`
+5. `spec-adversarial-review`
+6. `spec-plan-handoff`
+```
+
+- [ ] **Step 4: Update the loop-back instruction**
+
+Change the loop-back instruction (originally lines 129-130, adjusted for prior insertions) from:
+
+```markdown
+Loop back to `spec-loop` or `spec-completeness` whenever verification fails or
+blockers remain.
+```
+
+to:
+
+```markdown
+Loop back to `spec-loop` or `spec-completeness` whenever verification fails or
+blockers remain. If `spec-adversarial-review` escalates back, pass the
+`adversarial-escalation.json` artifact as input to the targeted `spec-loop`
+round so it addresses the specific findings rather than running a generic pass.
+```
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add skills/trace-orchestrator/SKILL.md
+git commit -m "feat: add adversarial review to orchestrator phases and sub-skill order"
+```
+
+---
+
+### Task 5: Update Orchestrator Artifacts and Delegation
+
+**Files:**
+- Modify: `skills/trace-orchestrator/SKILL.md:208-230` (artifacts section)
+- Modify: `skills/trace-orchestrator/SKILL.md:132-155` (delegation policy)
+
+- [ ] **Step 1: Add adversarial artifacts to the catalog**
+
+After line 229 (`- implementation-plan.md`), add:
+
+```markdown
+- `adversarial-review-log.md`
+- `adversarial-round-N.json`
+- `adversarial-escalation.json`
+- `decomposition-proposal.md`
+- `sub-spec-brief-<name>.md`
+```
+
+- [ ] **Step 2: Add team creation guidance to delegation policy**
+
+After the existing delegation policy section (after line 154), add:
+
+```markdown
+For adversarial review, create agent teams via `TeamCreate`:
+- section agents: one per substantive spec area, allocated by reading the
+  completeness matrix
+- cross-cutting agents: literal implementer, QA adversary, consistency checker
+- team persists for all adversarial rounds
+```
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add skills/trace-orchestrator/SKILL.md
+git commit -m "feat: add adversarial artifacts and team creation to orchestrator"
+```
+
+---
+
+### Task 6: Expand Spec-Loop Clarification Profiles
+
+**Files:**
+- Modify: `skills/spec-loop/SKILL.md:35-68` (clarification policy)
+
+- [ ] **Step 1: Add the expanded question categories with archetype matrix**
+
+After the existing clarification profiles (after line 57, the migration profile), add:
+
+```markdown
+Additional required categories by archetype:
+
+| Category | feature | analogy_feature | parity_clone | integration | bugfix | migration | refactor | reverse_spec |
+|----------|---------|----------------|-------------|-------------|--------|-----------|----------|-------------|
+| Failure modes | required | required | required | required | required | required | optional | required |
+| Security boundaries | required | required | required | required | optional | optional | optional | required |
+| Edge cases | required | required | required | required | required | required | optional | required |
+| Scalability assumptions | required | optional | optional | required | optional | required | optional | optional |
+| Operational concerns | required | optional | optional | required | optional | required | optional | required |
+| Ordering and concurrency | required | optional | optional | required | required | required | optional | optional |
+
+Categories marked `required` must be addressed before the drafting gate opens.
+Categories marked `optional` are skipped unless evidence suggests relevance.
+```
+
+- [ ] **Step 2: Add the research-first directive**
+
+After the new archetype matrix, add:
+
+```markdown
+## Research-first directive
+
+Before escalating any question to the user:
+1. search the codebase for existing patterns, implementations, or conventions
+   that answer it
+2. check existing evidence and prior clarification answers for implicit answers
+3. only escalate if genuinely unanswerable from available sources
+```
+
+- [ ] **Step 3: Add the raised drafting gate**
+
+After the research-first directive, add:
+
+```markdown
+## Raised drafting gate
+
+All required categories (per archetype matrix) must be addressed before
+transitioning to drafting. "Addressed" means the loop has a concrete answer
+from evidence, codebase research, or user answer — or has explicitly marked the
+category as out-of-scope with user agreement. "We didn't think to ask" is not
+addressed.
+```
+
+- [ ] **Step 4: Add adversarial-escalation.json re-entry support**
+
+After the raised drafting gate section, add:
+
+```markdown
+## Adversarial re-entry
+
+When `adversarial-escalation.json` is present as input, scope the round to the
+escalated findings only. Do not run a full generic pass. Address the specific
+findings, affected sections, and reopened blockers listed in the escalation
+artifact.
+```
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add skills/spec-loop/SKILL.md
+git commit -m "feat: expand spec-loop clarification profiles and add research-first directive"
+```
+
+---
+
+### Task 7: Add Sub-Signal Mapping to Spec-Completeness
+
+**Files:**
+- Modify: `skills/spec-completeness/SKILL.md:12-26` (ontology section)
+
+- [ ] **Step 1: Add sub-signal mapping after the ontology dimensions**
+
+After line 26 (`- acceptance criteria`), add:
+
+```markdown
+## Sub-signal requirements
+
+The following sub-signals feed into existing dimensions as required coverage
+inputs. A dimension cannot score above `partial` unless its mapped sub-signals
+are addressed (per the archetype applicability matrix in `spec-loop`).
+
+| Sub-signal | Feeds into dimensions |
+|------------|----------------------|
+| Security boundaries | `constraints`, `interfaces` |
+| Edge cases | `failure modes`, `state transitions` |
+| Scalability assumptions | `constraints`, `assumptions` |
+| Operational concerns | `interfaces`, `constraints` |
+| Ordering and concurrency | `state transitions`, `core flows` |
+
+For archetypes where a sub-signal is marked `optional` in the spec-loop
+matrix, that sub-signal does not block the parent dimension's coverage. It
+only contributes if evidence is present.
+```
+
+- [ ] **Step 2: Commit**
+
+```bash
+git add skills/spec-completeness/SKILL.md
+git commit -m "feat: add sub-signal dimension mapping to spec-completeness"
+```
+
+---
+
+### Task 8: Add Adversarial Gate to Spec-Plan-Handoff
+
+**Files:**
+- Modify: `skills/spec-plan-handoff/SKILL.md:10-17` (preconditions)
+
+- [ ] **Step 1: Add adversarial_status gate**
+
+Change lines 12-16 from:
+
+```markdown
+Do not emit a real implementation plan if:
+- `planning_status != PLANNING_READY`
+- or `handoff_status != ELIGIBLE`
+- or the run is a `sparse` `analogy_feature` or `parity_clone` with
+  `question_rounds_completed = 0`
+```
+
+to:
+
+```markdown
+Do not emit a real implementation plan if:
+- `planning_status != PLANNING_READY`
+- or `handoff_status != ELIGIBLE`
+- or `adversarial_status != converged`
+- or the run is a `sparse` `analogy_feature` or `parity_clone` with
+  `question_rounds_completed = 0`
+```
+
+- [ ] **Step 2: Add adversarial-review-log.md to inputs**
+
+After line 25 (`- review-report.md`), add:
+
+```markdown
+- `adversarial-review-log.md`
+```
+
+- [ ] **Step 3: Commit**
+
+```bash
+git add skills/spec-plan-handoff/SKILL.md
+git commit -m "feat: require adversarial_status=converged in plan-handoff gate"
 ```
 
 ---
