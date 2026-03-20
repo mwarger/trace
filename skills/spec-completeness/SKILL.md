@@ -1,6 +1,7 @@
 ---
 name: spec-completeness
 description: "Score a subject spec against the ontology and canonical readiness contract. Use this when you need claim-level coverage scoring, corroboration checks, critical-decision coverage, risk-weighted assumptions, contradiction penalties, and blocker-aware 80/80 gates."
+allowed-tools: Read, Write, Glob, Grep
 ---
 
 Use this whenever canon changes materially.
@@ -23,6 +24,24 @@ Track these dimensions:
 - non-goals
 - assumptions
 - acceptance criteria
+
+## Sub-signal requirements
+
+The following sub-signals feed into existing dimensions as required coverage
+inputs. A dimension cannot score above `partial` unless its mapped sub-signals
+are addressed (per the archetype applicability matrix in `spec-loop`).
+
+| Sub-signal | Feeds into dimensions |
+|------------|----------------------|
+| Security boundaries | `constraints`, `interfaces` |
+| Edge cases | `failure modes`, `state transitions` |
+| Scalability assumptions | `constraints`, `assumptions` |
+| Operational concerns | `interfaces`, `constraints` |
+| Ordering and concurrency | `state transitions`, `core flows` |
+
+For archetypes where a sub-signal is marked `optional` in the spec-loop
+matrix, that sub-signal does not block the parent dimension's coverage. It
+only contributes if evidence is present.
 
 For each dimension track:
 - `coverage`
