@@ -180,6 +180,12 @@ Delegate when work is:
 
 Keep work local when it changes canon, readiness, or user interaction policy.
 
+For adversarial review, create agent teams via `TeamCreate`:
+- section agents: one per substantive spec area, allocated by reading the
+  completeness matrix
+- cross-cutting agents: literal implementer, QA adversary, consistency checker
+- team persists for all adversarial rounds
+
 ## Tool policy
 
 - Give each role the minimum viable tool allowlist.
@@ -254,6 +260,11 @@ Sidecars:
 - `decision-log.md`
 - `review-report.md`
 - `implementation-plan.md`
+- `adversarial-review-log.md`
+- `adversarial-round-N.json`
+- `adversarial-escalation.json`
+- `decomposition-proposal.md`
+- `sub-spec-brief-<name>.md`
 
 ## Root specs index
 
