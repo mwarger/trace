@@ -106,12 +106,13 @@ from evidence, codebase research, or user answer — or has explicitly marked th
 category as out-of-scope with user agreement. "We didn't think to ask" is not
 addressed.
 
-## Adversarial re-entry
+## Escalation re-entry
 
-When `adversarial-escalation.json` is present as input, scope the round to the
-escalated findings only. Do not run a full generic pass. Address the specific
-findings, affected sections, and reopened blockers listed in the escalation
-artifact.
+When `adversarial-escalation.json` or `beads-escalation.json` is present as
+input, scope the round to the escalated findings only. Do not run a full
+generic pass. Address the specific findings, affected sections, and reopened
+blockers listed in the escalation artifact. Both artifact types use the same
+schema and are handled identically.
 
 ## Speculative mode
 
