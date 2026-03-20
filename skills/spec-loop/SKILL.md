@@ -1,6 +1,7 @@
 ---
 name: spec-loop
 description: "Run the evidence-first Trace loop for a subject spec. Use this when you need to process evidence one unit at a time, produce unit summaries, rewrite the rolling summary, branch out to sub-agents for bounded exploration, choose adaptive clarification profiles, and emit speculative variants when blockers remain."
+allowed-tools: Read, Write, Edit, Glob, Grep, Agent
 ---
 
 Use this after intake and whenever more evidence work is needed.
@@ -55,15 +56,37 @@ Use these clarification profiles:
   - compatibility window
   - rollback expectation
 
+Additional required categories by archetype:
+
+| Category | feature | analogy_feature | parity_clone | integration | bugfix | migration | refactor | reverse_spec |
+|----------|---------|----------------|-------------|-------------|--------|-----------|----------|-------------|
+| Failure modes | required | required | required | required | required | required | optional | required |
+| Security boundaries | required | required | required | required | optional | optional | optional | required |
+| Edge cases | required | required | required | required | required | required | optional | required |
+| Scalability assumptions | required | optional | optional | required | optional | required | optional | optional |
+| Operational concerns | required | optional | optional | required | optional | required | optional | required |
+| Ordering and concurrency | required | optional | optional | required | required | required | optional | optional |
+
+Categories marked `required` must be addressed before the drafting gate opens.
+Categories marked `optional` are skipped unless evidence suggests relevance.
+
 Ask only if:
 - passive evidence is exhausted, ambiguous, or lower value
 - the ambiguity blocks critical decision coverage or blocker closure
 
-Use the runtime's native question tool whenever available.
+Ask the user directly when input is needed.
 Ask one batch at a time, max `3`, with recommended options first.
 Allow a recommended default pack when the user can approve defaults in one
 reply.
 Record answers as new `evidence_unit` records.
+
+## Research-first directive
+
+Before escalating any question to the user:
+1. search the codebase for existing patterns, implementations, or conventions
+   that answer it
+2. check existing evidence and prior clarification answers for implicit answers
+3. only escalate if genuinely unanswerable from available sources
 
 For `sparse` `analogy_feature` or `parity_clone` runs:
 - seed required clarification ids before drafting:
@@ -74,6 +97,21 @@ For `sparse` `analogy_feature` or `parity_clone` runs:
 - do not mark those buckets `covered` from analogy alone
 - if the user does not answer, keep the run in
   `AWAITING_CLARIFICATION` or `SPECULATIVE_DRAFT`
+
+## Raised drafting gate
+
+All required categories (per archetype matrix) must be addressed before
+transitioning to drafting. "Addressed" means the loop has a concrete answer
+from evidence, codebase research, or user answer — or has explicitly marked the
+category as out-of-scope with user agreement. "We didn't think to ask" is not
+addressed.
+
+## Adversarial re-entry
+
+When `adversarial-escalation.json` is present as input, scope the round to the
+escalated findings only. Do not run a full generic pass. Address the specific
+findings, affected sections, and reopened blockers listed in the escalation
+artifact.
 
 ## Speculative mode
 
