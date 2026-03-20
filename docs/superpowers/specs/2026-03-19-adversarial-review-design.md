@@ -27,6 +27,8 @@ New planning states:
 DISCOVERY → AWAITING_CLARIFICATION → SPECULATIVE_DRAFT → ADVERSARIAL_REVIEW → PLANNING_READY
 ```
 
+`ADVERSARIAL_REVIEW` is a fifth legal value of the `planning_status` field in both `manifest.json` and `run-state.json`. The orchestrator's canonical readiness contract must be updated to include it in the enum.
+
 #### Entry to ADVERSARIAL_REVIEW
 
 All conditions that currently gate `PLANNING_READY` now gate entry to `ADVERSARIAL_REVIEW` instead:
@@ -35,6 +37,8 @@ All conditions that currently gate `PLANNING_READY` now gate entry to `ADVERSARI
 - All 5 critical decision buckets closed (not `open`)
 - `completeness_score >= 80` and `evidence_confidence_score >= 80`
 - Synthesis-review verification passes
+
+When these conditions are met, the orchestrator sets `planning_status = ADVERSARIAL_REVIEW` and routes to `spec-adversarial-review`.
 
 #### Exit from ADVERSARIAL_REVIEW
 
@@ -81,12 +85,12 @@ Each round:
    - **High** — ambiguous constraint, unclear boundary, missing edge case with non-obvious answer → escalate to user
    - **Resolvable** — answer is unambiguous from codebase or context → auto-resolve, log decision, flag for user visibility
 6. User answers escalated findings
-7. Spec is updated with all resolutions
+7. The orchestrator (as lead agent and sole reducer) applies all resolutions to the spec. This is an intra-phase canon write owned by the orchestrator, consistent with the reducer protocol. The adversarial review skill emits structured resolution proposals; the orchestrator applies them. No exception to the lead-agent-as-only-reducer rule is needed.
 8. Next round begins on the updated spec
 
 #### Convergence
 
-- **Minimum**: 2 rounds (first pass always finds things; second validates answers didn't expose new gaps)
+- **Minimum**: 2 rounds if round 1 produces findings. If round 1 produces zero material findings from all agents, the minimum is 1 round — the spec entered adversarial review already clean, and a mechanical repeat of an identical spec adds no signal.
 - **Maximum**: 5 rounds (safety cap)
 - **Exit**: a round where ALL agents — section and cross-cutting — independently report zero material findings
 - **Bias**: toward running another round if any agent is uncertain. The cap is a safety valve, not a target.
@@ -113,8 +117,10 @@ No middle ground. No "close enough."
 
 - `adversarial-review-log.md` — all findings across all rounds, with resolutions and provenance
 - `adversarial-round-N.json` — structured findings per round (for machine consumption)
-- Updated `specs/<subject>.md` — spec revised with resolutions
-- Updated `manifest.json` — new adversarial fields
+- Updated `specs/<subject>.md` — spec revised with resolutions (applied by the orchestrator, not the skill directly)
+- Updated `manifest.json` — new adversarial fields (written by the orchestrator per the canonical readiness contract)
+
+Both new artifact types (`adversarial-review-log.md` and `adversarial-round-N.json`) must be added to the orchestrator's artifact catalog so the `artifact-curator` delegation role knows to handle and preserve them.
 
 ### 3. Spec-Loop Clarification Hardening
 
@@ -122,7 +128,16 @@ No architectural changes to spec-loop — same skill, same clarification machine
 
 #### Expanded Question Categories
 
-Currently questions target the 5 critical decision buckets (core outcome, scope boundary, implementation constraints, dependencies, acceptance signal). Add mandatory categories:
+Currently questions target the 5 critical decision buckets (core outcome, scope boundary, implementation constraints, dependencies, acceptance signal). Add new categories with per-archetype applicability:
+
+| Category | feature | analogy_feature | parity_clone | integration | bugfix | migration | refactor | reverse_spec |
+|----------|---------|----------------|-------------|-------------|--------|-----------|----------|-------------|
+| **Failure modes** | required | required | required | required | required | required | optional | required |
+| **Security boundaries** | required | required | required | required | optional | optional | optional | required |
+| **Edge cases** | required | required | required | required | required | required | optional | required |
+| **Scalability assumptions** | required | optional | optional | required | optional | required | optional | optional |
+| **Operational concerns** | required | optional | optional | required | optional | required | optional | required |
+| **Ordering and concurrency** | required | optional | optional | required | required | required | optional | optional |
 
 - **Failure modes** — "What happens when X fails? What's the degraded behavior? Is data loss acceptable?"
 - **Security boundaries** — "Who can access this? What's the trust model? What input do you not control?"
@@ -130,6 +145,8 @@ Currently questions target the 5 critical decision buckets (core outcome, scope 
 - **Scalability assumptions** — "What volume are you designing for? What's the growth expectation?"
 - **Operational concerns** — "How do you know it's working? How do you debug it? What gets logged?"
 - **Ordering and concurrency** — "Can these happen in parallel? What if they arrive out of order?"
+
+Categories marked `optional` for an archetype are skipped by default unless evidence suggests they're relevant. Categories marked `required` must be addressed before the drafting gate opens. This preserves the existing per-archetype clarification profile contract while expanding coverage where it matters.
 
 #### Research-First Directive
 
@@ -172,6 +189,8 @@ If adversarial review escalates back, the spec re-enters the pipeline:
 - `SPECULATIVE_DRAFT` → same re-entry path
 - `decomposition_required` → user splits → each sub-spec enters at `spec-intake`
 
+**Handoff to spec-loop on re-entry**: when adversarial review triggers a back-transition, it emits an `adversarial-escalation.json` artifact listing the specific findings that caused the regression (finding IDs, affected sections, blocker reason if reopened). The orchestrator passes this as input to the targeted `spec-loop` round so the loop knows exactly what to address rather than running a generic pass. `spec-loop` must accept `adversarial-escalation.json` as an optional input that, when present, scopes the round to the escalated findings.
+
 #### Run State Changes
 
 `run-state.json` gains a new phase:
@@ -186,7 +205,7 @@ Phase 10: PUBLISH (was 9)
 
 #### New Manifest Fields
 
-Added to the canonical readiness fields:
+Added to the canonical readiness fields. **The orchestrator owns these fields** per the canonical readiness contract — `spec-adversarial-review` emits structured inputs, and the orchestrator writes the final values to `manifest.json`, consistent with the existing pattern where only the orchestrator finalizes readiness fields.
 
 - `adversarial_rounds_completed` (integer)
 - `adversarial_status` (`converged` | `decomposition_required`)
@@ -209,8 +228,8 @@ Gate requires `adversarial_status = converged`. No exceptions.
 | File | Change |
 |------|--------|
 | `skills/spec-adversarial-review/SKILL.md` | **new** — adversarial review skill |
-| `skills/spec-loop/SKILL.md` | **modify** — expanded clarification, research-first, raised drafting gate |
-| `skills/trace-orchestrator/SKILL.md` | **modify** — new state, routing, team creation, manifest fields, phase list |
+| `skills/spec-loop/SKILL.md` | **modify** — expanded clarification, research-first, raised drafting gate, accept `adversarial-escalation.json` on re-entry |
+| `skills/trace-orchestrator/SKILL.md` | **modify** — new state in `planning_status` enum, routing, team creation, manifest fields, phase list, artifact catalog update |
 | `skills/spec-completeness/SKILL.md` | **modify** — score expanded categories |
 | `skills/spec-plan-handoff/SKILL.md` | **modify** — require `adversarial_status = converged` |
 | `README.md` | **modify** — update readiness model, skill count to 7, repo layout |
