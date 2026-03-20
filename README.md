@@ -44,6 +44,56 @@ Important rules:
 - sparse analogy prompts with zero question rounds must not become
   `PLANNING_READY`
 
+## How it works
+
+### Pipeline
+
+```
+evidence → intake → loop → completeness → synthesis-review → adversarial-review → handoff
+                     ↑                                              │
+                     └──────────── blockers or gaps ────────────────┘
+```
+
+### Skills
+
+| Skill | Role |
+|-------|------|
+| `spec-intake` | Normalize inputs into a subject spec run — classify archetype, seed evidence ledger, create readiness skeleton |
+| `spec-loop` | Process evidence one unit at a time, ask clarifying questions, emit speculative variants when blockers remain |
+| `spec-completeness` | Score the spec against an 11-dimension ontology with sub-signal requirements, enforce 80/80 gates |
+| `spec-synthesis-review` | Merge sub-agent outputs into canon, run 4 review passes (completeness, contradiction, provenance, implementability) |
+| `spec-adversarial-review` | Stress-test the spec with dynamic agent teams — section agents for depth, cross-cutting agents for coherence — until zero findings or decomposition |
+| `spec-plan-handoff` | Render the implementation plan if eligible, or emit a withheld handoff with next steps if blocked |
+
+### State transitions
+
+```
+DISCOVERY
+  → AWAITING_CLARIFICATION  (evidence exhausted, user can answer)
+  → SPECULATIVE_DRAFT       (evidence partial, blocker reasons exist, question round done)
+
+AWAITING_CLARIFICATION
+  → DISCOVERY               (user answers but evidence gaps remain)
+  → SPECULATIVE_DRAFT       (user provides some answers, unresolved decisions remain)
+  → ADVERSARIAL_REVIEW      (all gates pass after user answers)
+
+SPECULATIVE_DRAFT
+  → AWAITING_CLARIFICATION  (review discovers ambiguities needing user input)
+  → ADVERSARIAL_REVIEW      (blocker reasons resolved, scores pass 80/80)
+
+ADVERSARIAL_REVIEW
+  → PLANNING_READY          (zero material findings by agent consensus)
+  → AWAITING_CLARIFICATION  (ambiguity only user can resolve, or decomposition required)
+  → SPECULATIVE_DRAFT       (missed blocker reopened)
+
+PLANNING_READY
+  → handoff_status = ELIGIBLE (always)
+```
+
+### Adversarial review
+
+The adversarial review stage is the key gate before a spec becomes planning-ready. Dynamic agent teams are assembled per-run: section agents probe individual spec areas for depth, while cross-cutting agents check coherence across the whole document. Review proceeds in convergence-based rounds — agents continue until findings reach zero or the round cap is hit. If material findings persist at the cap, the spec is sent back for revision or flagged for decomposition into smaller subjects.
+
 ## Repo layout
 
 ```text
