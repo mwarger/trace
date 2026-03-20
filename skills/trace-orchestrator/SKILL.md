@@ -129,10 +129,18 @@ Treat the workflow as a persisted state machine:
 6. `DRAFT`
 7. `VERIFY`
 8. `READINESS_GATE`
-9. `PUBLISH`
+9. `ADVERSARIAL_REVIEW`
+10. `PUBLISH`
 
 Each phase needs entry criteria, exit criteria, and a checkpoint artifact in
 `specs/_artifacts/<subject>/run-state.json`.
+
+`ADVERSARIAL_REVIEW` phase contract:
+- entry: synthesis-review passed, scoring gates met (`completeness_score >= 80`,
+  `evidence_confidence_score >= 80`, `blocker_reasons` empty)
+- exit: convergence (zero material findings by agent consensus) or
+  decomposition required (cap hit)
+- checkpoint: `adversarial-review-log.md`
 
 ## Required sub-skill order
 
@@ -140,10 +148,13 @@ Each phase needs entry criteria, exit criteria, and a checkpoint artifact in
 2. `spec-loop`
 3. `spec-completeness`
 4. `spec-synthesis-review`
-5. `spec-plan-handoff`
+5. `spec-adversarial-review`
+6. `spec-plan-handoff`
 
 Loop back to `spec-loop` or `spec-completeness` whenever verification fails or
-blockers remain.
+blockers remain. If `spec-adversarial-review` escalates back, pass the
+`adversarial-escalation.json` artifact as input to the targeted `spec-loop`
+round so it addresses the specific findings rather than running a generic pass.
 
 ## Delegation policy
 
