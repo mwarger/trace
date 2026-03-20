@@ -28,6 +28,7 @@ Planning states:
 - `DISCOVERY`
 - `AWAITING_CLARIFICATION`
 - `SPECULATIVE_DRAFT`
+- `ADVERSARIAL_REVIEW`
 - `PLANNING_READY`
 
 Handoff states:
@@ -55,6 +56,7 @@ skills/
   spec-loop/
   spec-completeness/
   spec-synthesis-review/
+  spec-adversarial-review/
   spec-plan-handoff/
 specs/
   README.md
@@ -73,12 +75,13 @@ LICENSE
 
 ## What gets installed
 
-This repo installs 6 skills:
+This repo installs 7 skills:
 - `trace-orchestrator`
 - `spec-intake`
 - `spec-loop`
 - `spec-completeness`
 - `spec-synthesis-review`
+- `spec-adversarial-review`
 - `spec-plan-handoff`
 
 The installer auto-detects the target platform:
