@@ -5,7 +5,7 @@
   "planning_status": "PLANNING_READY",
   "handoff_status": "ELIGIBLE",
   "blocker_reasons": [],
-  "current_phase": "PUBLISH",
+  "current_phase": "PLAN_HANDOFF",
   "canonical_revision": "rev-6",
   "status": "ready",
   "entry_criteria_met": true,
@@ -68,7 +68,7 @@
       "checkpoint": "manifest.json"
     },
     {
-      "phase": "PUBLISH",
+      "phase": "PLAN_HANDOFF",
       "status": "complete",
       "entry_criteria": "subject marked planning-ready",
       "exit_criteria": "implementation handoff emitted",

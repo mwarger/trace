@@ -7,7 +7,7 @@
 /plugin install trace@trace-dev
 ```
 
-All 6 skills are available immediately. Update with `/plugin update trace`.
+All 9 skills are available immediately. Update with `/plugin update trace`.
 
 ## Manual install
 

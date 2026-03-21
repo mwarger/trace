@@ -34,5 +34,17 @@
   "decision_risk_score": 16,
   "why_not_ready": [],
   "blocker_dimensions": [],
-  "minimum_next_actions": []
+  "minimum_next_actions": [],
+  "adversarial_rounds_completed": 0,
+  "adversarial_status": null,
+  "adversarial_findings_total": 0,
+  "adversarial_findings_resolved_by_research": 0,
+  "adversarial_findings_resolved_by_user": 0,
+  "beads_generated": false,
+  "beads_epic_id": null,
+  "beads_review_rounds_completed": 0,
+  "beads_review_status": null,
+  "beads_total": 0,
+  "beads_coverage_score": null,
+  "beads_workspace_path": null
 }

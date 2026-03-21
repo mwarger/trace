@@ -22,7 +22,10 @@ SKILL_NAMES=(
   spec-loop
   spec-completeness
   spec-synthesis-review
+  spec-adversarial-review
   spec-plan-handoff
+  spec-beads-generate
+  spec-beads-review
 )
 
 log() {
@@ -65,7 +68,10 @@ skills = [
   "spec-loop",
   "spec-completeness",
   "spec-synthesis-review",
+  "spec-adversarial-review",
   "spec-plan-handoff",
+  "spec-beads-generate",
+  "spec-beads-review",
 ]
 path = os.path.join(os.environ["TARGET_DIR"], ".trace-pack-install.json")
 data = {
