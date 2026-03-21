@@ -1,7 +1,7 @@
 {
   "name": "trace",
   "description": "Spec-from-evidence pipeline: build subject-named specs with sub-agent fanout, provenance tracking, adaptive clarification, and a canonical readiness contract",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "author": {
     "name": "Mat Warger"
   },

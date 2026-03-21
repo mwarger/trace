@@ -152,11 +152,14 @@ Each phase needs entry criteria, exit criteria, and a checkpoint artifact in
 - checkpoint: `adversarial-review-log.md`
 
 `BEADS_GENERATION` phase contract:
-- entry: `PLAN_HANDOFF` complete, user accepts prompt ("Would you like to
-  generate a beads workspace from this plan?")
+- entry: `PLAN_HANDOFF` complete, user accepts beads prompt
+- prompt: present labeled options to the user:
+  - **A) Generate beads** — decompose the plan into a beads workspace with
+    dependency wiring, epic grouping, and provenance labels
+  - **B) Done** — end the run here; the spec and plan are the final deliverables
 - exit: `beads-manifest.json` emitted, all beads created via `br`
 - checkpoint: `beads-manifest.json`
-- if user declines, run ends at `PLAN_HANDOFF`
+- if user chooses B, run ends at `PLAN_HANDOFF`
 
 `BEADS_REVIEW` phase contract:
 - entry: `BEADS_GENERATION` complete

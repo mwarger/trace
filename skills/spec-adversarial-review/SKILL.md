@@ -47,6 +47,11 @@ Always allocate these regardless of spec size:
 
 ## Round structure
 
+Every round MUST spawn the full agent team — all section agents and all
+cross-cutting agents. Do not spawn a subset, even if earlier findings were
+narrow. The point of subsequent rounds is to verify fixes did not introduce new
+issues elsewhere and to catch things the previous round missed.
+
 Each round:
 1. all agents read the current spec independently
 2. section agents probe their area for: ambiguous language, missing failure
