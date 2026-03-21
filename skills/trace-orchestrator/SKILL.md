@@ -162,7 +162,8 @@ Each phase needs entry criteria, exit criteria, and a checkpoint artifact in
 - if user chooses B, run ends at `PLAN_HANDOFF`
 
 `BEADS_REVIEW` phase contract:
-- entry: `BEADS_GENERATION` complete
+- entry: `BEADS_GENERATION` complete — proceed immediately, do not prompt the
+  user. Beads review is mandatory whenever beads are generated.
 - exit: convergence (zero material findings from all agents) or
   decomposition required (cap hit)
 - checkpoint: `beads-review-log.md`
@@ -176,7 +177,8 @@ Each phase needs entry criteria, exit criteria, and a checkpoint artifact in
 5. `spec-adversarial-review`
 6. `spec-plan-handoff`
 7. `spec-beads-generate` (optional — only if user accepts beads prompt)
-8. `spec-beads-review` (optional — only if beads were generated)
+8. `spec-beads-review` (mandatory if beads were generated — proceed immediately,
+   do not prompt the user)
 
 Loop back to `spec-loop` or `spec-completeness` whenever verification fails or
 blockers remain. If `spec-adversarial-review` escalates back, pass the
