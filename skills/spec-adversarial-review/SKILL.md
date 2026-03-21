@@ -160,3 +160,7 @@ On decomposition:
    `decomposition_required`. No middle ground.
 6. Agent teams are the required organizing mechanism. Do not use ad-hoc agent
    spawning.
+7. Never predict convergence. Never skip a round because you believe it will
+   converge. Spawn all agents, collect their findings, and only then determine
+   whether findings are zero. "I'm confident round N will converge" is not a
+   substitute for running round N.

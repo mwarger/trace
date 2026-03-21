@@ -75,6 +75,12 @@ Agents must use `br` and `bv --robot-*` commands as evidence sources:
 
 ## Round structure
 
+Every round MUST spawn the full agent team — all four agents (coverage,
+granularity, dependency, actionability). Do not spawn a subset, even if earlier
+findings were narrow. Do not predict convergence — run the round and observe
+the results. The point of subsequent rounds is to verify fixes did not
+introduce new issues and to catch things the previous round missed.
+
 Each round:
 1. all agents evaluate the current bead set independently
 2. agents use `br` queries and `bv --robot-*` commands as evidence
@@ -173,3 +179,7 @@ On decomposition:
    spawning.
 7. Every bead must have a `test_first` annotation and test sketches (unless
    `test-first: n/a` with rationale). Missing test sketches is a finding.
+8. Never predict convergence. Never skip a round because you believe it will
+   converge. Spawn all agents, collect their findings, and only then determine
+   whether findings are zero. "I'm confident round N will converge" is not a
+   substitute for running round N.

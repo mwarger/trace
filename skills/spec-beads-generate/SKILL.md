@@ -86,6 +86,24 @@ Emit as structured input to the orchestrator:
   - `beads_total`
   - `beads_workspace_path`
 
+## Quality gates and cross-cutting concerns
+
+Do not create standalone beads for cross-cutting concerns like quality gates,
+CI configuration, env var documentation, or linting setup. These are not
+discrete work units — they apply across the entire epic.
+
+Instead:
+- embed quality gate criteria in the epic description
+- distribute cross-cutting acceptance criteria across the beads they apply to
+  (e.g., "all public functions have typespecs" goes on every bead that creates
+  public functions)
+- if a spec claim is purely cross-cutting (e.g., "all endpoints require auth"),
+  map it to every bead whose work it constrains rather than creating a
+  catch-all bead
+
+The review phase's granularity agent will flag any bead that is just a
+collection of unrelated cross-cutting checks.
+
 ## Hard rules
 
 1. This skill does not evaluate quality. That is the review phase's job.
@@ -96,3 +114,5 @@ Emit as structured input to the orchestrator:
    directory directly.
 4. Do not re-init an existing `.beads` workspace.
 5. Epic and label provenance are required for every bead.
+6. Do not create standalone beads for cross-cutting concerns — see
+   "Quality gates and cross-cutting concerns" above.
