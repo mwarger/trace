@@ -144,6 +144,29 @@ Treat the workflow as a persisted state machine:
 Each phase needs entry criteria, exit criteria, and a checkpoint artifact in
 `specs/_artifacts/<subject>/run-state.json`.
 
+### Auto-transition rule
+
+Phases 8 through 12 are **automatic**: when a phase's exit criteria are met,
+immediately invoke the next sub-skill without pausing for user input. Do not
+stop to summarize intermediate results between phases. Specifically:
+
+- `READINESS_GATE` passes (`completeness_score >= 80`,
+  `evidence_confidence_score >= 80`, `blocker_reasons` empty) →
+  immediately invoke `spec-synthesis-review`
+- `spec-synthesis-review` verification passes →
+  immediately set `planning_status = ADVERSARIAL_REVIEW` and invoke
+  `spec-adversarial-review`
+- `spec-adversarial-review` converges →
+  immediately set `planning_status = PLANNING_READY`,
+  `handoff_status = ELIGIBLE` and invoke `spec-plan-handoff`
+- `PLAN_HANDOFF` completes → prompt user for beads (this is the only
+  user-facing pause in the late pipeline)
+- `BEADS_GENERATION` completes → immediately invoke `spec-beads-review`
+
+The only reasons to pause mid-pipeline are: (a) a gate fails and the run
+loops back, or (b) user input is required (beads prompt after plan handoff).
+Report phase transitions in a single status line, not a multi-line summary.
+
 `ADVERSARIAL_REVIEW` phase contract:
 - entry: synthesis-review passed, scoring gates met (`completeness_score >= 80`,
   `evidence_confidence_score >= 80`, `blocker_reasons` empty)

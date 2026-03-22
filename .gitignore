@@ -2,3 +2,4 @@
 .tmp-bin/
 .tmp-claude-home/
 .tmp-codex-home/
+.cmux-ide.state.json
