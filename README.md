@@ -1,25 +1,44 @@
 # Trace
 
-Trace turns a feature request, codebase, or conversation transcript into a
-rigorous, implementation-ready specification. It uses AI sub-agents to gather
-evidence, challenge assumptions, and produce a plan you can hand off to an
-engineer or another agent.
+Turn a feature request into an implementation-ready spec — stress-tested before any code is written.
 
-It runs as a skill pack for [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
-and [Codex](https://github.com/openai/codex).
+## The problem
 
-> **See an example output:** [`specs/feature-flags-system.md`](specs/feature-flags-system.md)
-> is a finished spec with full artifacts in
-> [`specs/_artifacts/feature-flags-system/`](specs/_artifacts/feature-flags-system/).
+AI-generated specs hallucinate decisions. They fill in blanks with plausible-sounding answers instead of flagging them as open questions. The implementer — human or agent — hits gaps, invents answers on the fly, and ships something that doesn't match what anyone intended.
 
-## Prerequisites
+Nobody stress-tests the spec before handoff. By the time contradictions and missing edge cases surface, they're already bugs.
+
+## What Trace does differently
+
+- **Everything starts as evidence.** Code, docs, transcripts, screenshots — classified and tracked, not summarized away.
+- **One reducer writes canon.** Sub-agents explore and review. Only the lead agent merges findings into the spec. No conflicting rewrites.
+- **Provenance is required.** Every canonical claim traces back to the evidence that supports it. Unsupported claims get flagged, not shipped.
+- **Readiness is a state machine.** Not a score threshold — a formal model with blocker rules, planning states, and handoff gates.
+- **Adversarial review before handoff.** Dynamic agent teams probe for ambiguity, contradictions, and untestable claims. The spec doesn't ship until they find nothing.
+
+## What you get
+
+A **subject spec** — a specification document named after its subject (e.g. `auth-session-system.md`) — with sidecar artifacts:
+
+- The spec itself with provenance-linked claims
+- An evidence ledger (JSONL) of every input processed
+- Readiness metadata (scores, blocker reasons, planning/handoff state)
+- An implementation plan with acceptance criteria
+- Optional **beads** — discrete implementation work units with dependency wiring
+
+> **See a finished example:** [`specs/feature-flags-system.md`](specs/feature-flags-system.md)
+> with full artifacts in [`specs/_artifacts/feature-flags-system/`](specs/_artifacts/feature-flags-system/).
+
+## Quick start
+
+### Prerequisites
 
 - Claude Code (`claude`) or Codex (`codex`)
 - `bash`, `git`, `python3` (for manual/shell install only)
 
-## Install
+### Install
 
-### Claude Code (recommended)
+**Claude Code (recommended):**
 
 ```
 /plugin marketplace add mwarger/trace
@@ -28,13 +47,29 @@ and [Codex](https://github.com/openai/codex).
 
 All 9 skills are available immediately. Update with `/plugin update trace`.
 
-### Codex
+**Codex:**
 
 ```
 Fetch and follow instructions from https://raw.githubusercontent.com/mwarger/trace/main/.codex/INSTALL.md
 ```
 
-### Manual / shell
+### Your first spec
+
+Start a new session after install and ask for one of these:
+
+```text
+Create a subject-named spec for this feature request using Trace.
+Reverse engineer this repo into a Trace spec with sidecar artifacts.
+Take this transcript and build a planning-ready subject spec.
+Use the trace-orchestrator skill on this codebase.
+```
+
+Works in both Claude Code (`claude`) and Codex (`codex`). If the install worked, the orchestrator skill should trigger and route into the focused sub-skills.
+
+<details>
+<summary>Advanced install options (manual / shell / remote)</summary>
+
+**Manual / shell:**
 
 ```bash
 ./install.sh
@@ -50,154 +85,26 @@ TRACE_SKILLS_DIR="$HOME/.claude/skills" ./install.sh
 TRACE_SKILLS_DIR="$HOME/.codex/skills" ./install.sh
 ```
 
-Remote install:
+**Remote install:**
 
 ```bash
 curl -fsSL "https://raw.githubusercontent.com/mwarger/trace/main/install.sh?$(date +%s)" | bash
 ```
 
-Platform-specific install docs:
+**Platform-specific install docs:**
 - Claude Code: [`.claude/INSTALL.md`](.claude/INSTALL.md)
 - Codex: [`.codex/INSTALL.md`](.codex/INSTALL.md)
-
-## How to kick it off
-
-Start a new session after install and ask for one of these:
-
-```text
-Create a subject-named spec for this feature request using Trace.
-Reverse engineer this repo into a Trace spec with sidecar artifacts.
-Take this transcript and build a planning-ready subject spec.
-Use the trace-orchestrator skill on this codebase.
-```
-
-Works in both Claude Code (`claude`) and Codex (`codex`). If the install
-worked, the orchestrator skill should trigger and then route into the focused
-sub-skills.
-
-After changing the skill pack, restart the agent session before testing again.
-Do not trust a run that still writes old policy markers such as `trace-v1`.
-
-## What gets installed
-
-This repo installs 9 skills:
-- `trace-orchestrator`
-- `spec-intake`
-- `spec-loop`
-- `spec-completeness`
-- `spec-synthesis-review`
-- `spec-adversarial-review`
-- `spec-plan-handoff`
-- `spec-beads-generate`
-- `spec-beads-review`
 
 The installer auto-detects the target platform:
 - If `~/.claude/` exists → installs to `~/.claude/skills/`
 - If `~/.codex/` exists → installs to `~/.codex/skills/`
 - Override with `TRACE_SKILLS_DIR`
 
-By default the installer uses symlinks so local edits in this repo are visible
-immediately in the installed skills.
+By default the installer uses symlinks so local edits in this repo are visible immediately in the installed skills.
 
-## Helper command
-
-After install, this command should be available:
-
-```bash
-trace-pack help
-```
-
-Supported commands:
-- `help`
-- `where`
-- `list-skills`
-- `install-skills`
-- `uninstall-skills`
-- `doctor`
-- `smoke-test`
-- `test-local`
-
-## Testing
-
-### Smoke test
-
-To verify the repo structure and example artifacts:
-
-```bash
-./scripts/smoke-test.sh
-# or
-trace-pack smoke-test
-```
-
-The smoke test checks:
-- expected skill folders exist
-- expected spec files exist
-- the root specs index uses the managed Trace block
-- managed JSON files parse
-- managed JSONL ledgers parse
-
-### Local isolated testing
-
-If you want to test without touching your normal setup:
-
-```bash
-./scripts/test-local.sh
-# or
-trace-pack test-local
-```
-
-That creates `.local-test/skills` and installs the skills there instead of your
-normal skills directory. Then launch your agent from the same shell with:
-
-```bash
-TRACE_SKILLS_DIR="$(pwd)/.local-test/skills" claude
-# or
-TRACE_SKILLS_DIR="$(pwd)/.local-test/skills" codex
-```
-
-This isolates the test from your normal skills and other installed scripts.
-
-## Uninstall
-
-To remove the installed wrapper and managed skills:
-
-```bash
-./uninstall.sh
-# or
-trace-pack uninstall-skills
-```
-
----
+</details>
 
 ## How it works
-
-### Glossary
-
-| Term | Meaning |
-|------|---------|
-| **Subject spec** | A specification document named after its subject (e.g. `auth-session-system.md`). The primary output of a Trace run. |
-| **Evidence** | Any input material — code, docs, transcripts, screenshots, URLs, or user statements — that the spec is built from. |
-| **Canon** | The authoritative merged state of the spec. Only the lead agent (the "reducer") writes to canon. |
-| **Reducer** | The lead agent role that merges sub-agent outputs into the canonical spec. Sub-agents explore and review; only the reducer writes final text. |
-| **Sub-agent** | A spawned agent that performs bounded exploration, review, or adversarial testing. Reports findings back to the reducer. |
-| **Provenance** | A trace from any canonical claim back to the evidence that supports it. Required before text becomes part of canon. |
-| **Beads** | Discrete implementation work units (`br` beads) decomposed from the plan, with dependency wiring and spec-claim mapping. |
-| **Evidence ledger** | A JSONL log of every evidence unit processed during a run. |
-
-### Inspiration
-
-Trace takes inspiration from marginalia as a reading and synthesis method, then
-pushes that idea into evidence-led specification, reducer-based merges, and
-sub-agent-assisted planning.
-
-The pack is built around 5 ideas:
-- everything starts as evidence
-- the lead agent is the only reducer of canon
-- sub-agents do most bounded exploration and review work
-- provenance is required before text becomes canonical
-- readiness is a canonical state machine, not just a score threshold
-
-### Pipeline
 
 ```mermaid
 flowchart LR
@@ -212,6 +119,37 @@ flowchart LR
     H --> I[beads-review]
     I -->|beads escalation| C
 ```
+
+Evidence flows in, gets classified and tracked, then moves through iterative refinement loops. The spec is scored against a 12-dimension ontology, stress-tested by adversarial agent teams, and only handed off when readiness gates pass. Optional beads decompose the plan into implementation work units.
+
+## Key concepts
+
+| Term | Meaning |
+|------|---------|
+| **Subject spec** | A specification document named after its subject (e.g. `auth-session-system.md`). The primary output of a Trace run. |
+| **Evidence** | Any input material — code, docs, transcripts, screenshots, URLs, or user statements — that the spec is built from. |
+| **Canon** | The authoritative merged state of the spec. Only the lead agent (the "reducer") writes to canon. |
+| **Reducer** | The lead agent role that merges sub-agent outputs into the canonical spec. Sub-agents explore and review; only the reducer writes final text. |
+| **Sub-agent** | A spawned agent that performs bounded exploration, review, or adversarial testing. Reports findings back to the reducer. |
+| **Provenance** | A trace from any canonical claim back to the evidence that supports it. Required before text becomes part of canon. |
+| **Beads** | Discrete implementation work units (`br` beads) decomposed from the plan, with dependency wiring and spec-claim mapping. |
+| **Evidence ledger** | A JSONL log of every evidence unit processed during a run. |
+
+## Skills
+
+| Skill | Role |
+|-------|------|
+| `trace-orchestrator` | Top-level orchestrator — routes through sub-skills, manages state transitions, acts as the sole reducer of canon |
+| `spec-intake` | Normalize inputs into a subject spec run — classify archetype, seed evidence ledger, create readiness skeleton |
+| `spec-loop` | Process evidence one unit at a time, ask clarifying questions, emit speculative variants when blockers remain |
+| `spec-completeness` | Score the spec against a 12-dimension ontology with sub-signal requirements, enforce 80/80 gates |
+| `spec-synthesis-review` | Merge sub-agent outputs into canon, run 4 review passes (completeness, contradiction, provenance, implementability) |
+| `spec-adversarial-review` | Stress-test the spec with dynamic agent teams — section agents for depth, cross-cutting agents for coherence — until zero findings or decomposition |
+| `spec-plan-handoff` | Render the implementation plan if eligible, or emit a withheld handoff with next steps if blocked |
+| `spec-beads-generate` | Decompose implementation plan into beads with dependency wiring, epic grouping, and provenance labels |
+| `spec-beads-review` | Stress-test beads for coverage, granularity, dependencies, and actionability using adversarial agent teams |
+
+## Deep dives
 
 ### Anatomy of a run
 
@@ -254,7 +192,7 @@ flowchart TD
 | `BEADS_GENERATION` | Decompose plan into beads with dependency wiring | beads-manifest.json emitted |
 | `BEADS_REVIEW` | Stress-test beads for coverage, granularity, dependencies | Zero findings or cap hit |
 
-### Canonical readiness model
+### Readiness model
 
 Trace separates planning state from handoff state.
 
@@ -277,8 +215,6 @@ Important rules:
 - speculative uncertainty should become bounded variants, not fake certainty
 - sparse analogy prompts with zero question rounds must not become
   `PLANNING_READY`
-
-### State transitions
 
 ```mermaid
 stateDiagram-v2
@@ -367,38 +303,67 @@ Beads are an optional post-handoff step — the user is prompted after plan deli
 
 Same convergence model as adversarial review: min 2 rounds, max 5, exit on zero findings, cap = decomposition signal. Beads review can surface spec gaps that adversarial review missed — these escalate back to the spec-loop via `beads-escalation.json`.
 
-### Skills
+## Development
 
-| Skill | Role |
-|-------|------|
-| `trace-orchestrator` | Top-level orchestrator — routes through sub-skills, manages state transitions, acts as the sole reducer of canon |
-| `spec-intake` | Normalize inputs into a subject spec run — classify archetype, seed evidence ledger, create readiness skeleton |
-| `spec-loop` | Process evidence one unit at a time, ask clarifying questions, emit speculative variants when blockers remain |
-| `spec-completeness` | Score the spec against a 12-dimension ontology with sub-signal requirements, enforce 80/80 gates |
-| `spec-synthesis-review` | Merge sub-agent outputs into canon, run 4 review passes (completeness, contradiction, provenance, implementability) |
-| `spec-adversarial-review` | Stress-test the spec with dynamic agent teams — section agents for depth, cross-cutting agents for coherence — until zero findings or decomposition |
-| `spec-plan-handoff` | Render the implementation plan if eligible, or emit a withheld handoff with next steps if blocked |
-| `spec-beads-generate` | Decompose implementation plan into beads with dependency wiring, epic grouping, and provenance labels |
-| `spec-beads-review` | Stress-test beads for coverage, granularity, dependencies, and actionability using adversarial agent teams |
+### Testing
 
-## Root specs index contract
+#### Smoke test
 
-Every successful Trace run should leave behind:
-- a subject spec at `specs/<subject>.md`
-- a matching row in `specs/README.md`
+To verify the repo structure and example artifacts:
 
-Trace manages the subject rows inside:
-- `<!-- trace:spec-index:start -->`
-- `<!-- trace:spec-index:end -->`
+```bash
+./scripts/smoke-test.sh
+# or
+trace-pack smoke-test
+```
 
-Human notes outside that block should be preserved.
+The smoke test checks:
+- expected skill folders exist
+- expected spec files exist
+- the root specs index uses the managed Trace block
+- managed JSON files parse
+- managed JSONL ledgers parse
 
-Rows should surface:
-- planning status
-- handoff status
-- subject purpose
+#### Local isolated testing
 
-## Repo layout
+If you want to test without touching your normal setup:
+
+```bash
+./scripts/test-local.sh
+# or
+trace-pack test-local
+```
+
+That creates `.local-test/skills` and installs the skills there instead of your
+normal skills directory. Then launch your agent from the same shell with:
+
+```bash
+TRACE_SKILLS_DIR="$(pwd)/.local-test/skills" claude
+# or
+TRACE_SKILLS_DIR="$(pwd)/.local-test/skills" codex
+```
+
+This isolates the test from your normal skills and other installed scripts.
+
+### Helper command
+
+After install, this command should be available:
+
+```bash
+trace-pack help
+```
+
+Supported commands:
+- `help`
+- `where`
+- `list-skills`
+- `install-skills`
+- `uninstall-skills`
+- `doctor`
+- `smoke-test`
+- `test-local`
+
+### Repo layout
 
 ```text
 .claude/
@@ -435,3 +400,33 @@ install.sh
 uninstall.sh
 LICENSE
 ```
+
+### Root specs index contract
+
+Every successful Trace run should leave behind:
+- a subject spec at `specs/<subject>.md`
+- a matching row in `specs/README.md`
+
+Trace manages the subject rows inside:
+- `<!-- trace:spec-index:start -->`
+- `<!-- trace:spec-index:end -->`
+
+Human notes outside that block should be preserved.
+
+Rows should surface:
+- planning status
+- handoff status
+- subject purpose
+
+### Uninstall
+
+To remove the installed wrapper and managed skills:
+
+```bash
+./uninstall.sh
+# or
+trace-pack uninstall-skills
+```
+
+After changing the skill pack, restart the agent session before testing again.
+Do not trust a run that still writes old policy markers such as `trace-v1`.
