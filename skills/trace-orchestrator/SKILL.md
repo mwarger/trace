@@ -62,6 +62,8 @@ Every run must carry these canonical fields in `manifest.json` and
 - `beads_review_rounds_completed`
 - `beads_review_status`
 - `beads_total`
+- `beads_epilogue_count`
+- `beads_followup_count`
 - `beads_coverage_score`
 - `beads_workspace_path`
 
@@ -158,7 +160,9 @@ stop to summarize intermediate results between phases. Specifically:
   `spec-adversarial-review`
 - `spec-adversarial-review` converges →
   immediately set `planning_status = PLANNING_READY`,
-  `handoff_status = ELIGIBLE` and invoke `spec-plan-handoff`
+  `handoff_status = ELIGIBLE` and invoke `spec-plan-handoff`.
+  Do not present options, summarize findings, or ask the user what to do
+  next — the transition to plan handoff is not optional.
 - `PLAN_HANDOFF` completes → prompt user for beads (this is the only
   user-facing pause in the late pipeline)
 - `BEADS_GENERATION` completes → immediately invoke `spec-beads-review`
@@ -171,7 +175,9 @@ Report phase transitions in a single status line, not a multi-line summary.
 - entry: synthesis-review passed, scoring gates met (`completeness_score >= 80`,
   `evidence_confidence_score >= 80`, `blocker_reasons` empty)
 - exit: convergence (zero material findings by agent consensus) or
-  decomposition required (cap hit)
+  decomposition required (cap hit).
+  On convergence, do not pause or summarize — the auto-transition rule
+  governs. Immediately proceed to `spec-plan-handoff`.
 - checkpoint: `adversarial-review-log.md`
 
 `BEADS_GENERATION` phase contract:
@@ -309,6 +315,11 @@ Root index:
 
 Canonical spec:
 - `specs/<subject>.md`
+
+Project-level (not per-spec — persists across all Trace runs):
+- `ubiquitous-language.md` — domain glossary at the project root, created
+  during intake if missing, updated throughout the pipeline and by epilogue
+  beads
 
 Sidecars:
 - `manifest.json`

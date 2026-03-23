@@ -82,6 +82,11 @@ Turn raw inputs into a normalized evidence run with:
    - `input-log.md`
    - `evidence-ledger.jsonl`
    - `claim-ledger.jsonl`
+15. If `ubiquitous-language.md` does not exist at the project root, create it
+    with an initial set of domain terms extracted from the evidence sources.
+    If it already exists, read it and use existing terms for consistency.
+    Append any new domain terms, entity names, or concepts discovered during
+    intake.
 
 ## Output rules
 

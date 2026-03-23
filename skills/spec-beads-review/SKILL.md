@@ -164,6 +164,39 @@ On decomposition:
 - `beads-decomposition-proposal.md`
 - `beads-escalation.json` (on back-transition to spec-loop)
 
+## Epilogue bead exemptions
+
+Epilogue beads (labeled `epilogue`) are meta-beads for post-implementation
+quality and learning. They require different treatment from each agent:
+
+- **Coverage agent**: skip epilogue beads entirely. They have no spec claims
+  or acceptance criteria to verify — `spec_claims` and `acceptance_criteria`
+  are intentionally empty.
+- **Granularity agent**: skip epilogue beads. Their scope is fixed by
+  definition and not subject to split/merge proposals.
+- **Dependency agent**: verify each epilogue bead depends on ALL implementation
+  beads. Flag any implementation bead missing from an epilogue bead's
+  dependency list. The Agent Guidance Review bead must also depend on the
+  Learnings Retrospective bead. Disregard `bv` warnings about high fan-in
+  on epilogue beads — this is expected and intentional.
+- **Actionability agent**: evaluate epilogue beads for clarity of description
+  and acceptance criteria, but mark `test_first: n/a` with rationale
+  "epilogue meta-task". Do not require TDD test sketches — these are
+  review/analysis tasks, not code-producing tasks.
+
+Epilogue beads are listed in the `epilogue_beads` array of
+`beads-manifest.json`, not in the `beads` array. The `unmapped_claims` and
+`unmapped_acceptance_criteria` arrays do not apply to them.
+
+### Follow-up beads created by epilogues
+
+Epilogue beads may create `epilogue-followup` labeled beads in the same epic
+to address their findings. Follow-up beads ARE subject to the normal review
+rules — they are implementation beads, not epilogue beads. The dependency
+agent should verify follow-up beads are wired correctly (each depends on the
+bead whose code it addresses). Follow-up beads appear in the `followup_beads`
+array of `beads-manifest.json`.
+
 ## Hard rules
 
 1. This skill does not write canon. It emits proposals. The orchestrator

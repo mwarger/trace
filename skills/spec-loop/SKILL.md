@@ -13,7 +13,9 @@ For each evidence unit:
 2. rewrite the one-sentence `rolling summary`
 3. update claims and provenance links
 4. update critical decision coverage and blocker state
-5. choose the next action:
+5. if the evidence introduces or refines domain terms, update
+   `ubiquitous-language.md` at the project root
+6. choose the next action:
    - `Read More`
    - `Ask`
    - `Mark Assumption`
