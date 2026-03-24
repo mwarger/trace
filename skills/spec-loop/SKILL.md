@@ -14,7 +14,7 @@ For each evidence unit:
 3. update claims and provenance links
 4. update critical decision coverage and blocker state
 5. if the evidence introduces or refines domain terms, update
-   `ubiquitous-language.md` at the project root
+   `UBIQUITOUS-LANGUAGE.md` at the project root
 6. choose the next action:
    - `Read More`
    - `Ask`
@@ -88,7 +88,8 @@ Before escalating any question to the user:
 1. search the codebase for existing patterns, implementations, or conventions
    that answer it
 2. check existing evidence and prior clarification answers for implicit answers
-3. only escalate if genuinely unanswerable from available sources
+3. check `AGENTS.md` for prior implementation learnings that answer it
+4. only escalate if genuinely unanswerable from available sources
 
 For `sparse` `analogy_feature` or `parity_clone` runs:
 - seed required clarification ids before drafting:

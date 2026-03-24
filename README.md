@@ -24,7 +24,8 @@ A **subject spec** — a specification document named after its subject (e.g. `a
 - An evidence ledger (JSONL) of every input processed
 - Readiness metadata (scores, blocker reasons, planning/handoff state)
 - An implementation plan with acceptance criteria
-- Optional **beads** — discrete implementation work units with dependency wiring
+- A ubiquitous language glossary (`UBIQUITOUS-LANGUAGE.md`) for consistent domain terminology
+- Optional **beads** — discrete implementation work units with dependency wiring, including epilogue beads for post-implementation learning
 
 > **See a finished example:** [`specs/feature-flags-system.md`](specs/feature-flags-system.md)
 > with full artifacts in [`specs/_artifacts/feature-flags-system/`](specs/_artifacts/feature-flags-system/).
@@ -133,6 +134,8 @@ Evidence flows in, gets classified and tracked, then moves through iterative ref
 | **Sub-agent** | A spawned agent that performs bounded exploration, review, or adversarial testing. Reports findings back to the reducer. |
 | **Provenance** | A trace from any canonical claim back to the evidence that supports it. Required before text becomes part of canon. |
 | **Beads** | Discrete implementation work units (`br` beads) decomposed from the plan, with dependency wiring and spec-claim mapping. |
+| **Epilogue beads** | Meta-beads for post-implementation quality tasks (retrospectives, agent guidance). Depend on all implementation beads; may spawn follow-up beads. |
+| **Ubiquitous language** | A domain glossary (`UBIQUITOUS-LANGUAGE.md` at project root) created during intake and updated throughout the pipeline. All beads and spec text use these terms. |
 | **Evidence ledger** | A JSONL log of every evidence unit processed during a run. |
 
 ## Skills
@@ -290,7 +293,9 @@ The adversarial review stage is the key gate before a spec becomes planning-read
 
 Beads are an optional post-handoff step — the user is prompted after plan delivery.
 
-**Generation** decomposes the implementation plan into beads: one epic per spec subject, one bead per discrete work unit. Each bead carries dependency wiring, provenance labels (`trace:<subject-slug>`), and an explicit mapping back to spec claims. Every spec claim must map to at least one bead. Output: `beads-manifest.json`.
+**Generation** decomposes the implementation plan into beads: one epic per spec subject, one bead per discrete work unit. Each bead carries dependency wiring, provenance labels (`trace:<subject-slug>`), and an explicit mapping back to spec claims. Every spec claim must map to at least one bead. Bead descriptions encode methodology guidance — red-green-refactor, walking skeleton, deep modules, ubiquitous language — with rationale from the original authors (Beck, Ousterhout, Evans, Cockburn) so the implementing agent understands *why*, not just *what*. Output: `beads-manifest.json`.
+
+**Epilogue beads** are meta-beads for post-implementation quality and learning (e.g. learnings retrospective, agent guidance review). They live in the `epilogue_beads` array of the manifest and depend on all implementation beads. Epilogue beads may create `epilogue-followup` beads to address their findings — these are normal implementation beads subject to standard review rules.
 
 **Review** stress-tests the beads with a 4-agent team:
 
@@ -300,6 +305,8 @@ Beads are an optional post-handoff step — the user is prompted after plan deli
 | Granularity | Each bead is properly sized (not too coarse, not too fine) |
 | Dependency | Cycle detection and dependency graph structure |
 | Actionability | TDD-readiness, test boundaries, literal implementability |
+
+Epilogue beads get special treatment: coverage and granularity agents skip them, the dependency agent verifies they depend on all implementation beads, and the actionability agent evaluates clarity but does not require TDD test sketches.
 
 Same convergence model as adversarial review: min 2 rounds, max 5, exit on zero findings, cap = decomposition signal. Beads review can surface spec gaps that adversarial review missed — these escalate back to the spec-loop via `beads-escalation.json`.
 

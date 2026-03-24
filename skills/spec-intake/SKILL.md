@@ -82,11 +82,16 @@ Turn raw inputs into a normalized evidence run with:
    - `input-log.md`
    - `evidence-ledger.jsonl`
    - `claim-ledger.jsonl`
-15. If `ubiquitous-language.md` does not exist at the project root, create it
+15. If `UBIQUITOUS-LANGUAGE.md` does not exist at the project root, create it
     with an initial set of domain terms extracted from the evidence sources.
     If it already exists, read it and use existing terms for consistency.
     Append any new domain terms, entity names, or concepts discovered during
     intake.
+16. Read `AGENTS.md` at the project root (if it exists). Note project
+    conventions, patterns, and anti-patterns it encodes — these are prior
+    implementation learnings that should inform the new spec rather than be
+    rediscovered. Record relevant conventions as `observation` evidence units
+    with `source_type: prior_learnings`.
 
 ## Output rules
 

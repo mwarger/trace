@@ -25,6 +25,7 @@ Merge order:
 2. contradiction review
 3. provenance review
 4. implementability review
+5. terminology review
 
 ## Verification loop
 
@@ -37,6 +38,7 @@ Before readiness promotion, run:
 - action-safety gate for mutation or publication steps
 - stable-id check for questions, assumptions, decisions, and major claims
 - evidence-ref check for every major canon claim
+- terminology check against `UBIQUITOUS-LANGUAGE.md` at the project root
 - blocker-state check against the orchestrator readiness contract
 
 If any check fails, return to:

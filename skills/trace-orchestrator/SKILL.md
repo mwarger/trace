@@ -317,9 +317,14 @@ Canonical spec:
 - `specs/<subject>.md`
 
 Project-level (not per-spec — persists across all Trace runs):
-- `ubiquitous-language.md` — domain glossary at the project root, created
+- `UBIQUITOUS-LANGUAGE.md` — domain glossary at the project root, created
   during intake if missing, updated throughout the pipeline and by epilogue
   beads
+- `AGENTS.md` — project agent conventions at the project root, created or
+  updated by epilogue beads; read during intake, loop, adversarial review, and
+  plan handoff to carry forward learnings across runs
+- `.claude/skills/` — project-scoped agent skills, created or updated by
+  epilogue beads, referenced as-needed during implementation work
 
 Sidecars:
 - `manifest.json`

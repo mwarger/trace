@@ -43,6 +43,14 @@ For archetypes where a sub-signal is marked `optional` in the spec-loop
 matrix, that sub-signal does not block the parent dimension's coverage. It
 only contributes if evidence is present.
 
+## Domain terminology check
+
+Read `UBIQUITOUS-LANGUAGE.md` at the project root (if it exists). Verify that
+major canonical claims, entity names, and interface descriptions use terms from
+the glossary. Flag inconsistencies as a sub-signal feeding into `entities` and
+`interfaces` dimensions. Mismatched terminology does not block readiness on its
+own but reduces confidence in those dimensions.
+
 For each dimension track:
 - `coverage`
 - `confidence`

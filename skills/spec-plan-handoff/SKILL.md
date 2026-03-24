@@ -24,6 +24,10 @@ Read from canon and sidecars:
 - `completeness-matrix.md`
 - `review-report.md`
 - `adversarial-review-log.md`
+- `UBIQUITOUS-LANGUAGE.md` (project root, if it exists)
+- `AGENTS.md` (project root, if it exists) — prior implementation conventions
+  that should inform workstream ordering, risk assessment, and anti-patterns
+  to avoid
 
 Do not plan directly from raw intake chatter.
 

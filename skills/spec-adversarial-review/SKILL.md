@@ -53,7 +53,8 @@ narrow. The point of subsequent rounds is to verify fixes did not introduce new
 issues elsewhere and to catch things the previous round missed.
 
 Each round:
-1. all agents read the current spec independently
+1. all agents read the current spec, `UBIQUITOUS-LANGUAGE.md`, and `AGENTS.md`
+   (project root, if they exist) independently
 2. section agents probe their area for: ambiguous language, missing failure
    modes, unstated assumptions, vague constraints, gaps an engineer would have
    to fill with judgment

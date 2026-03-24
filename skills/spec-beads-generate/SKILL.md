@@ -173,7 +173,7 @@ should specify:
 The problem: "On a project without a common language, developers have to translate for domain experts. Translation muddles model concepts, which leads to destructive refactoring of code." Translation is not just inconvenient — it actively corrupts the model. The solution: one language everywhere — in code (class names, method names), in conversation, and in documentation. The language is rooted in the domain model and co-evolves with it. Evans' feedback loop: "Domain experts should object to terms or structures that are awkward or inadequate to convey domain understanding; developers should watch for ambiguity or inconsistency that will trip up design." When a term feels wrong, that signals a problem in the model.
 
 Bead titles and descriptions must use terms from the project's
-`ubiquitous-language.md` glossary (at the project root). If the glossary does
+`UBIQUITOUS-LANGUAGE.md` glossary (at the project root). If the glossary does
 not yet exist, the intake phase creates it. Consistent domain terminology
 across all beads prevents ambiguity during implementation.
 
@@ -236,21 +236,21 @@ update project-specific guidance. Depends on the Learnings Retrospective bead
 (consumes its output to inform guidance updates).
 
 Inputs to audit:
-- project CLAUDE.md
+- project AGENTS.md
 - `.ralph-tui/progress.md` Codebase Patterns section
 - any project-scoped skills in `.claude/skills/`
 - SKILL.md files referenced during implementation
 
 Actions:
-- update CLAUDE.md with new project conventions discovered during implementation
+- update AGENTS.md with new project conventions discovered during implementation
 - create or update project-scoped skills in `.claude/skills/` that auto-load
   for future agent runs
 - update `.ralph-tui/progress.md` Codebase Patterns section with reusable
   patterns
-- flag and resolve any conflicting rules across CLAUDE.md, SKILL.md files,
+- flag and resolve any conflicting rules across AGENTS.md, SKILL.md files,
   and progress.md
-- audit and update `ubiquitous-language.md` at the project root with any new
-  domain terms discovered during implementation; ensure CLAUDE.md references
+- audit and update `UBIQUITOUS-LANGUAGE.md` at the project root with any new
+  domain terms discovered during implementation; ensure AGENTS.md references
   the glossary so agents use consistent terminology across all work
 
 After auditing and updating guidance, create follow-up beads in the same epic
@@ -260,7 +260,7 @@ follow-up beads with `trace:<subject-slug>,epilogue-followup`.
 
 Acceptance criteria: all rule sources audited for conflicts; at least one
 guidance artifact updated with implementation learnings; no contradictory
-rules remain across guidance sources; ubiquitous-language.md updated with new
+rules remain across guidance sources; UBIQUITOUS-LANGUAGE.md updated with new
 terms; follow-up beads created for all actionable items.
 
 Dependencies: all implementation beads + Epilogue: Learnings Retrospective.
@@ -276,7 +276,7 @@ changed during the epic. Agent roles:
 - **Simplifier** — unnecessary complexity, dead code, redundant abstractions,
   simplification opportunities
 - **Convention checker** — verify code follows project conventions from
-  CLAUDE.md, linting rules, and existing patterns
+  AGENTS.md, linting rules, and existing patterns
 
 Uses a convergence model: multiple rounds until all agents report zero material
 findings, max 3 rounds. Findings categorized by severity (critical, high,
