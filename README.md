@@ -15,6 +15,8 @@ Nobody stress-tests the spec before handoff. By the time contradictions and miss
 - **Provenance is required.** Every canonical claim traces back to the evidence that supports it. Unsupported claims get flagged, not shipped.
 - **Readiness is a state machine.** Not a score threshold — a formal model with blocker rules, planning states, and handoff gates.
 - **Adversarial review before handoff.** Dynamic agent teams probe for ambiguity, contradictions, and untestable claims. The spec doesn't ship until they find nothing.
+- **Design tree walks.** Clarification and research sub-agents walk the codebase's design tree (directory structure, module boundaries, naming conventions) to ground questions in what actually exists.
+- **Learning artifacts feed forward.** Per-bead learnings from `.ralph-tui/progress.md` are consumed by the planning pipeline, so each spec benefits from patterns discovered in prior implementations.
 
 ## What you get
 
@@ -56,16 +58,24 @@ Fetch and follow instructions from https://raw.githubusercontent.com/mwarger/tra
 
 ### Your first spec
 
-Start a new session after install and ask for one of these:
+Start a new session after install and just describe what you want. Trace triggers automatically — no special syntax needed:
+
+```text
+Trace a feature to add real-time notifications
+Trace a fix for the auth token refresh bug
+Trace a migration from REST to GraphQL
+Trace a refactor of the payment processing module
+Reverse engineer this repo into a spec
+```
+
+Or be more explicit if you prefer:
 
 ```text
 Create a subject-named spec for this feature request using Trace.
-Reverse engineer this repo into a Trace spec with sidecar artifacts.
-Take this transcript and build a planning-ready subject spec.
 Use the trace-orchestrator skill on this codebase.
 ```
 
-Works in both Claude Code (`claude`) and Codex (`codex`). If the install worked, the orchestrator skill should trigger and route into the focused sub-skills.
+Works in both Claude Code (`claude`) and Codex (`codex`). The orchestrator skill triggers and routes into the focused sub-skills automatically.
 
 <details>
 <summary>Advanced install options (manual / shell / remote)</summary>
@@ -293,9 +303,9 @@ The adversarial review stage is the key gate before a spec becomes planning-read
 
 Beads are an optional post-handoff step — the user is prompted after plan delivery.
 
-**Generation** decomposes the implementation plan into beads: one epic per spec subject, one bead per discrete work unit. Each bead carries dependency wiring, provenance labels (`trace:<subject-slug>`), and an explicit mapping back to spec claims. Every spec claim must map to at least one bead. Bead descriptions encode methodology guidance — red-green-refactor, walking skeleton, deep modules, ubiquitous language — with rationale from the original authors (Beck, Ousterhout, Evans, Cockburn) so the implementing agent understands *why*, not just *what*. Output: `beads-manifest.json`.
+**Generation** decomposes the implementation plan into beads: one epic per spec subject, one bead per discrete work unit. Each bead carries dependency wiring, provenance labels (`trace:<subject-slug>`), and an explicit mapping back to spec claims. Every spec claim must map to at least one bead. Beads are sized for single-responsibility — if a title contains "and" or lists multiple concerns, it gets split. Bead descriptions encode methodology guidance — red-green-refactor, walking skeleton, deep modules, ubiquitous language — with rationale from the original authors (Beck, Ousterhout, Evans, Cockburn) so the implementing agent understands *why*, not just *what*. Generation auto-transitions to review with no user prompt. Output: `beads-manifest.json`.
 
-**Epilogue beads** are meta-beads for post-implementation quality and learning (e.g. learnings retrospective, agent guidance review). They live in the `epilogue_beads` array of the manifest and depend on all implementation beads. Epilogue beads may create `epilogue-followup` beads to address their findings — these are normal implementation beads subject to standard review rules.
+**Epilogue beads** are meta-beads for post-implementation quality and learning: learnings retrospective, agent guidance review, and full code review. They live in the `epilogue_beads` array of the manifest and depend on all implementation beads. Epilogue beads may create `epilogue-followup` beads to address their findings — these are normal implementation beads subject to standard review rules.
 
 **Review** stress-tests the beads with a 4-agent team:
 
