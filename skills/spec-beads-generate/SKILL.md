@@ -295,6 +295,19 @@ follow-up beads created for all material findings.
 
 Dependencies: all implementation beads.
 
+## Bead sizing
+
+A bead must be completable in a single focused agent session. Use these
+heuristics to decide when to split:
+
+- If a bead title contains "and" or commas listing distinct concerns, it needs
+  splitting. "Config, GraphQL HTTP client, Clerk auth" is three beads, not one.
+- Each bead should have a single responsibility — one module, one integration
+  point, or one data structure.
+- Workstreams with 3+ distinct deliverables should produce 3+ beads minimum.
+- When in doubt, prefer smaller beads — the review phase can merge but cannot
+  split.
+
 ## Hard rules
 
 1. This skill does not evaluate quality. That is the review phase's job.
@@ -307,3 +320,7 @@ Dependencies: all implementation beads.
 5. Epic and label provenance are required for every bead.
 6. Do not create standalone beads for cross-cutting concerns — see
    "Quality gates and cross-cutting concerns" above.
+7. When generation is complete, report results in a single status line and
+   return control to the orchestrator. Do NOT ask the user whether to proceed —
+   the orchestrator's auto-transition rule governs the next step. Do NOT offer
+   a "stopping point" — beads review is mandatory and follows automatically.
