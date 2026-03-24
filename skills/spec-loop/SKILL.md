@@ -72,6 +72,10 @@ Additional required categories by archetype:
 Categories marked `required` must be addressed before the drafting gate opens.
 Categories marked `optional` are skipped unless evidence suggests relevance.
 
+Walk down each branch of the design tree. For each branch, determine whether
+evidence closes it or whether ambiguity remains that blocks critical decision
+coverage.
+
 Ask only if:
 - passive evidence is exhausted, ambiguous, or lower value
 - the ambiguity blocks critical decision coverage or blocker closure
@@ -84,7 +88,8 @@ Record answers as new `evidence_unit` records.
 
 ## Research-first directive
 
-Before escalating any question to the user:
+Walk down each branch of the design tree. Before escalating any question to
+the user:
 1. search the codebase for existing patterns, implementations, or conventions
    that answer it
 2. check existing evidence and prior clarification answers for implicit answers
