@@ -219,9 +219,8 @@ Synthesize scattered per-bead learnings into a structured retrospective:
 - recommendations for future work in this area
 
 After synthesizing learnings, create follow-up beads in the same epic for any
-process improvements that require code or config changes (e.g., "add
-pre-commit hook for X", "create shared test fixture for Y"). Label follow-up
-beads with `trace:<subject-slug>,epilogue-followup`.
+process improvements that require code or config changes. Use the follow-up
+bead creation contract below.
 
 Acceptance criteria: learnings document exists with categorized findings; every
 bead's progress.md entry has been reviewed; findings are actionable, not just
@@ -254,9 +253,8 @@ Actions:
   the glossary so agents use consistent terminology across all work
 
 After auditing and updating guidance, create follow-up beads in the same epic
-for any guidance changes that require code changes (e.g., "update CI config to
-enforce new convention", "add linting rule for discovered anti-pattern"). Label
-follow-up beads with `trace:<subject-slug>,epilogue-followup`.
+for any guidance changes that require code changes. Use the follow-up bead
+creation contract below.
 
 Acceptance criteria: all rule sources audited for conflicts; at least one
 guidance artifact updated with implementation learnings; no contradictory
@@ -283,17 +281,55 @@ findings, max 3 rounds. Findings categorized by severity (critical, high,
 resolvable). Critical findings block epic closure.
 
 After each convergence round, create follow-up beads in the same epic for
-every material finding. Each finding becomes a bead with:
+every material finding. Use the follow-up bead creation contract below.
+Each finding becomes a bead with:
 - title describing the fix
 - description with finding details and remediation steps
 - dependency on the bead whose code introduced the issue
-- labels: `trace:<subject-slug>,epilogue-followup`
 
 Acceptance criteria: every file changed during the epic has been reviewed; all
 findings categorized by severity; critical findings have remediation steps;
 follow-up beads created for all material findings.
 
 Dependencies: all implementation beads.
+
+### Follow-up bead creation contract
+
+Every follow-up bead created by an epilogue MUST be parented to the epic and
+use this exact command template:
+
+```
+br create --title "<fix description>" --type task --parent <epic-id> --labels "trace:<subject-slug>,epilogue-followup" --description "<finding details and remediation steps>"
+```
+
+Hard requirements:
+- `--parent <epic-id>` is mandatory — omitting it creates an orphan invisible
+  to `br ready` in the epic context
+- `--labels` must include both `trace:<subject-slug>` and `epilogue-followup`
+- each follow-up bead must declare a dependency on the bead whose code it
+  addresses: `br dep add <followup-id> <source-bead-id>`
+- update `beads-manifest.json` `followup_beads` array with the new bead
+
+## Epilogue cycle
+
+After all follow-up beads from an epilogue round are implemented, a new
+epilogue cycle begins:
+
+1. Create a new Full Code Review epilogue bead covering **only the code
+   changed by follow-up beads** from the previous cycle
+2. If that review produces material findings, create follow-up beads (using
+   the contract above) and implement them
+3. Repeat until a Full Code Review round produces **zero material findings**
+4. **Max 3 epilogue cycles** (safety cap) — if cycle 3 still produces
+   findings, escalate to the user
+
+Cycle scoping rules:
+- The **Learnings Retrospective** and **Agent Guidance Review** run only on
+  the first cycle — subsequent cycles are Full Code Review only
+- Each subsequent Full Code Review is scoped to code changed since the
+  previous cycle, not the entire epic
+- Follow-up beads in subsequent cycles still use the same creation contract
+  (parented, labeled, dependency-wired)
 
 ## Bead sizing
 

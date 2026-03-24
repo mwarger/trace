@@ -192,10 +192,17 @@ Epilogue beads are listed in the `epilogue_beads` array of
 
 Epilogue beads may create `epilogue-followup` labeled beads in the same epic
 to address their findings. Follow-up beads ARE subject to the normal review
-rules — they are implementation beads, not epilogue beads. The dependency
-agent should verify follow-up beads are wired correctly (each depends on the
-bead whose code it addresses). Follow-up beads appear in the `followup_beads`
-array of `beads-manifest.json`.
+rules — they are implementation beads, not epilogue beads.
+
+**Hard rule**: every follow-up bead MUST use `--parent <epic-id>` when
+created. A follow-up bead without a parent is an orphan invisible to
+`br ready` in the epic context. The dependency agent's checklist must include:
+verify every `epilogue-followup` bead is a child of the same epic (check via
+`br show <followup-id>` — parent field must equal the epic ID).
+
+The dependency agent should also verify follow-up beads are wired correctly
+(each depends on the bead whose code it addresses). Follow-up beads appear in
+the `followup_beads` array of `beads-manifest.json`.
 
 ## Hard rules
 

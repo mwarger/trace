@@ -197,6 +197,19 @@ Report phase transitions in a single status line, not a multi-line summary.
   decomposition required (cap hit)
 - checkpoint: `beads-review-log.md`
 
+`EPILOGUE_CYCLE` concept (applies during implementation, after beads review):
+- After beads review converges and all implementation + epilogue beads are
+  complete, if any epilogue bead created follow-up beads, those follow-ups
+  must be implemented and then reviewed by a new Full Code Review
+- The cycle repeats until a Full Code Review produces zero material findings,
+  max 3 cycles
+- Learnings Retrospective and Agent Guidance Review run only on the first
+  cycle — subsequent cycles are Full Code Review only
+- Each cycle's Full Code Review is scoped to code changed by that cycle's
+  follow-up beads, not the entire epic
+- Follow-up beads in every cycle MUST use `--parent <epic-id>` — orphan
+  follow-ups are a hard error
+
 ## Required sub-skill order
 
 1. `spec-intake`
