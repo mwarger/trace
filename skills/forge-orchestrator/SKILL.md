@@ -1,6 +1,6 @@
 ---
-name: trace-orchestrator
-description: "Create a subject-named specification from any evidence source using a reducer-based Trace workflow. Use this when the user wants a planning-ready spec, a clean-room reverse spec, or an evidence-first feature spec with sub-agent fanout, provenance tracking, adaptive clarification, speculative variants, and a canonical readiness contract."
+name: forge-orchestrator
+description: "Create a subject-named specification from any evidence source using a reducer-based Forge workflow. Use this when the user wants a planning-ready spec, a clean-room reverse spec, or an evidence-first feature spec with sub-agent fanout, provenance tracking, adaptive clarification, speculative variants, and a canonical readiness contract."
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent
 ---
 
@@ -25,7 +25,7 @@ Trigger when the user wants to:
 3. The lead agent is the only reducer.
 4. Use sub-agents by default for bounded read-heavy work.
 5. Ask the user directly when user input is needed.
-6. `trace-orchestrator` owns the canonical readiness verdict.
+6. `forge-orchestrator` owns the canonical readiness verdict.
 7. No run is planning-ready if blocker reasons remain open.
 8. Scores matter only after blocker reasons are cleared.
 9. A `sparse` `analogy_feature` or `parity_clone` run with
@@ -66,8 +66,9 @@ Every run must carry these canonical fields in `manifest.json` and
 - `beads_followup_count`
 - `beads_coverage_score`
 - `beads_workspace_path`
+- `loop_strategy`
 
-`trace-orchestrator` is the only skill allowed to finalize:
+`forge-orchestrator` is the only skill allowed to finalize:
 - `planning_status`
 - `handoff_status`
 - `blocker_reasons`
@@ -154,18 +155,18 @@ stop to summarize intermediate results between phases. Specifically:
 
 - `READINESS_GATE` passes (`completeness_score >= 80`,
   `evidence_confidence_score >= 80`, `blocker_reasons` empty) →
-  immediately invoke `spec-synthesis-review`
-- `spec-synthesis-review` verification passes →
+  immediately invoke `forge-synthesis-review`
+- `forge-synthesis-review` verification passes →
   immediately set `planning_status = ADVERSARIAL_REVIEW` and invoke
-  `spec-adversarial-review`
-- `spec-adversarial-review` converges →
+  `forge-adversarial-review`
+- `forge-adversarial-review` converges →
   immediately set `planning_status = PLANNING_READY`,
-  `handoff_status = ELIGIBLE` and invoke `spec-plan-handoff`.
+  `handoff_status = ELIGIBLE` and invoke `forge-plan-handoff`.
   Do not present options, summarize findings, or ask the user what to do
   next — the transition to plan handoff is not optional.
 - `PLAN_HANDOFF` completes → prompt user for beads (this is the only
   user-facing pause in the late pipeline)
-- `BEADS_GENERATION` completes → immediately invoke `spec-beads-review`
+- `BEADS_GENERATION` completes → immediately invoke `forge-beads-review`
 
 The only reasons to pause mid-pipeline are: (a) a gate fails and the run
 loops back, or (b) user input is required (beads prompt after plan handoff).
@@ -177,7 +178,7 @@ Report phase transitions in a single status line, not a multi-line summary.
 - exit: convergence (zero material findings by agent consensus) or
   decomposition required (cap hit).
   On convergence, do not pause or summarize — the auto-transition rule
-  governs. Immediately proceed to `spec-plan-handoff`.
+  governs. Immediately proceed to `forge-plan-handoff`.
 - checkpoint: `adversarial-review-log.md`
 
 `BEADS_GENERATION` phase contract:
@@ -212,25 +213,54 @@ Report phase transitions in a single status line, not a multi-line summary.
 
 ## Required sub-skill order
 
-1. `spec-intake`
-2. `spec-loop`
-3. `spec-completeness`
-4. `spec-synthesis-review`
-5. `spec-adversarial-review`
-6. `spec-plan-handoff`
-7. `spec-beads-generate` (optional — only if user accepts beads prompt)
-8. `spec-beads-review` (mandatory if beads were generated — proceed immediately,
+1. `forge-intake`
+
+After `forge-intake` completes, present the user with a choice:
+
+- **A) Evidence-first loop** — interactive forge-loop with adaptive
+  clarification. Best when available for questions.
+- **B) Autoresearch loop** — autonomous iterative improvement with
+  blind scoring. Best for overnight runs or well-defined programs.
+  Returns an epic ID; user runs `ralph-loop <epic-id>` externally.
+
+If user chooses B:
+1. Invoke `forge-autoresearch` skill
+2. Set `loop_strategy = "autoresearch"` in run-state.json
+3. Return epic ID to user — the run pauses here
+4. User resumes Forge after loop converges (see post-loop re-entry)
+
+If user chooses A (default):
+
+2. `forge-loop`
+3. `forge-completeness`
+4. `forge-synthesis-review`
+5. `forge-adversarial-review`
+6. `forge-plan-handoff`
+7. `forge-beads-generate` (optional — only if user accepts beads prompt)
+8. `forge-beads-review` (mandatory if beads were generated — proceed immediately,
    do not prompt the user)
 
-Loop back to `spec-loop` or `spec-completeness` whenever verification fails or
-blockers remain. If `spec-adversarial-review` escalates back, pass the
-`adversarial-escalation.json` artifact as input to the targeted `spec-loop`
+Loop back to `forge-loop` or `forge-completeness` whenever verification fails or
+blockers remain. If `forge-adversarial-review` escalates back, pass the
+`adversarial-escalation.json` artifact as input to the targeted `forge-loop`
 round so it addresses the specific findings rather than running a generic pass.
 
-If `spec-beads-review` triggers a back-transition, pass the
-`beads-escalation.json` artifact as input to the targeted `spec-loop` round.
-`spec-loop` treats `beads-escalation.json` identically to
+If `forge-beads-review` triggers a back-transition, pass the
+`beads-escalation.json` artifact as input to the targeted `forge-loop` round.
+`forge-loop` treats `beads-escalation.json` identically to
 `adversarial-escalation.json` — scope the round to the listed findings.
+
+### Post-autoresearch re-entry
+
+When `loop_strategy = "autoresearch"` and the user returns after convergence:
+
+1. Read `.autoresearch/research-log.jsonl` for final score
+2. Read `.autoresearch/retrospective.md` for process insights
+3. Set `planning_status = READINESS_GATE` in run-state.json
+4. Run READINESS_GATE entry criteria check
+5. If gate passes, auto-transition pipeline takes over (unchanged)
+6. If gate fails, offer: re-enter forge-loop interactively or re-stamp
+   another autoresearch cycle
 
 ## Delegation policy
 
@@ -329,7 +359,7 @@ Root index:
 Canonical spec:
 - `specs/<subject>.md`
 
-Project-level (not per-spec — persists across all Trace runs):
+Project-level (not per-spec — persists across all Forge runs):
 - `UBIQUITOUS-LANGUAGE.md` — domain glossary at the project root, created
   during intake if missing, updated throughout the pipeline and by epilogue
   beads
@@ -366,7 +396,7 @@ Sidecars:
 
 ## Root specs index
 
-Every successful Trace run must leave behind a root `specs/README.md`.
+Every successful Forge run must leave behind a root `specs/README.md`.
 
 Rules:
 - if `specs/README.md` is missing, create it before or alongside the subject spec
@@ -375,8 +405,8 @@ Rules:
 - do not duplicate rows for the same subject; update the existing row
 
 Managed block markers:
-- `<!-- trace:spec-index:start -->`
-- `<!-- trace:spec-index:end -->`
+- `<!-- forge:spec-index:start -->`
+- `<!-- forge:spec-index:end -->`
 
 The root index is for discovery and navigation.
 The subject spec is the backing artifact to hand to an external implementation

@@ -1,5 +1,5 @@
 ---
-name: spec-synthesis-review
+name: forge-synthesis-review
 description: "Reduce typed sub-agent outputs into canon and verify the subject spec before readiness promotion. Use this when you need deterministic merges, provenance review, contradiction handling, verification loops, section drafting, or final review passes across the spec."
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
@@ -53,8 +53,8 @@ After the subject spec reaches a stable draft, create or update the row for the
 current subject inside the managed block in `specs/README.md`.
 
 Managed block markers:
-- `<!-- trace:spec-index:start -->`
-- `<!-- trace:spec-index:end -->`
+- `<!-- forge:spec-index:start -->`
+- `<!-- forge:spec-index:end -->`
 
 Preserve prose outside the managed block.
 

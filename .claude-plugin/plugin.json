@@ -1,12 +1,12 @@
 {
-  "name": "trace",
-  "description": "Spec-from-evidence pipeline: build subject-named specs with sub-agent fanout, provenance tracking, adaptive clarification, and a canonical readiness contract",
-  "version": "1.9.0",
+  "name": "forge",
+  "description": "Spec-from-evidence pipeline with autoresearch loops: build subject-named specs with sub-agent fanout, provenance tracking, adaptive clarification, blind scoring, self-replicating bead cycles, and a canonical readiness contract",
+  "version": "0.2.0",
   "author": {
     "name": "Mat Warger"
   },
-  "homepage": "https://github.com/mwarger/trace",
-  "repository": "https://github.com/mwarger/trace",
+  "homepage": "https://github.com/mwarger/forge",
+  "repository": "https://github.com/mwarger/forge",
   "license": "MIT",
-  "keywords": ["skills", "specs", "evidence", "planning", "readiness"]
+  "keywords": ["skills", "specs", "evidence", "planning", "readiness", "autoresearch", "forge"]
 }

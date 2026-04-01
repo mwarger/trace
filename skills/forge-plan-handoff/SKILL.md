@@ -1,10 +1,10 @@
 ---
-name: spec-plan-handoff
+name: forge-plan-handoff
 description: "Render the implementation handoff for a subject spec. Use this when the canonical readiness verdict already exists and you need either a real implementation plan for eligible runs or a withheld handoff plus bounded options for blocked runs."
 allowed-tools: Read, Write, Glob, Grep
 ---
 
-Use this only after `trace-orchestrator` has finalized `planning_status` and
+Use this only after `forge-orchestrator` has finalized `planning_status` and
 `handoff_status`.
 
 ## Preconditions

@@ -1,5 +1,5 @@
 ---
-name: spec-completeness
+name: forge-completeness
 description: "Score a subject spec against the ontology and canonical readiness contract. Use this when you need claim-level coverage scoring, corroboration checks, critical-decision coverage, risk-weighted assumptions, contradiction penalties, and blocker-aware 80/80 gates."
 allowed-tools: Read, Write, Glob, Grep
 ---
@@ -7,7 +7,7 @@ allowed-tools: Read, Write, Glob, Grep
 Use this whenever canon changes materially.
 
 Do not finalize readiness here.
-Emit structured inputs for the `trace-orchestrator` verdict.
+Emit structured inputs for the `forge-orchestrator` verdict.
 
 ## Ontology
 
@@ -29,7 +29,7 @@ Track these dimensions:
 
 The following sub-signals feed into existing dimensions as required coverage
 inputs. A dimension cannot score above `partial` unless its mapped sub-signals
-are addressed (per the archetype applicability matrix in `spec-loop`).
+are addressed (per the archetype applicability matrix in `forge-loop`).
 
 | Sub-signal | Feeds into dimensions |
 |------------|----------------------|
@@ -39,7 +39,7 @@ are addressed (per the archetype applicability matrix in `spec-loop`).
 | Operational concerns | `interfaces`, `constraints` |
 | Ordering and concurrency | `state transitions`, `core flows` |
 
-For archetypes where a sub-signal is marked `optional` in the spec-loop
+For archetypes where a sub-signal is marked `optional` in the forge-loop
 matrix, that sub-signal does not block the parent dimension's coverage. It
 only contributes if evidence is present.
 

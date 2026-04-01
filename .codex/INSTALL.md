@@ -1,11 +1,11 @@
-# Trace for Codex
+# Forge for Codex
 
 ## Quick local install
 
 If you already have a checkout of this repo:
 
 ```bash
-cd /path/to/trace
+cd /path/to/forge
 ./install.sh
 ```
 
@@ -13,21 +13,21 @@ That installs the skills into:
 - `${CODEX_HOME:-$HOME/.codex}/skills`
 
 and installs a helper command:
-- `trace-pack`
+- `forge-pack`
 
 ## Isolated local test install
 
 If you want to test without touching your normal Codex setup:
 
 ```bash
-cd /path/to/trace
+cd /path/to/forge
 ./scripts/test-local.sh
 export CODEX_HOME="$(pwd)/.local-test/codex-home"
 ```
 
 Then start Codex from that same shell.
 
-Trace should produce subject specs that can be handed to implementation work
+Forge should produce subject specs that can be handed to implementation work
 directly when `planning_status=PLANNING_READY` and
 `handoff_status=ELIGIBLE`, plus a root `specs/README.md` index for lookup.
 
@@ -36,19 +36,19 @@ keep handoff withheld until clarifications close the critical decision buckets.
 
 ## Remote install
 
-Tell your agent to install Trace from:
-- <https://github.com/mwarger/trace>
+Tell your agent to install Forge from:
+- <https://github.com/mwarger/forge>
 
 The Codex install doc is:
 
 ```text
-Fetch and follow instructions from https://raw.githubusercontent.com/mwarger/trace/main/.codex/INSTALL.md
+Fetch and follow instructions from https://raw.githubusercontent.com/mwarger/forge/main/.codex/INSTALL.md
 ```
 
 If you prefer a shell install:
 
 ```bash
-curl -fsSL "https://raw.githubusercontent.com/mwarger/trace/main/install.sh?$(date +%s)" | bash
+curl -fsSL "https://raw.githubusercontent.com/mwarger/forge/main/install.sh?$(date +%s)" | bash
 ```
 
 ## Verify
@@ -56,11 +56,11 @@ curl -fsSL "https://raw.githubusercontent.com/mwarger/trace/main/install.sh?$(da
 Run:
 
 ```bash
-trace-pack doctor
-trace-pack list-skills
+forge-pack doctor
+forge-pack list-skills
 ```
 
-Then start a new Codex session and ask for a Trace-style spec.
+Then start a new Codex session and ask for a Forge-style spec.
 
 If you update the skill pack, restart the agent session before rerunning a
-Trace prompt so the new policy is actually loaded.
+Forge prompt so the new policy is actually loaded.

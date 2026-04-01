@@ -4,12 +4,12 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 log() {
-  printf '[trace-smoke] %s\n' "$1"
+  printf '[forge-smoke] %s\n' "$1"
 }
 
 require_file() {
   [[ -f "$1" ]] || {
-    printf '[trace-smoke] ERROR: missing file %s\n' "$1" >&2
+    printf '[forge-smoke] ERROR: missing file %s\n' "$1" >&2
     exit 1
   }
 }
@@ -25,26 +25,27 @@ require_file "$ROOT_DIR/specs/feature-flags-system.md"
 require_file "$ROOT_DIR/specs/auth-session-system.md"
 
 for skill in \
-  trace-orchestrator \
-  spec-intake \
-  spec-loop \
-  spec-completeness \
-  spec-synthesis-review \
-  spec-adversarial-review \
-  spec-plan-handoff \
-  spec-beads-generate \
-  spec-beads-review
+  forge-orchestrator \
+  forge-intake \
+  forge-loop \
+  forge-completeness \
+  forge-synthesis-review \
+  forge-adversarial-review \
+  forge-plan-handoff \
+  forge-beads-generate \
+  forge-beads-review \
+  forge-autoresearch
 do
   require_file "$ROOT_DIR/skills/$skill/SKILL.md"
 done
 
 log "checking root specs index markers"
-grep -q '<!-- trace:spec-index:start -->' "$ROOT_DIR/specs/README.md" || {
-  printf '[trace-smoke] ERROR: missing start marker in specs/README.md\n' >&2
+grep -q '<!-- forge:spec-index:start -->' "$ROOT_DIR/specs/README.md" || {
+  printf '[forge-smoke] ERROR: missing start marker in specs/README.md\n' >&2
   exit 1
 }
-grep -q '<!-- trace:spec-index:end -->' "$ROOT_DIR/specs/README.md" || {
-  printf '[trace-smoke] ERROR: missing end marker in specs/README.md\n' >&2
+grep -q '<!-- forge:spec-index:end -->' "$ROOT_DIR/specs/README.md" || {
+  printf '[forge-smoke] ERROR: missing end marker in specs/README.md\n' >&2
   exit 1
 }
 

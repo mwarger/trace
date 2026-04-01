@@ -1,10 +1,10 @@
 ---
-name: spec-adversarial-review
+name: forge-adversarial-review
 description: "Stress-test a subject spec for ambiguity, gaps, contradictions, and untestable claims using dynamic agent teams. Use this when the spec has passed completeness and synthesis-review gates and needs adversarial validation before readiness promotion."
 allowed-tools: Read, Write, Edit, Glob, Grep, Agent
 ---
 
-Use this after `spec-synthesis-review` passes and the orchestrator's scoring
+Use this after `forge-synthesis-review` passes and the orchestrator's scoring
 gates are met. Do not use this before `blocker_reasons` is empty and
 `completeness_score >= 80` and `evidence_confidence_score >= 80`.
 
@@ -101,7 +101,7 @@ triggers a decomposition signal:
   - scope and boundaries (in and out)
   - constraints inherited from the parent spec
   - dependencies on other sub-specs (if any)
-  - enough context for a fresh session to run `spec-intake` without losing
+  - enough context for a fresh session to run `forge-intake` without losing
     information
 - the decomposition proposal must identify dependency edges between sub-specs
 - the user decides per sub-spec: run now (sequential), run in parallel via
@@ -113,7 +113,7 @@ triggers a decomposition signal:
 When escalating back to earlier pipeline stages:
 - emit `adversarial-escalation.json` listing: finding IDs, affected sections,
   blocker reason if reopened
-- the orchestrator passes this to `spec-loop` so the re-entry round is targeted
+- the orchestrator passes this to `forge-loop` so the re-entry round is targeted
   to the specific findings, not a generic pass
 
 ## Finding structure

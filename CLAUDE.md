@@ -1,10 +1,10 @@
-# Trace — Project Instructions
+# Forge — Project Instructions
 
 ## Version bumping
 
 Every commit that changes skills, orchestrator behavior, or plugin metadata
 **must** bump the version in `.claude-plugin/plugin.json` before pushing. This
-ensures `/plugin update trace` picks up the latest changes.
+ensures `/plugin update forge` picks up the latest changes.
 
 Use semver:
 - **patch** (1.2.0 → 1.2.1): bug fixes, wording clarifications, doc-only changes

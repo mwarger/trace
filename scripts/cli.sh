@@ -2,11 +2,11 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-CLI_NAME="trace-pack"
+CLI_NAME="forge-pack"
 
 detect_skills_dir() {
-  if [[ -n "${TRACE_SKILLS_DIR:-}" ]]; then
-    printf '%s\n' "$TRACE_SKILLS_DIR"
+  if [[ -n "${FORGE_SKILLS_DIR:-}" ]]; then
+    printf '%s\n' "$FORGE_SKILLS_DIR"
   elif [[ -d "$HOME/.claude" ]]; then
     printf '%s\n' "$HOME/.claude/skills"
   elif [[ -d "$HOME/.codex" ]]; then
@@ -15,17 +15,18 @@ detect_skills_dir() {
     printf '%s\n' "$HOME/.claude/skills"
   fi
 }
-MANIFEST_NAME=".trace-pack-install.json"
+MANIFEST_NAME=".forge-pack-install.json"
 SKILL_NAMES=(
-  trace-orchestrator
-  spec-intake
-  spec-loop
-  spec-completeness
-  spec-synthesis-review
-  spec-adversarial-review
-  spec-plan-handoff
-  spec-beads-generate
-  spec-beads-review
+  forge-orchestrator
+  forge-intake
+  forge-loop
+  forge-completeness
+  forge-synthesis-review
+  forge-adversarial-review
+  forge-plan-handoff
+  forge-beads-generate
+  forge-beads-review
+  forge-autoresearch
 )
 
 log() {
@@ -46,7 +47,7 @@ skills_dir() {
 }
 
 install_mode() {
-  printf '%s\n' "${TRACE_INSTALL_MODE:-link}"
+  printf '%s\n' "${FORGE_INSTALL_MODE:-link}"
 }
 
 manifest_path() {
@@ -63,17 +64,18 @@ write_manifest() {
   TARGET_DIR="$target_dir" ROOT="$ROOT_DIR" MODE="$mode" python3 - <<'PY'
 import json, os
 skills = [
-  "trace-orchestrator",
-  "spec-intake",
-  "spec-loop",
-  "spec-completeness",
-  "spec-synthesis-review",
-  "spec-adversarial-review",
-  "spec-plan-handoff",
-  "spec-beads-generate",
-  "spec-beads-review",
+  "forge-orchestrator",
+  "forge-intake",
+  "forge-loop",
+  "forge-completeness",
+  "forge-synthesis-review",
+  "forge-adversarial-review",
+  "forge-plan-handoff",
+  "forge-beads-generate",
+  "forge-beads-review",
+  "forge-autoresearch",
 ]
-path = os.path.join(os.environ["TARGET_DIR"], ".trace-pack-install.json")
+path = os.path.join(os.environ["TARGET_DIR"], ".forge-pack-install.json")
 data = {
   "root_dir": os.environ["ROOT"],
   "install_mode": os.environ["MODE"],
@@ -192,10 +194,10 @@ Commands:
   test-local
 
 Env vars:
-  TRACE_SKILLS_DIR     override auto-detected skills directory
-  TRACE_INSTALL_MODE   link (default) or copy
+  FORGE_SKILLS_DIR     override auto-detected skills directory
+  FORGE_INSTALL_MODE   link (default) or copy
 
-Platform detection (when TRACE_SKILLS_DIR is not set):
+Platform detection (when FORGE_SKILLS_DIR is not set):
   1. ~/.claude/ exists → ~/.claude/skills/
   2. ~/.codex/ exists  → ~/.codex/skills/
   3. fallback          → ~/.claude/skills/

@@ -1,10 +1,10 @@
 ---
-name: spec-beads-review
-description: "Stress-test beads for coverage, granularity, dependency correctness, and actionability using adversarial agent teams. Use this after spec-beads-generate when the beads workspace is populated."
+name: forge-beads-review
+description: "Stress-test beads for coverage, granularity, dependency correctness, and actionability using adversarial agent teams. Use this after forge-beads-generate when the beads workspace is populated."
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash, Agent
 ---
 
-Use this after `spec-beads-generate` has emitted `beads-manifest.json` and
+Use this after `forge-beads-generate` has emitted `beads-manifest.json` and
 created all beads via `br`.
 
 ## Purpose
@@ -63,7 +63,7 @@ Test sketches are embedded in the bead description by default. Use
 ### Evidence sources
 
 Agents must use `br` and `bv --robot-*` commands as evidence sources:
-- `br list --label trace:<subject>` — list beads for this spec
+- `br list --label forge:<subject>` — list beads for this spec
 - `br show <id>` — read bead details
 - `br dep list <id>` — check dependencies
 - `br dep tree <id>` — visualize dependency tree
@@ -130,7 +130,7 @@ Decomposition can mean one of two things:
    into concrete work units revealed ambiguity that the spec adversarial
    review missed. Emit `beads-escalation.json` listing finding IDs, affected
    spec sections, and reopened blockers. The orchestrator passes this to
-   `spec-loop` for a targeted re-entry round.
+   `forge-loop` for a targeted re-entry round.
 
 The user decides next steps based on the decomposition proposal.
 
@@ -162,7 +162,7 @@ Emit as structured input to the orchestrator (do not write these directly):
 
 On decomposition:
 - `beads-decomposition-proposal.md`
-- `beads-escalation.json` (on back-transition to spec-loop)
+- `beads-escalation.json` (on back-transition to forge-loop)
 
 ## Epilogue bead exemptions
 

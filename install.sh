@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-CLI_NAME="trace-pack"
+CLI_NAME="forge-pack"
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-INSTALL_DIR="${TRACE_PACK_HOME:-$HOME/.trace-pack}"
-REPO_URL="${TRACE_REPO_URL:-}"
+INSTALL_DIR="${FORGE_PACK_HOME:-$HOME/.forge-pack}"
+REPO_URL="${FORGE_REPO_URL:-}"
 
 log() {
-  printf '[trace install] %s\n' "$1"
+  printf '[forge install] %s\n' "$1"
 }
 
 fail() {
-  printf '[trace install] ERROR: %s\n' "$1" >&2
+  printf '[forge install] ERROR: %s\n' "$1" >&2
   exit 1
 }
 
@@ -22,8 +22,8 @@ has_cmd() {
 pick_bin_dir() {
   local candidates=()
 
-  if [[ -n "${TRACE_BIN_DIR:-}" ]]; then
-    candidates+=("$TRACE_BIN_DIR")
+  if [[ -n "${FORGE_BIN_DIR:-}" ]]; then
+    candidates+=("$FORGE_BIN_DIR")
   fi
 
   candidates+=("/usr/local/bin" "/opt/homebrew/bin" "$HOME/.local/bin" "$HOME/bin")
@@ -52,7 +52,7 @@ ensure_source() {
   fi
 
   has_cmd git || fail "git is required for remote install"
-  [[ -n "$REPO_URL" ]] || fail "set TRACE_REPO_URL for remote install"
+  [[ -n "$REPO_URL" ]] || fail "set FORGE_REPO_URL for remote install"
 
   if [[ -d "$INSTALL_DIR/.git" ]]; then
     log "updating existing install at $INSTALL_DIR"
@@ -81,6 +81,19 @@ EOF
   chmod +x "$target"
 }
 
+install_ralph_loop() {
+  local source_dir="$1"
+  local bin_dir="$2"
+  local target="$bin_dir/ralph-loop"
+  log "installing ralph-loop at $target"
+  cat > "$target" <<EOF
+#!/usr/bin/env bash
+set -euo pipefail
+exec "$source_dir/bin/ralph-loop" "\$@"
+EOF
+  chmod +x "$target"
+}
+
 main() {
   has_cmd bash || fail "bash is required"
   has_cmd python3 || fail "python3 is required"
@@ -92,6 +105,7 @@ main() {
   bin_dir="$(pick_bin_dir)"
 
   install_wrapper "$source_dir" "$bin_dir"
+  install_ralph_loop "$source_dir" "$bin_dir"
 
   log "installing skills"
   "$source_dir/scripts/cli.sh" install-skills
